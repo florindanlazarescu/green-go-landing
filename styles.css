@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 :root {
     --primary-green: #2ecc71;
     --primary-hover: #27ae60;
@@ -54,6 +58,10 @@ section {
     margin-bottom: 1rem;
 }
 
+.subtitle .text-black {
+    color: var(--text-dark);
+}
+
 h2 {
     font-size: 2.5rem;
     font-weight: 700;
@@ -81,11 +89,20 @@ nav {
 .logo {
     font-size: 1.5rem;
     font-weight: 800;
-    color: var(--dark-green);
-    text-decoration: none; /* Asigurăm că nu are subliniere ca link */
+    color: var(--primary-green);
+    text-decoration: none;
 }
 
-.logo span { color: var(--primary-green); }
+.logo span { color: #000; }
+
+.logo-style {
+    font-weight: 800;
+    color: var(--primary-green);
+}
+
+.logo-style span {
+    color: #000;
+}
 
 .nav-links {
     display: flex;
@@ -144,11 +161,11 @@ nav {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 40px;
-    align-items: start; /* Am schimbat de la center la start pentru a alinia poza cu textul sus */
+    align-items: start;
 }
 
 .hero-content {
-    padding-top: 20px; /* Adăugat puțin padding pentru a fi perfect în linie cu imaginea */
+    padding-top: 20px;
 }
 
 .hero h1 {
