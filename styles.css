@@ -82,6 +82,7 @@ nav {
     font-size: 1.5rem;
     font-weight: 800;
     color: var(--dark-green);
+    text-decoration: none; /* Asigurăm că nu are subliniere ca link */
 }
 
 .logo span { color: var(--primary-green); }
@@ -97,6 +98,11 @@ nav {
     color: var(--text-dark);
     font-weight: 500;
     font-size: 0.95rem;
+    transition: color 0.2s;
+}
+
+.nav-links a:hover {
+    color: var(--primary-green);
 }
 
 /* Buttons */
@@ -138,7 +144,11 @@ nav {
     display: grid;
     grid-template-columns: 1.2fr 0.8fr;
     gap: 40px;
-    align-items: center;
+    align-items: start; /* Am schimbat de la center la start pentru a alinia poza cu textul sus */
+}
+
+.hero-content {
+    padding-top: 20px; /* Adăugat puțin padding pentru a fi perfect în linie cu imaginea */
 }
 
 .hero h1 {
@@ -174,9 +184,14 @@ nav {
     color: var(--text-muted);
 }
 
+.hero-image {
+    display: flex;
+    justify-content: flex-end;
+}
+
 .mockup {
     width: 100%;
-    max-width: 400px;
+    max-width: 450px;
     border-radius: 40px;
     box-shadow: 0 30px 60px rgba(0,0,0,0.1);
 }
@@ -417,10 +432,10 @@ footer {
     .hero-grid, .features-grid, .business-grid {
         grid-template-columns: 1fr;
     }
-    .hero-content { text-align: center; }
+    .hero-content { text-align: center; padding-top: 0; }
     .hero p { margin-left: auto; margin-right: auto; }
     .hero-stats { justify-content: center; }
-    .hero-image { order: -1; }
+    .hero-image { order: -1; justify-content: center; margin-bottom: 2rem; }
     .hero h1 { font-size: 3rem; }
     .restaurant-logos { grid-template-columns: repeat(2, 1fr); }
     .footer-content { grid-template-columns: 1fr; }
