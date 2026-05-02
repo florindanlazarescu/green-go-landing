@@ -470,6 +470,37 @@ footer {
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 
+.logo-footer {
+    font-size: 1.5rem;
+    font-weight: 800;
+    color: var(--primary-green);
+    text-decoration: none;
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.logo-footer span {
+    color: #fff;
+}
+
+.social-links {
+    margin-top: 1.5rem;
+    display: flex;
+    gap: 1.2rem;
+}
+
+.social-links a {
+    color: rgba(255,255,255,0.7);
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 500;
+    transition: color 0.3s ease;
+}
+
+.social-links a:hover {
+    color: var(--primary-green);
+}
+
 .footer-links-grid {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -478,15 +509,23 @@ footer {
 
 .links-column h4 {
     margin-bottom: 1.5rem;
-    font-size: 1rem;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #fff;
 }
 
 .links-column a {
     display: block;
-    color: rgba(255,255,255,0.6);
+    color: rgba(255,255,255,0.7);
     text-decoration: none;
     margin-bottom: 0.8rem;
-    font-size: 0.9rem;
+    font-size: 0.95rem;
+    font-weight: 400;
+    transition: color 0.3s ease;
+}
+
+.links-column a:hover {
+    color: var(--primary-green);
 }
 
 .footer-bottom {
