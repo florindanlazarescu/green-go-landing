@@ -4,30 +4,230 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenGO - Mâncarea ta preferată, livrată local.</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div class="container">
-        <div class="content">
-            <div class="badge">NOU: Livrări ultra-rapide în Greenfield</div>
-            <h1>Mâncarea ta preferată,<br>livrată local.</h1>
-            <p>GreenGO conectează comunitatea Greenfield cu restaurantele locale. Fără timpi mari de așteptare, fără taxe ascunse.</p>
-            <a href="https://app.green-go.ro/merchants" class="btn">Comandă acum</a>
-        </div>
-        <div class="image-container">
-            <img src="https://images.unsplash.com/photo-1525351484163-7529414344d8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1200&q=80" alt="Avocado Toast">
-        </div>
-    </div>
+    <header>
+        <nav class="container">
+            <div class="logo">Green<span>GO</span></div>
+            <ul class="nav-links">
+                <li><a href="#hero">Restaurante</a></li>
+                <li><a href="#comunitate">Greenfield</a></li>
+                <li><a href="#download">Descarcă</a></li>
+            </ul>
+            <a href="https://app.green-go.ro/merchants" class="btn btn-nav">Comandă acum</a>
+        </nav>
+    </header>
+
+    <main>
+        <!-- Hero Section -->
+        <section id="hero" class="hero section-light">
+            <div class="container hero-grid">
+                <div class="hero-content">
+                    <div class="badge">NOU: Livrări ultra-rapide în Greenfield</div>
+                    <h1>Mâncarea ta preferată,<br>livrată local.</h1>
+                    <p>GreenGO conectează comunitatea Greenfield cu restaurantele locale. Fără timpi mari de așteptare, fără taxe ascunse.</p>
+                    <div class="hero-actions">
+                        <a href="#download" class="btn btn-primary">Descarcă aplicația</a>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="stat">
+                            <span class="stat-value">20 min</span>
+                            <span class="stat-label">Timp mediu</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">15+</span>
+                            <span class="stat-label">Parteneri</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-value">0 RON</span>
+                            <span class="stat-label">Taxă livrare</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1512917774080-9991f1c4c750?auto=format&fit=crop&w=800&q=80" alt="App Preview" class="mockup">
+                </div>
+            </div>
+        </section>
+
+        <!-- Steps Section -->
+        <section class="steps section-dark">
+            <div class="container">
+                <div class="section-header">
+                    <span class="subtitle">CUM FUNCȚIONEAZĂ</span>
+                    <h2>3 pași, ajunge la ușă</h2>
+                </div>
+                <div class="steps-grid">
+                    <div class="step-card">
+                        <div class="step-num">01</div>
+                        <h3>Descarcă aplicația</h3>
+                        <p>Găsește GreenGO în App Store sau Google Play și creează-ți contul în câteva secunde.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">02</div>
+                        <h3>Alege ce vrei</h3>
+                        <p>Răsfoiește meniul restaurantelor tale preferate din zonă și adaugă preparatele în coș.</p>
+                    </div>
+                    <div class="step-card">
+                        <div class="step-num">03</div>
+                        <h3>Așteaptă 20 de minute</h3>
+                        <p>Curierii noștri locali îți aduc mâncarea caldă, direct la ușa ta, în timp record.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Community Section -->
+        <section id="comunitate" class="community section-light">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="subtitle">DE CE GREENG0</span>
+                    <h2>Diferiți? Nu, dar suntem<br>parte din comunitate.</h2>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card featured">
+                        <div class="icon">🏠</div>
+                        <h3>100% local</h3>
+                        <p>Suntem singurul serviciu creat special pentru Greenfield. Cunoaștem fiecare alee și livrăm mai rapid decât oricine.</p>
+                        <div class="big-stat">100%</div>
+                    </div>
+                    <div class="feature-list">
+                        <div class="feature-item">
+                            <div class="icon-small">💰</div>
+                            <div>
+                                <h4>Fără taxe ascunse</h4>
+                                <p>Plătești exact prețul din meniu. Fără taxe de serviciu sau surprize la checkout.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="icon-small">⚡</div>
+                            <div>
+                                <h4>Livrări în 20 min</h4>
+                                <p>Datorită proximității, mâncarea ajunge la tine la fel de caldă ca în restaurant.</p>
+                            </div>
+                        </div>
+                        <div class="feature-item">
+                            <div class="icon-small">🤝</div>
+                            <div>
+                                <h4>Susții micile afaceri</h4>
+                                <p>Fiecare comandă ajută restaurantele locale să crească și să se dezvolte.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Restaurants Section -->
+        <section class="restaurants section-light-alt">
+            <div class="container">
+                <div class="section-header text-center">
+                    <span class="subtitle">RESTAURANTE</span>
+                    <h2>Locurile tale preferate,<br>acum la un click distanță</h2>
+                </div>
+                <div class="restaurant-logos">
+                    <!-- Placeholder logos -->
+                    <div class="logo-item">Fratelli</div>
+                    <div class="logo-item">Stadio</div>
+                    <div class="logo-item">18 Lounge</div>
+                    <div class="logo-item">Osho</div>
+                    <div class="logo-item">Cișmigiu</div>
+                    <div class="logo-item">Biutiful</div>
+                    <div class="logo-item">Uanderful</div>
+                    <div class="logo-item">Le Bab</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Download Section -->
+        <section id="download" class="download section-dark">
+            <div class="container text-center">
+                <span class="subtitle">PROMO</span>
+                <h2>Descarcă GreenGO</h2>
+                <div class="app-buttons">
+                    <a href="#" class="app-btn store-apple">App Store</a>
+                    <a href="#" class="app-btn store-google">Google Play</a>
+                </div>
+                <div class="launch-box">
+                    <p>🚀 <strong>Lansăm pe 1 iunie</strong></p>
+                    <div class="signup-form">
+                        <input type="email" placeholder="Adresa ta de email">
+                        <button class="btn btn-primary">Anunță-mă</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Business Section -->
+        <section class="business section-light">
+            <div class="container business-grid">
+                <div class="business-info">
+                    <span class="subtitle">PARTENERI</span>
+                    <h2>Adu afacerea ta în Greenfield</h2>
+                    <p>Extinde-ți raza de acțiune și livrează clienților din Greenfield prin cel mai eficient canal local.</p>
+                    <ul class="check-list">
+                        <li><strong>Comisioane 0</strong> în primele 3 luni</li>
+                        <li><strong>Clienți loiali</strong> din comunitate</li>
+                        <li><strong>Marketing inclus</strong> pe toate canalele</li>
+                        <li><strong>Onboarding gratuit</strong> și suport 24/7</li>
+                    </ul>
+                </div>
+                <div class="business-form-card">
+                    <h3>Solicită demo gratuit</h3>
+                    <p>Completează formularul și te contactăm în 24h.</p>
+                    <form>
+                        <input type="text" placeholder="Nume Restaurant" required>
+                        <input type="text" placeholder="Persoană contact" required>
+                        <input type="email" placeholder="Email" required>
+                        <input type="tel" placeholder="Telefon" required>
+                        <select>
+                            <option value="">Localitate</option>
+                            <option value="bucuresti">București</option>
+                            <option value="ilfov">Ilfov</option>
+                        </select>
+                        <button type="submit" class="btn btn-primary full-width">Trimite solicitarea</button>
+                    </form>
+                </div>
+            </div>
+        </section>
+    </main>
 
     <footer>
-        <span>&copy; 2026 GreenGO. Toate drepturile rezervate.</span>
-        <div class="footer-links">
-            <a href="https://anpc.ro" target="_blank" rel="noopener noreferrer">ANPC</a>
-            <a href="https://anpc.ro/ce-este-sal/" target="_blank" rel="noopener noreferrer">Soluționarea Alternativă a Litigiilor</a>
-            <a href="https://ec.europa.eu/consumers/odr" target="_blank" rel="noopener noreferrer">Platforma SOL (UE)</a>
-            <a href="#" >Termeni și condiții</a>
-            <a href="#">Politica de confidențialitate</a>
+        <div class="container footer-content">
+            <div class="footer-brand">
+                <div class="logo">Green<span>GO</span></div>
+                <p>Livrare locală, impact global.</p>
+                <div class="social-links">
+                    <a href="#">FB</a>
+                    <a href="#">IG</a>
+                    <a href="#">LI</a>
+                </div>
+            </div>
+            <div class="footer-links-grid">
+                <div class="links-column">
+                    <h4>Comunitate</h4>
+                    <a href="#">Restaurante</a>
+                    <a href="#">Greenfield</a>
+                    <a href="#">Blog</a>
+                </div>
+                <div class="links-column">
+                    <h4>Resurse</h4>
+                    <a href="https://anpc.ro" target="_blank">ANPC</a>
+                    <a href="https://anpc.ro/ce-este-sal/" target="_blank">SAL</a>
+                    <a href="https://ec.europa.eu/consumers/odr" target="_blank">SOL (UE)</a>
+                </div>
+                <div class="links-column">
+                    <h4>Legal</h4>
+                    <a href="#">Termeni și condiții</a>
+                    <a href="#">Confidențialitate</a>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom container">
+            <span>&copy; 2026 GreenGO. Toate drepturile rezervate.</span>
         </div>
     </footer>
 </body>
