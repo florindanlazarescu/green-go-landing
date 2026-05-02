@@ -58,8 +58,8 @@ section {
     margin-bottom: 1rem;
 }
 
-.subtitle .text-black {
-    color: var(--text-dark);
+.text-black {
+    color: #000;
 }
 
 h2 {
@@ -112,7 +112,7 @@ nav {
 
 .nav-links a {
     text-decoration: none;
-    color: var(--text-dark);
+    color: #000;
     font-weight: 500;
     font-size: 0.95rem;
     transition: color 0.2s;
@@ -303,12 +303,65 @@ nav {
 
 .logo-item {
     background: white;
-    padding: 30px;
+    padding: 20px;
     border-radius: 12px;
     text-align: center;
     font-weight: 700;
     color: #ccc;
     border: 1px solid #f0f0f0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    min-height: 180px;
+}
+
+.logo-item span {
+    font-size: 0.9rem;
+    line-height: 1.2;
+    margin-top: 15px;
+    display: block;
+    color: #bbb;
+}
+
+.logo-item.active {
+    color: var(--text-dark);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+}
+
+.logo-item.active:hover {
+    transform: translateY(-5px);
+    border-color: var(--primary-green);
+    box-shadow: 0 10px 25px rgba(46, 204, 113, 0.1);
+}
+
+.logo-item.active span {
+    color: var(--text-dark);
+}
+
+.merchant-img-container {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    overflow: hidden;
+    background: #f8f8f8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid #eee;
+    transition: transform 0.3s ease;
+}
+
+.merchant-img-container img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.logo-item.active:hover .merchant-img-container {
+    transform: scale(1.05);
 }
 
 /* Download Section */
