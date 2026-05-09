@@ -4,7 +4,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>GreenGO - Mâncarea ta preferată, livrată local.</title>
+    <link rel="icon" type="image/png" href="poze/logo.png">
+
+    <!-- SEO & Social Media Meta Tags -->
+    <meta name="description" content="GreenGO este serviciul de livrare ultra-rapid dedicat comunității Greenfield. Comandă mâncare de la restaurantele locale și o primești în 20 de minute.">
+    <meta name="keywords" content="livrare mancare, greenfield, delivery, local, rapid, restaurante, comanda online">
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://www.green-go.ro/">
+    <meta property="og:title" content="GreenGO - Livrare locală în Greenfield">
+    <meta property="og:description" content="Mâncarea ta preferată de la restaurantele din zonă, livrată la ușa ta în timp record.">
+    <meta property="og:image" content="https://www.green-go.ro/poze/banner_2.png">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://www.green-go.ro/">
+    <meta property="twitter:title" content="GreenGO - Livrare locală în Greenfield">
+    <meta property="twitter:description" content="Mâncarea ta preferată de la restaurantele din zonă, livrată la ușa ta în timp record.">
+    <meta property="twitter:image" content="https://www.green-go.ro/poze/banner_2.png">
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -29,7 +50,7 @@
         <!-- Hero Section -->
         <section id="hero" class="hero section-light">
             <div class="container hero-grid">
-                <div class="hero-content">
+                <div class="hero-content" data-aos="fade-right">
                     <div class="badge">Livrări ultra-rapide în Greenfield</div>
                     <h1>Mâncarea ta preferată,<br>livrată local.</h1>
                     <p>GreenGO conectează comunitatea Greenfield cu restaurantele locale. Fără timpi mari de așteptare, fără taxe ascunse.</p>
@@ -37,21 +58,21 @@
                         <a href="#download" class="btn btn-primary">Descarcă aplicația</a>
                     </div>
                     <div class="hero-stats">
-                        <div class="stat">
+                        <div class="stat" data-aos="fade-up" data-aos-delay="100">
                             <span class="stat-value">20 min</span>
                             <span class="stat-label">Timp mediu</span>
                         </div>
-                        <div class="stat">
+                        <div class="stat" data-aos="fade-up" data-aos-delay="200">
                             <span class="stat-value">12+</span>
                             <span class="stat-label">Parteneri</span>
                         </div>
-                        <div class="stat">
+                        <div class="stat" data-aos="fade-up" data-aos-delay="300">
                             <span class="stat-value">0-9 RON</span>
                             <span class="stat-label">Taxă livrare</span>
                         </div>
                     </div>
                 </div>
-                <div class="hero-image">
+                <div class="hero-image" data-aos="zoom-in-left">
                     <img src="ou.avif" alt="Mâncare proaspătă" class="mockup">
                 </div>
             </div>
@@ -60,24 +81,24 @@
         <!-- Steps Section -->
         <section id="cum-functioneaza" class="steps section-dark">
             <div class="container">
-                <div class="section-header text-center">
-<!--                    <span class="subtitle">CUM FUNCȚIONEAZĂ</span>-->
+                <div class="section-header text-center" data-aos="fade-up">
+                    <span class="subtitle">CUM FUNCȚIONEAZĂ</span>
                     <h2>Din cartier, pentru cartier!</h2>
                 </div>
                 <div class="steps-grid">
-                    <div class="step-card">
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="100">
                         <div class="step-icon">📱</div>
                         <div class="step-num">01</div>
                         <h3>Descarcă aplicația</h3>
                         <p>Găsește GreenGO în App Store sau Google Play și creează-ți contul în câteva secunde.</p>
                     </div>
-                    <div class="step-card">
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="200">
                         <div class="step-icon">🍔</div>
                         <div class="step-num">02</div>
                         <h3>Alege ce vrei</h3>
                         <p>Răsfoiește meniul restaurantelor tale preferate din zonă și adaugă preparatele în coș.</p>
                     </div>
-                    <div class="step-card">
+                    <div class="step-card" data-aos="fade-up" data-aos-delay="300">
                         <div class="step-icon">🛵</div>
                         <div class="step-num">03</div>
                         <h3>Așteaptă 20 de minute</h3>
@@ -90,18 +111,17 @@
         <!-- Community Section -->
         <section id="comunitate" class="community section-light">
             <div class="container">
-                <div class="section-header text-center">
-<!--                    <span class="subtitle"><span class="text-black">DE CE</span> <span class="logo-style">Green<span>GO</span></span></span>-->
+                <div class="section-header text-center" data-aos="fade-up">
                     <h2>Diferiți? Nu, suntem<br>parte din comunitate.</h2>
                 </div>
                 <div class="features-grid">
-                    <div class="feature-card featured">
+                    <div class="feature-card featured" data-aos="zoom-in-right">
                         <div class="icon">🏠</div>
                         <h3>100% local</h3>
                         <p>Suntem singurul serviciu creat special pentru Greenfield. Cunoaștem fiecare alee și livrăm mai rapid decât oricine.</p>
                         <div class="big-stat">100%</div>
                     </div>
-                    <div class="feature-list">
+                    <div class="feature-list" data-aos="fade-left">
                         <div class="feature-item">
                             <div class="icon-small">💰</div>
                             <div>
@@ -131,70 +151,41 @@
         <!-- Restaurants Section -->
         <section id="restaurante" class="restaurants section-light-alt">
             <div class="container">
-                <div class="section-header text-center">
-<!--                    <span class="subtitle">RESTAURANTE</span>-->
+                <div class="section-header text-center" data-aos="fade-up">
                     <h2>Locurile tale preferate,<br>acum la un click distanță</h2>
                 </div>
                 <div class="restaurant-logos">
-                    <!-- Active Merchant links with real images -->
-                    <a href="https://app.green-go.ro/merchant/menu?id=6" class="logo-item active" target="_blank">
+                    <a href="https://app.green-go.ro/merchant/menu?id=6" class="logo-item active" target="_blank" data-aos="zoom-in">
                         <div class="merchant-img-container">
                             <img src="poze/gyro.jpg" alt="GYRO Mediterranean Flavors">
                         </div>
                         <span>GYRO Mediterranean Flavors</span>
                     </a>
-                    <a href="https://app.green-go.ro/merchant/menu?id=3" class="logo-item active" target="_blank">
+                    <a href="https://app.green-go.ro/merchant/menu?id=3" class="logo-item active" target="_blank" data-aos="zoom-in" data-aos-delay="100">
                         <div class="merchant-img-container">
                             <img src="poze/corner_stuff.jpg" alt="Corner Stuff">
                         </div>
                         <span>Corner Stuff</span>
                     </a>
-                    <a href="https://app.green-go.ro/merchant/menu?id=5" class="logo-item active" target="_blank">
+                    <a href="https://app.green-go.ro/merchant/menu?id=5" class="logo-item active" target="_blank" data-aos="zoom-in" data-aos-delay="200">
                         <div class="merchant-img-container">
                             <img src="poze/sareanbucate.png" alt="Sarea'N Bucate">
                         </div>
                         <span>Sarea'N Bucate</span>
                     </a>
-                    <a href="https://app.green-go.ro/merchant/menu?id=1" class="logo-item active" target="_blank">
+                    <a href="https://app.green-go.ro/merchant/menu?id=1" class="logo-item active" target="_blank" data-aos="zoom-in" data-aos-delay="300">
                         <div class="merchant-img-container">
                             <img src="poze/ograda.png" alt="Ograda Urbana">
                         </div>
                         <span>Ograda Urbana</span>
                     </a>
-
-                    <!-- Inactive stores with Coming Soon banner -->
-                    <div class="logo-item">
-                        <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
-                        </div>
-                        <span>Novu</span>
-                    </div>
-                    <div class="logo-item">
-                        <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
-                        </div>
-                        <span>Bunătățuri Maramureșene</span>
-                    </div>
-                    <div class="logo-item">
-                        <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
-                        </div>
-                        <span>Krepe Cafe</span>
-                    </div>
-                    <div class="logo-item">
-                        <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
-                        </div>
-                        <span>Botanical Pick me Up</span>
-                    </div>
                 </div>
             </div>
         </section>
 
         <!-- Download Section -->
         <section id="download" class="download section-dark">
-            <div class="container text-center">
-<!--                <span class="subtitle">DESCARCĂ</span>-->
+            <div class="container text-center" data-aos="fade-up">
                 <h2>Descarcă GreenGO</h2>
                 <div class="app-buttons">
                     <a href="#" class="app-btn store-apple">App Store</a>
@@ -213,8 +204,7 @@
         <!-- Business Section -->
         <section id="parteneri" class="business section-light">
             <div class="container business-grid">
-                <div class="business-info">
-<!--                    <span class="subtitle">PARTENERI</span>-->
+                <div class="business-info" data-aos="fade-right">
                     <h2>Adu afacerea ta în Greenfield</h2>
                     <p>Extinde-ți raza de acțiune și livrează clienților din Greenfield prin cel mai eficient canal local.</p>
                     <ul class="check-list">
@@ -224,7 +214,7 @@
                         <li><strong>Onboarding gratuit</strong> și suport 24/7</li>
                     </ul>
                 </div>
-                <div class="business-form-card">
+                <div class="business-form-card" data-aos="fade-left">
                     <h3>Solicită demo gratuit</h3>
                     <p>Completează formularul și te contactăm în 24h.</p>
                     <form>
@@ -283,6 +273,7 @@
         </div>
     </footer>
 
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
