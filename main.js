@@ -69,6 +69,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 slideShadows: true, // Umbre pentru un efect 3D cat mai realist
             },
             loop: true,
+            loopedSlides: 3, // Asigură suficient spațiu de loop chiar și cu puține slide-uri
             autoplay: {
                 delay: 2500, // Se invarte putin mai repede
                 disableOnInteraction: false,
@@ -77,6 +78,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 el: '.swiper-pagination',
                 clickable: true,
             },
+            // Adaugă suport bun pentru swipe pe mobile
+            touchEventsTarget: 'container',
+            simulateTouch: true,
         });
     };
 
@@ -89,7 +93,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         promoCarousel.innerHTML = '';
 
-        promotions.forEach(promo => {
+        // Dacă avem foarte puține promoții (ex: doar 1 sau 2), le duplicăm temporar
+        // pentru ca efectul de coverflow 3D să funcționeze și arate bine, altfel se blochează swipe-ul.
+        let promosToDisplay = [...promotions];
+        if (promotions.length < 4 && promotions.length > 0) {
+             while(promosToDisplay.length < 4) {
+                 promosToDisplay = promosToDisplay.concat(promotions);
+             }
+        }
+
+        promosToDisplay.forEach(promo => {
             const merchant = merchantDetails[promo.merchantId];
             if (!merchant) return;
 

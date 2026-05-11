@@ -256,7 +256,7 @@ nav {
     display: flex;
     justify-content: center;
     perspective: 1200px;
-    padding: 30px 0; /* Mai mult spațiu pentru umbra farfuriei */
+    padding: 30px 0;
 }
 
 /* SWIPER 3D PLATE EFFECT (CSS ART) */
@@ -832,4 +832,9 @@ footer {
 
     .promo-swiper { max-width: 100%; }
     .swiper-slide { width: 280px; height: 280px; }
+
+    .promo-card .info { width: 90%; }
+    .promo-card .img-container { width: 80px; height: 80px; margin-bottom: 10px;}
+    .promo-card h4 { font-size: 1.1rem; }
+    .promo-card .promo-name { font-size: 0.85rem; margin-bottom: 5px; }
 }
