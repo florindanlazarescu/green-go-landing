@@ -62,15 +62,15 @@ document.addEventListener('DOMContentLoaded', () => {
             centeredSlides: true,
             slidesPerView: 'auto',
             coverflowEffect: {
-                rotate: 50,
-                stretch: 0,
-                depth: 100,
+                rotate: 60, // Mareste rotatia pentru a simula curbura pe margini
+                stretch: -30, // Trage farfuriile mai aproape
+                depth: 300, // Impinge farfuriile mult inapoi (efect de sfera)
                 modifier: 1,
-                slideShadows: true,
+                slideShadows: true, // Umbre pentru un efect 3D cat mai realist
             },
             loop: true,
             autoplay: {
-                delay: 3000,
+                delay: 2500, // Se invarte putin mai repede
                 disableOnInteraction: false,
             },
             pagination: {
