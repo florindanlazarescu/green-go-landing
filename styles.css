@@ -251,16 +251,67 @@ nav {
     color: var(--text-muted);
 }
 
-.hero-image {
+/* Promo Carousel */
+.promo-carousel {
     display: flex;
-    justify-content: flex-end;
+    flex-direction: column;
+    gap: 15px;
+    height: 450px; /* Or adjust to fit your design */
+    overflow-y: auto;
 }
 
-.mockup {
+.promo-card {
+    background: white;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    border: 1px solid #eee;
+    text-decoration: none;
+    color: var(--text-dark);
+    transition: transform 0.3s ease;
+}
+
+.promo-card:hover {
+    transform: translateY(-5px);
+}
+
+.promo-card .img-container {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.promo-card img {
     width: 100%;
-    max-width: 450px;
-    border-radius: 40px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
+    height: 100%;
+    object-fit: cover;
+}
+
+.promo-card .info h4 {
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0;
+}
+
+.promo-card .info p {
+    font-size: 0.85rem;
+    margin: 0;
+    color: var(--text-muted);
+}
+
+.promo-card .discount {
+    margin-left: auto;
+    background: #e74c3c;
+    color: white;
+    font-weight: 700;
+    font-size: 0.9rem;
+    padding: 6px 12px;
+    border-radius: 8px;
 }
 
 /* Steps Section */
@@ -623,7 +674,7 @@ footer {
     .hero-content { text-align: center; padding-top: 0; }
     .hero p { margin-left: auto; margin-right: auto; }
     .hero-stats { justify-content: center; }
-    .hero-image { order: -1; justify-content: center; margin-bottom: 2rem; }
+    .hero-image, .promo-carousel { order: -1; justify-content: center; margin-bottom: 2rem; }
     .hero h1 { font-size: 3rem; }
     .restaurant-logos { grid-template-columns: repeat(2, 1fr); }
     .footer-content { grid-template-columns: 1fr; }
