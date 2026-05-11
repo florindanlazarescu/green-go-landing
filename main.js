@@ -66,10 +66,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 stretch: -30, // Trage farfuriile mai aproape
                 depth: 300, // Impinge farfuriile mult inapoi (efect de sfera)
                 modifier: 1,
-                slideShadows: true, // Umbre pentru un efect 3D cat mai realist
+                slideShadows: false, // Umbre false pt un aspect mai clean
             },
             loop: true,
-            loopedSlides: 3, // Asigură suficient spațiu de loop chiar și cu puține slide-uri
+            loopedSlides: 4, // Asigură suficient spațiu de loop chiar și cu puține slide-uri
             autoplay: {
                 delay: 2500, // Se invarte putin mai repede
                 disableOnInteraction: false,
