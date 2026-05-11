@@ -26,6 +26,10 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
@@ -72,9 +76,17 @@
                         </div>
                     </div>
                 </div>
-                <div id="promo-carousel" class="promo-carousel" data-aos="zoom-in-left">
-                    <!-- Promotions will be injected here by JavaScript -->
+
+                <div class="hero-image" data-aos="zoom-in-left">
+                    <!-- Swiper 3D Carousel -->
+                    <div class="swiper promo-swiper" style="display: none;">
+                        <div class="swiper-wrapper" id="promo-carousel">
+                            <!-- Promotions will be injected here -->
+                        </div>
+                        <div class="swiper-pagination"></div>
+                    </div>
                 </div>
+
             </div>
         </section>
 
@@ -82,7 +94,6 @@
         <section id="cum-functioneaza" class="steps section-dark">
             <div class="container">
                 <div class="section-header text-center" data-aos="fade-up">
-<!--                    <span class="subtitle">CUM FUNCȚIONEAZĂ</span>-->
                     <h2>Din cartier, pentru cartier!</h2>
                 </div>
                 <div class="steps-grid">
@@ -300,6 +311,8 @@
         </div>
     </footer>
 
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
     <script src="main.js"></script>
 </body>

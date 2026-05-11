@@ -33,6 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Promotions Carousel ---
     const promoCarousel = document.getElementById('promo-carousel');
+    const swiperContainer = document.querySelector('.promo-swiper');
 
     // A small local "database" to map merchantId to its details
     const merchantDetails = {
@@ -54,9 +55,27 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join(', ');
     };
 
+    const initSwiper = () => {
+        new Swiper('.promo-swiper', {
+            effect: 'cards',
+            grabCursor: true,
+            initialSlide: 0,
+            loop: true,
+            autoplay: {
+                delay: 3000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+        });
+    };
+
     const displayPromotions = (promotions) => {
         if (!promotions || promotions.length === 0) {
-            promoCarousel.innerHTML = '<p class="text-center">Momentan nu sunt promoții active.</p>';
+            if (swiperContainer) swiperContainer.style.display = 'block';
+            promoCarousel.innerHTML = '<p class="text-center" style="padding: 20px;">Momentan nu sunt promoții active.</p>';
             return;
         }
 
@@ -68,27 +87,29 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const scheduleText = formatSchedule(promo.schedules);
 
-            const card = document.createElement('a');
-            card.href = `https://app.green-go.ro/merchant/menu?id=${promo.merchantId}`;
-            card.className = 'promo-card';
-            card.target = '_blank';
-            card.setAttribute('data-aos', 'fade-up');
-
+            const card = document.createElement('div');
+            card.className = 'swiper-slide';
             card.innerHTML = `
-                <div class="img-container">
-                    <img src="${merchant.logo}" alt="${merchant.name}">
-                </div>
-                <div class="info">
-                    <h4>${merchant.name}</h4>
-                    <p class="promo-name">${promo.name}</p>
-                    <p class="promo-schedule">${scheduleText}</p>
-                </div>
-                <div class="discount">
-                    -${Math.round(promo.discountPercent)}%
-                </div>
+                <a href="https://app.green-go.ro/merchant/menu?id=${promo.merchantId}" class="promo-card" target="_blank">
+                    <div class="discount">-${Math.round(promo.discountPercent)}%</div>
+                    <div class="img-container">
+                        <img src="${merchant.logo}" alt="${merchant.name}">
+                    </div>
+                    <div class="info">
+                        <h4>${merchant.name}</h4>
+                        <p class="promo-name">${promo.name}</p>
+                        <p class="promo-schedule">${scheduleText}</p>
+                    </div>
+                </a>
             `;
             promoCarousel.appendChild(card);
         });
+
+        // Make the carousel visible and initialize Swiper
+        if (swiperContainer) {
+            swiperContainer.style.display = 'block';
+            initSwiper();
+        }
     };
 
     const fetchAndDisplayPromotions = async () => {
@@ -99,7 +120,8 @@ document.addEventListener('DOMContentLoaded', () => {
             displayPromotions(promotions);
         } catch (error) {
             console.error('Could not fetch live promotions. Error:', error);
-            promoCarousel.innerHTML = '<p class="text-center">Eroare la încărcarea promoțiilor.</p>';
+            if (swiperContainer) swiperContainer.style.display = 'block';
+            promoCarousel.innerHTML = '<p class="text-center" style="padding: 20px;">Eroare la încărcarea promoțiilor.</p>';
         }
     };
 
