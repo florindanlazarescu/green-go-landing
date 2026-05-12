@@ -66,13 +66,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 stretch: -30, // Trage farfuriile mai aproape
                 depth: 300, // Impinge farfuriile mult inapoi (efect de sfera)
                 modifier: 1,
-                slideShadows: false, // Umbre false pt un aspect mai clean
+                slideShadows: true, // Umbre pentru un efect 3D cat mai realist
             },
             loop: true,
-<<<<<<< HEAD
-            loopedSlides: 4, // Asigură suficient spațiu de loop chiar și cu puține slide-uri
-=======
->>>>>>> parent of 1def6ab (micsorare farfurie pt a putea face slide si st si dr pe mobil)
             autoplay: {
                 delay: 2500, // Se invarte putin mai repede
                 disableOnInteraction: false,
