@@ -269,20 +269,13 @@ nav {
 
 .swiper-slide {
     width: 340px;
-    height: 340px;
+    height: 340px; /* Pătrat pentru a deveni cerc */
     background-color: transparent;
     display: flex;
     align-items: center;
     justify-content: center;
     border: none;
     box-shadow: none;
-    /* FADE EFFECT FOR NON-ACTIVE SLIDES */
-    opacity: 0.3;
-    transition: opacity 0.3s ease;
-}
-
-.swiper-slide-active {
-    opacity: 1; /* Center slide is fully visible */
 }
 
 .promo-card {
@@ -297,15 +290,16 @@ nav {
     text-decoration: none;
     color: var(--text-dark);
     position: relative;
+    /* Transformare în farfurie ceramică */
     border-radius: 50%;
     background: #fdfdfd;
     background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f4f4f4 60%, #e8e8e8 100%);
     box-shadow:
-        15px 25px 35px rgba(0,0,0,0.15),
-        inset -15px -15px 30px rgba(255,255,255,0.8),
-        inset 15px 15px 30px rgba(0,0,0,0.05),
-        inset 0 0 0 25px #ffffff,
-        inset 0 0 20px 25px rgba(0,0,0,0.08);
+        15px 25px 35px rgba(0,0,0,0.15), /* Umbra pe masă (efect 3D) */
+        inset -15px -15px 30px rgba(255,255,255,0.8), /* Lumină pe marginea de jos */
+        inset 15px 15px 30px rgba(0,0,0,0.05), /* Umbră pe marginea de sus */
+        inset 0 0 0 25px #ffffff, /* Buza plată a farfuriei (rim) */
+        inset 0 0 20px 25px rgba(0,0,0,0.08); /* Adâncimea farfuriei (inner shadow) */
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -319,7 +313,7 @@ nav {
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: 15px;
-    border: 3px solid #fff;
+    border: 3px solid #fff; /* Ramă albă ca o porție în centru */
     background: #fff;
     display: flex;
     align-items: center;
@@ -335,7 +329,7 @@ nav {
 }
 
 .promo-card .info {
-    width: 75%;
+    width: 75%; /* Mai îngust ca să încapă în centrul "farfuriei" */
     z-index: 2;
 }
 
@@ -360,9 +354,10 @@ nav {
     padding: 4px 10px;
     border-radius: 20px;
     display: inline-block;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Umbră mică pentru text */
 }
 
+/* Reducerea ca un sticker atașat pe marginea farfuriei */
 .promo-card .discount {
     position: absolute;
     top: 15px;
@@ -379,7 +374,7 @@ nav {
     font-size: 1.1rem;
     box-shadow:
         0 8px 20px rgba(231, 76, 60, 0.4),
-        inset 2px 2px 5px rgba(255,255,255,0.3);
+        inset 2px 2px 5px rgba(255,255,255,0.3); /* Mic highlight pe sticker */
     z-index: 10;
     transform: rotate(15deg);
 }
@@ -835,7 +830,7 @@ footer {
     .stat-label { font-size: 0.75rem; }
     .logo { font-size: 1.3rem; }
 
-    .promo-swiper { max-width: 100%; padding-top: 10px; }
+    .promo-swiper { max-width: 100%; }
     .swiper-slide { width: 280px; height: 280px; }
 
     .promo-card .info { width: 90%; }
