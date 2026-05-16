@@ -1,0 +1,401 @@
+<!doctype html>
+<html lang="ro">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>3D Carousel Flow Gallery</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@picocss/pico@1/css/pico.min.css">
+  <style>
+    :root {
+      --brand: #7c3aed;
+      --brand-2: #06b6d4;
+      --bg: #09090f;
+      --card: rgba(255,255,255,.08);
+      --text-soft: rgba(255,255,255,.72);
+    }
+
+    body {
+      min-height: 100vh;
+      margin: 0;
+      color: white;
+      background:
+        radial-gradient(circle at top left, rgba(124,58,237,.35), transparent 30rem),
+        radial-gradient(circle at bottom right, rgba(6,182,212,.25), transparent 28rem),
+        var(--bg);
+    }
+
+    nav.container-fluid {
+      padding: 1rem 2rem;
+      backdrop-filter: blur(14px);
+      background: rgba(9,9,15,.65);
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    nav a, nav strong { color: white; }
+
+    main.container { padding-top: 4rem; padding-bottom: 3rem; }
+
+    .hero {
+      text-align: center;
+      max-width: 820px;
+      margin: 0 auto 2.5rem;
+    }
+
+    .hero h1 {
+      font-size: clamp(2.4rem, 7vw, 5.8rem);
+      line-height: .95;
+      margin-bottom: 1rem;
+      letter-spacing: -0.06em;
+      background: linear-gradient(135deg, #fff, #c4b5fd 45%, #67e8f9);
+      -webkit-background-clip: text;
+      color: transparent;
+    }
+
+    .hero p { color: var(--text-soft); font-size: 1.08rem; }
+
+    .gallery-shell {
+      position: relative;
+      overflow: hidden;
+      min-height: 520px;
+      border-radius: 2rem;
+      border: 1px solid rgba(255,255,255,.1);
+      background: linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.035));
+      box-shadow: 0 30px 90px rgba(0,0,0,.45);
+      padding: 2rem 1rem 1.2rem;
+    }
+
+    .carousel {
+      position: relative;
+      height: 390px;
+      perspective: 1200px;
+      transform-style: preserve-3d;
+    }
+
+    .slide {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: min(68vw, 620px);
+      aspect-ratio: 16 / 10;
+      transform-style: preserve-3d;
+      transform: translate(-50%, -50%);
+      border-radius: 1.5rem;
+      overflow: hidden;
+      background: #111827;
+      box-shadow: 0 26px 60px rgba(0,0,0,.55);
+      transition: transform .65s cubic-bezier(.2,.8,.2,1), opacity .5s, filter .5s;
+      cursor: pointer;
+    }
+
+    .slide img, .slide video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .caption {
+      position: absolute;
+      inset: auto 1rem 1rem 1rem;
+      padding: .9rem 1rem;
+      border-radius: 1rem;
+      background: rgba(0,0,0,.5);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+
+    .caption h3 { margin: 0; font-size: 1.1rem; color: white; }
+    .caption p { margin: .15rem 0 0; color: rgba(255,255,255,.76); font-size: .9rem; }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: .7rem;
+      margin-top: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .controls button {
+      width: auto;
+      border-radius: 999px;
+      padding: .75rem 1.1rem;
+      background: rgba(255,255,255,.1);
+      border: 1px solid rgba(255,255,255,.14);
+    }
+
+    .controls button.primary {
+      background: linear-gradient(135deg, var(--brand), var(--brand-2));
+      border: none;
+    }
+
+    .thumbs {
+      display: flex;
+      gap: .65rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-top: 1.2rem;
+    }
+
+    .thumb {
+      width: 72px;
+      height: 48px;
+      border-radius: .7rem;
+      object-fit: cover;
+      opacity: .45;
+      border: 2px solid transparent;
+      cursor: pointer;
+      transition: .25s;
+    }
+
+    .thumb.active {
+      opacity: 1;
+      border-color: #67e8f9;
+      transform: translateY(-3px);
+    }
+
+    .features {
+      margin-top: 2rem;
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1rem;
+    }
+
+    .features article {
+      background: var(--card);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 1.4rem;
+      margin: 0;
+    }
+
+    section[aria-label="Subscribe example"] article {
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 1.5rem;
+    }
+
+    footer.container { text-align: center; padding-bottom: 2rem; }
+    footer a, footer small { color: var(--text-soft); }
+
+    @media (max-width: 780px) {
+      nav.container-fluid { padding: .8rem 1rem; }
+      .gallery-shell { min-height: 455px; }
+      .carousel { height: 320px; }
+      .slide { width: 82vw; }
+      .features { grid-template-columns: 1fr; }
+      .caption { inset: auto .65rem .65rem .65rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav class="container-fluid">
+    <ul>
+      <li><strong>Flow3D Gallery</strong></li>
+    </ul>
+    <ul>
+      <li><a href="#gallery">Galerie</a></li>
+      <li><a href="#features">Funcții</a></li>
+      <li><a href="#subscribe" role="button">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main class="container">
+    <section class="hero">
+      <hgroup>
+        <h1>3D Carousel Flow</h1>
+        <h3>Galerie media interactivă pentru imagini și video</h3>
+      </hgroup>
+      <p>Un carousel modern, fluid și responsive, cu perspectivă 3D, thumbnail-uri, auto-play și navigare prin tastatură.</p>
+    </section>
+
+    <div class="grid" id="gallery">
+      <section>
+        <div class="gallery-shell">
+          <div class="carousel" id="carousel" aria-label="3D media carousel"></div>
+
+          <div class="controls">
+            <button id="prev" aria-label="Slide anterior">← Anterior</button>
+            <button id="toggle" class="primary">Pauză autoplay</button>
+            <button id="next" aria-label="Slide următor">Următor →</button>
+          </div>
+
+          <div class="thumbs" id="thumbs" aria-label="Miniaturi galerie"></div>
+        </div>
+      </section>
+    </div>
+
+    <section class="features" id="features">
+      <article>
+        <h3>Perspectivă 3D</h3>
+        <p>Slide-ul activ rămâne în față, iar cele laterale se rotesc și se estompează pentru efect de adâncime.</p>
+      </article>
+      <article>
+        <h3>Responsive</h3>
+        <p>Layout-ul se adaptează automat pentru desktop, tabletă și telefon.</p>
+      </article>
+      <article>
+        <h3>Ușor de personalizat</h3>
+        <p>Schimbi rapid imaginile, titlurile, viteza de autoplay și textele dintr-un singur array JavaScript.</p>
+      </article>
+    </section>
+  </main>
+
+  <section aria-label="Subscribe example" id="subscribe">
+    <div class="container">
+      <article>
+        <hgroup>
+          <h2>Vrei o galerie pentru proiectul tău?</h2>
+          <h3>Lasă datele și te contactăm cu o variantă personalizată.</h3>
+        </hgroup>
+        <form class="grid">
+          <input type="text" id="firstname" name="firstname" placeholder="Prenume" aria-label="Prenume" required>
+          <input type="email" id="email" name="email" placeholder="Adresă de email" aria-label="Adresă de email" required>
+          <button type="submit" onclick="event.preventDefault(); alert('Mulțumim! Formular demo.');">Trimite</button>
+        </form>
+      </article>
+    </div>
+  </section>
+
+  <footer class="container">
+    <small>
+      <a href="#">Termeni</a> • <a href="#">Confidențialitate</a> • <a href="#gallery">Înapoi sus</a>
+    </small>
+  </footer>
+
+  <script>
+    const items = [
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1400&q=80',
+        title: 'Mountain Escape',
+        text: 'Cadru cinematic pentru proiecte outdoor.'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1492691527719-9d1e07e534b4?auto=format&fit=crop&w=1400&q=80',
+        title: 'Creative Studio',
+        text: 'Perfect pentru portofolii foto și video.'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=80',
+        title: 'Desert Flow',
+        text: 'Tranziții line cu profunzime vizuală.'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1518005020951-eccb494ad742?auto=format&fit=crop&w=1400&q=80',
+        title: 'Urban Geometry',
+        text: 'Arhitectură, design și prezentări premium.'
+      },
+      {
+        type: 'image',
+        src: 'https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1400&q=80',
+        title: 'Wide Gallery',
+        text: 'Poți adăuga oricâte slide-uri dorești.'
+      }
+    ];
+
+    const carousel = document.getElementById('carousel');
+    const thumbs = document.getElementById('thumbs');
+    const prev = document.getElementById('prev');
+    const next = document.getElementById('next');
+    const toggle = document.getElementById('toggle');
+
+    let active = 0;
+    let autoplay = true;
+    let timer;
+
+    function createSlides() {
+      carousel.innerHTML = '';
+      thumbs.innerHTML = '';
+
+      items.forEach((item, index) => {
+        const slide = document.createElement('article');
+        slide.className = 'slide';
+        slide.innerHTML = `
+          ${item.type === 'video'
+            ? `<video src="${item.src}" muted loop playsinline></video>`
+            : `<img src="${item.src}" alt="${item.title}">`}
+          <div class="caption">
+            <h3>${item.title}</h3>
+            <p>${item.text}</p>
+          </div>
+        `;
+        slide.addEventListener('click', () => setActive(index));
+        carousel.appendChild(slide);
+
+        const thumb = document.createElement('img');
+        thumb.className = 'thumb';
+        thumb.src = item.src;
+        thumb.alt = item.title;
+        thumb.addEventListener('click', () => setActive(index));
+        thumbs.appendChild(thumb);
+      });
+    }
+
+    function getOffset(index) {
+      let offset = index - active;
+      const half = Math.floor(items.length / 2);
+      if (offset > half) offset -= items.length;
+      if (offset < -half) offset += items.length;
+      return offset;
+    }
+
+    function render() {
+      const slides = [...document.querySelectorAll('.slide')];
+      const thumbNodes = [...document.querySelectorAll('.thumb')];
+
+      slides.forEach((slide, index) => {
+        const offset = getOffset(index);
+        const abs = Math.abs(offset);
+        const x = offset * 230;
+        const z = -abs * 150;
+        const rotate = offset * -38;
+        const opacity = abs > 2 ? 0 : 1 - abs * .22;
+        const scale = 1 - abs * .12;
+        const blur = abs > 1 ? 2 : 0;
+
+        slide.style.zIndex = 20 - abs;
+        slide.style.opacity = opacity;
+        slide.style.filter = `blur(${blur}px)`;
+        slide.style.pointerEvents = abs > 2 ? 'none' : 'auto';
+        slide.style.transform = `translate(-50%, -50%) translateX(${x}px) translateZ(${z}px) rotateY(${rotate}deg) scale(${scale})`;
+
+        const video = slide.querySelector('video');
+        if (video) index === active ? video.play() : video.pause();
+      });
+
+      thumbNodes.forEach((thumb, index) => thumb.classList.toggle('active', index === active));
+    }
+
+    function setActive(index) {
+      active = (index + items.length) % items.length;
+      render();
+      restartAutoplay();
+    }
+
+    function restartAutoplay() {
+      clearInterval(timer);
+      if (autoplay) timer = setInterval(() => setActive(active + 1), 3200);
+    }
+
+    prev.addEventListener('click', () => setActive(active - 1));
+    next.addEventListener('click', () => setActive(active + 1));
+    toggle.addEventListener('click', () => {
+      autoplay = !autoplay;
+      toggle.textContent = autoplay ? 'Pauză autoplay' : 'Pornește autoplay';
+      restartAutoplay();
+    });
+
+    window.addEventListener('keydown', event => {
+      if (event.key === 'ArrowLeft') setActive(active - 1);
+      if (event.key === 'ArrowRight') setActive(active + 1);
+    });
+
+    createSlides();
+    render();
+    restartAutoplay();
+  </script>
+</body>
+</html>
