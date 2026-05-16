@@ -860,251 +860,143 @@ footer {
 }
 
 
-/* =========================================================
-   GREEN-GO MOBILE HOTFIX v2
-   Fixes: blank mobile hero caused by AOS hidden elements,
-   oversized/off-canvas layout, and mobile menu positioning.
-   ========================================================= */
-
-html,
-body {
-    width: 100%;
-    max-width: 100%;
-    overflow-x: hidden;
+/* ===== FIX CARUSEL HERO PE MOBIL =====
+   Desktop ramane cu efectul Swiper cards/3D.
+   Pe mobil caruselul devine slide normal ca sa nu mai largeasca pagina
+   si sa nu mai impinga continutul in afara ecranului. */
+.hero,
+.hero-grid,
+.hero-image,
+.promo-swiper {
+    min-width: 0;
 }
 
-img,
-video,
-canvas,
-svg {
-    max-width: 100%;
-    height: auto;
+.hero {
+    overflow: hidden;
 }
 
-header {
-    width: 100%;
-}
-
-header nav.container {
-    min-height: 56px;
-}
-
-/* Sa nu ramana elementele invizibile pe mobil daca AOS/JS nu porneste */
-@media (max-width: 992px) {
-    [data-aos],
-    [data-aos][class*="aos-"] {
-        opacity: 1 !important;
-        transform: none !important;
-        transition: none !important;
-        pointer-events: auto !important;
-    }
-
-    .container {
+@media (max-width: 768px) {
+    html,
+    body {
         width: 100%;
         max-width: 100%;
-        padding-left: 18px;
-        padding-right: 18px;
-    }
-
-    header {
-        padding: 14px 0;
-        background: #ffffff;
-        border-bottom: 1px solid rgba(0,0,0,0.08);
+        overflow-x: hidden;
     }
 
     .hero {
-        min-height: auto !important;
-        padding: 34px 0 44px !important;
-        overflow: visible;
-        background: linear-gradient(135deg, #f8fffb 0%, #e8f7ee 100%);
+        padding: 48px 0 56px;
     }
 
     .hero-grid {
         display: grid;
-        grid-template-columns: minmax(0, 1fr) !important;
-        gap: 24px;
-        align-items: center;
+        grid-template-columns: 1fr;
+        gap: 28px;
+        width: 100%;
     }
 
     .hero-content {
-        display: block !important;
-        visibility: visible !important;
-        opacity: 1 !important;
         text-align: left;
-        order: 1;
-    }
-
-    .hero-image {
-        display: flex !important;
-        visibility: visible !important;
-        opacity: 1 !important;
-        order: 2;
-        margin: 8px auto 0 !important;
-        padding: 0 !important;
-        width: 100%;
-        max-width: 100%;
-        perspective: none;
-    }
-
-    .badge {
-        margin-bottom: 12px;
-    }
-
-    .hero h1 {
-        font-size: clamp(2.05rem, 12vw, 3rem) !important;
-        line-height: 1.08;
-        margin-bottom: 16px;
-        word-break: normal;
     }
 
     .hero p {
-        max-width: none;
-        margin: 0 0 24px !important;
-        font-size: 1rem;
-        line-height: 1.55;
+        margin-left: 0;
+        margin-right: 0;
+        max-width: 100%;
     }
 
-    .hero-actions {
-        display: flex;
-        justify-content: flex-start;
-    }
-
-    .hero-stats {
-        display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 10px !important;
-        margin-top: 28px !important;
-        text-align: left;
+    .hero-image {
+        order: 0;
+        width: 100%;
+        max-width: 100%;
+        padding: 0;
+        margin: 8px auto 0;
+        perspective: none;
+        overflow: hidden;
     }
 
     .promo-swiper {
+        display: block;
         width: 100%;
-        max-width: 360px;
+        max-width: 340px;
+        margin: 0 auto;
+        padding: 10px 0 42px;
         overflow: hidden;
-        padding-top: 10px;
-        padding-bottom: 42px;
-        margin-left: auto;
-        margin-right: auto;
     }
 
-    .swiper-slide {
-        width: min(82vw, 300px) !important;
-        height: min(82vw, 300px) !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .menu-toggle {
-        display: flex !important;
-        flex: 0 0 44px;
-        z-index: 1202;
-    }
-
-    .nav-links {
-        position: fixed !important;
-        top: 0 !important;
-        right: 0 !important;
-        left: auto !important;
-        width: min(82vw, 330px) !important;
-        height: 100dvh !important;
-        min-height: 100vh;
-        padding: 90px 24px 32px !important;
-        margin: 0 !important;
-        background: #171717 !important;
-        color: #ffffff;
-        display: flex !important;
-        flex-direction: column;
+    .promo-swiper .swiper-wrapper {
         align-items: center;
-        justify-content: flex-start;
-        gap: 0;
-        box-shadow: -18px 0 50px rgba(0,0,0,0.25);
-        transform: translateX(110%);
-        transition: transform .28s ease;
-        z-index: 1200;
-        overflow-y: auto;
     }
 
-    .nav-links.active {
-        transform: translateX(0);
-        right: 0 !important;
-    }
-
-    .nav-links li {
-        width: 100%;
-        margin: 0 !important;
-        text-align: center;
-    }
-
-    .nav-links a {
-        display: block;
-        padding: 17px 0;
-        color: #ffffff !important;
-        font-size: 1.12rem !important;
-        line-height: 1.25;
-    }
-
-    .nav-links .logo-style,
-    .nav-links .logo-style span {
-        color: inherit;
-    }
-
-    .nav-links .logo-style {
-        color: var(--primary-green) !important;
-    }
-
-    .btn-nav {
-        display: none !important;
-    }
-
-    body.no-scroll {
-        overflow: hidden;
-        touch-action: none;
-    }
-
-    .footer-bottom {
-        display: block;
-        text-align: center;
-    }
-}
-
-@media (max-width: 480px) {
-    section {
-        padding: 52px 0;
-    }
-
-    .logo {
-        font-size: 1.25rem !important;
-    }
-
-    .hero {
-        padding-top: 28px !important;
-    }
-
-    .hero h1 {
-        font-size: clamp(2rem, 11vw, 2.65rem) !important;
-    }
-
-    .hero-stats {
-        grid-template-columns: 1fr 1fr 1fr;
-    }
-
-    .stat-value {
-        font-size: 1.12rem !important;
-    }
-
-    .stat-label {
-        font-size: .72rem !important;
+    .promo-swiper .swiper-slide {
+        width: 300px !important;
+        height: 300px;
+        max-width: calc(100vw - 48px);
+        transform: none;
     }
 
     .promo-card {
         padding: 22px;
+        box-shadow:
+            0 16px 35px rgba(0,0,0,0.12),
+            inset -10px -10px 22px rgba(255,255,255,0.8),
+            inset 10px 10px 22px rgba(0,0,0,0.05),
+            inset 0 0 0 18px #ffffff,
+            inset 0 0 16px 18px rgba(0,0,0,0.07);
+    }
+
+    .promo-card:hover {
+        transform: none;
     }
 
     .promo-card .discount {
-        width: 54px;
-        height: 54px;
-        font-size: .95rem;
         top: 10px;
         right: 10px;
+        width: 54px;
+        height: 54px;
+        font-size: 0.95rem;
+    }
+
+    .promo-card .img-container {
+        width: 76px;
+        height: 76px;
+    }
+
+    .promo-card .info {
+        width: 86%;
+    }
+
+    .promo-card h4 {
+        font-size: 1rem;
+    }
+
+    .promo-card .promo-name {
+        font-size: 0.85rem;
+    }
+
+    .promo-card .promo-schedule {
+        max-width: 100%;
+        font-size: 0.68rem;
+        white-space: normal;
+    }
+}
+
+@media (max-width: 480px) {
+    .hero h1 {
+        font-size: clamp(2.35rem, 13vw, 3.15rem);
+        line-height: 1.08;
+    }
+
+    .hero-stats {
+        justify-content: flex-start;
+    }
+
+    .promo-swiper {
+        max-width: 310px;
+    }
+
+    .promo-swiper .swiper-slide {
+        width: 280px !important;
+        height: 280px;
+        max-width: calc(100vw - 40px);
     }
 }

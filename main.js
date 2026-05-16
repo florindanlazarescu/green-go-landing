@@ -23,42 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Close mobile menu when tapping outside it or pressing Escape
-    document.addEventListener('click', (event) => {
-        if (!menuToggle || !navLinks) return;
-        const clickedInsideMenu = navLinks.contains(event.target);
-        const clickedToggle = menuToggle.contains(event.target);
-        if (!clickedInsideMenu && !clickedToggle && navLinks.classList.contains('active')) {
-            menuToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            body.classList.remove('no-scroll');
-        }
+    // Initialize Animate on Scroll
+    AOS.init({
+        duration: 800,
+        easing: 'ease-in-out',
+        once: true,
+        mirror: false,
     });
-
-    document.addEventListener('keydown', (event) => {
-        if (!menuToggle || !navLinks) return;
-        if (event.key === 'Escape' && navLinks.classList.contains('active')) {
-            menuToggle.classList.remove('active');
-            navLinks.classList.remove('active');
-            body.classList.remove('no-scroll');
-        }
-    });
-
-    // Initialize Animate on Scroll safely. On mobile, content must remain visible even if AOS fails.
-    if (window.AOS && window.innerWidth > 992) {
-        AOS.init({
-            duration: 800,
-            easing: 'ease-in-out',
-            once: true,
-            mirror: false,
-        });
-    } else {
-        document.querySelectorAll('[data-aos]').forEach(el => {
-            el.style.opacity = '1';
-            el.style.transform = 'none';
-            el.removeAttribute('data-aos');
-        });
-    }
 
     // --- Promotions Carousel ---
     const promoCarousel = document.getElementById('promo-carousel');
@@ -84,10 +55,28 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join(', ');
     };
 
+    let promoSwiperInstance = null;
+
     const initSwiper = () => {
-        new Swiper('.promo-swiper', {
-            effect: 'cards',
+        if (!document.querySelector('.promo-swiper')) return;
+
+        if (promoSwiperInstance) {
+            promoSwiperInstance.destroy(true, true);
+            promoSwiperInstance = null;
+        }
+
+        const isMobile = window.matchMedia('(max-width: 768px)').matches;
+
+        promoSwiperInstance = new Swiper('.promo-swiper', {
+            effect: isMobile ? 'slide' : 'cards',
+            cardsEffect: {
+                perSlideOffset: 8,
+                perSlideRotate: 2,
+                slideShadows: false
+            },
             grabCursor: true,
+            centeredSlides: true,
+            slidesPerView: 1,
             initialSlide: 0,
             loop: true,
             autoplay: {
@@ -100,6 +89,14 @@ document.addEventListener('DOMContentLoaded', () => {
             },
         });
     };
+
+    let resizeTimer;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(() => {
+            if (promoCarousel && promoCarousel.children.length > 0) initSwiper();
+        }, 250);
+    });
 
     const displayPromotions = (promotions) => {
         if (!promotions || promotions.length === 0) {
