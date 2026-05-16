@@ -23,15 +23,40 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initialize Animate on Scroll only when available.
-    // On small screens animations are disabled so content never stays hidden if a CDN is delayed.
-    if (window.AOS) {
+    // Close mobile menu when tapping outside it or pressing Escape
+    document.addEventListener('click', (event) => {
+        if (!menuToggle || !navLinks) return;
+        const clickedInsideMenu = navLinks.contains(event.target);
+        const clickedToggle = menuToggle.contains(event.target);
+        if (!clickedInsideMenu && !clickedToggle && navLinks.classList.contains('active')) {
+            menuToggle.classList.remove('active');
+            navLinks.classList.remove('active');
+            body.classList.remove('no-scroll');
+        }
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (!menuToggle || !navLinks) return;
+        if (event.key === 'Escape' && navLinks.classList.contains('active')) {
+            menuToggle.classList.remove('active');
+            navLinks.classList.remove('active');
+            body.classList.remove('no-scroll');
+        }
+    });
+
+    // Initialize Animate on Scroll safely. On mobile, content must remain visible even if AOS fails.
+    if (window.AOS && window.innerWidth > 992) {
         AOS.init({
             duration: 800,
             easing: 'ease-in-out',
             once: true,
             mirror: false,
-            disable: () => window.innerWidth < 769
+        });
+    } else {
+        document.querySelectorAll('[data-aos]').forEach(el => {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+            el.removeAttribute('data-aos');
         });
     }
 
@@ -60,7 +85,6 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initSwiper = () => {
-        if (!window.Swiper) return;
         new Swiper('.promo-swiper', {
             effect: 'cards',
             grabCursor: true,
