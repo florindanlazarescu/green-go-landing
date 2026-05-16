@@ -23,13 +23,17 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initialize Animate on Scroll
-    AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        mirror: false,
-    });
+    // Initialize Animate on Scroll only when available.
+    // On small screens animations are disabled so content never stays hidden if a CDN is delayed.
+    if (window.AOS) {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            mirror: false,
+            disable: () => window.innerWidth < 769
+        });
+    }
 
     // --- Promotions Carousel ---
     const promoCarousel = document.getElementById('promo-carousel');
@@ -56,6 +60,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initSwiper = () => {
+        if (!window.Swiper) return;
         new Swiper('.promo-swiper', {
             effect: 'cards',
             grabCursor: true,
