@@ -860,66 +860,88 @@ footer {
 }
 
 
-/* ===== FIX CARUSEL HERO PE MOBIL =====
-   Desktop ramane cu efectul Swiper cards/3D.
-   Pe mobil caruselul devine slide normal ca sa nu mai largeasca pagina
-   si sa nu mai impinga continutul in afara ecranului. */
-.hero,
-.hero-grid,
-.hero-image,
-.promo-swiper {
-    min-width: 0;
-}
-
-.hero {
-    overflow: hidden;
+/* === MOBILE FIX: ascunde complet butoanele din bara de sus și oprește overflow-ul caruselului === */
+html, body {
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 @media (max-width: 768px) {
-    html,
-    body {
+    header {
+        padding: 14px 0;
+    }
+
+    header nav.container {
         width: 100%;
         max-width: 100%;
-        overflow-x: hidden;
+        padding: 0 18px;
+        justify-content: flex-start;
+    }
+
+    /* Pe mobil nu mai afișăm deloc linkurile/butoanele din navbar */
+    .nav-links,
+    .nav-links.active,
+    .btn-nav,
+    .menu-toggle,
+    .menu-toggle.active {
+        display: none !important;
+        visibility: hidden !important;
+        pointer-events: none !important;
+    }
+
+    body.no-scroll {
+        overflow: auto !important;
     }
 
     .hero {
-        padding: 48px 0 56px;
+        padding: 56px 0 46px;
+        overflow: hidden;
     }
 
     .hero-grid {
         display: grid;
         grid-template-columns: 1fr;
         gap: 28px;
-        width: 100%;
     }
 
     .hero-content {
         text-align: left;
     }
 
-    .hero p {
+    .hero-content h1 {
+        font-size: clamp(2.2rem, 12vw, 3.4rem);
+        line-height: 1.05;
+    }
+
+    .hero-content p {
         margin-left: 0;
         margin-right: 0;
         max-width: 100%;
     }
 
+    .hero-stats {
+        justify-content: flex-start;
+        gap: 24px;
+    }
+
     .hero-image {
-        order: 0;
+        order: initial;
         width: 100%;
         max-width: 100%;
-        padding: 0;
-        margin: 8px auto 0;
-        perspective: none;
+        margin: 0 auto;
+        padding: 10px 0 0;
         overflow: hidden;
+        perspective: none;
     }
 
     .promo-swiper {
         display: block;
         width: 100%;
-        max-width: 340px;
-        margin: 0 auto;
-        padding: 10px 0 42px;
+        max-width: min(92vw, 360px);
+        margin-left: auto;
+        margin-right: auto;
+        padding-top: 12px;
+        padding-bottom: 42px;
         overflow: hidden;
     }
 
@@ -928,41 +950,33 @@ footer {
     }
 
     .promo-swiper .swiper-slide {
-        width: 300px !important;
-        height: 300px;
-        max-width: calc(100vw - 48px);
-        transform: none;
+        width: min(82vw, 310px) !important;
+        height: min(82vw, 310px) !important;
+        max-width: 310px;
+        max-height: 310px;
+        transform: none !important;
+        opacity: 1 !important;
     }
 
     .promo-card {
-        padding: 22px;
-        box-shadow:
-            0 16px 35px rgba(0,0,0,0.12),
-            inset -10px -10px 22px rgba(255,255,255,0.8),
-            inset 10px 10px 22px rgba(0,0,0,0.05),
-            inset 0 0 0 18px #ffffff,
-            inset 0 0 16px 18px rgba(0,0,0,0.07);
+        transform: none !important;
     }
 
     .promo-card:hover {
-        transform: none;
+        transform: none !important;
     }
 
     .promo-card .discount {
-        top: 10px;
-        right: 10px;
         width: 54px;
         height: 54px;
         font-size: 0.95rem;
+        top: 10px;
+        right: 10px;
     }
 
     .promo-card .img-container {
-        width: 76px;
-        height: 76px;
-    }
-
-    .promo-card .info {
-        width: 86%;
+        width: 78px;
+        height: 78px;
     }
 
     .promo-card h4 {
@@ -970,33 +984,14 @@ footer {
     }
 
     .promo-card .promo-name {
-        font-size: 0.85rem;
+        font-size: 0.82rem;
     }
 
     .promo-card .promo-schedule {
-        max-width: 100%;
         font-size: 0.68rem;
-        white-space: normal;
-    }
-}
-
-@media (max-width: 480px) {
-    .hero h1 {
-        font-size: clamp(2.35rem, 13vw, 3.15rem);
-        line-height: 1.08;
-    }
-
-    .hero-stats {
-        justify-content: flex-start;
-    }
-
-    .promo-swiper {
-        max-width: 310px;
-    }
-
-    .promo-swiper .swiper-slide {
-        width: 280px !important;
-        height: 280px;
-        max-width: calc(100vw - 40px);
+        max-width: 190px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
     }
 }

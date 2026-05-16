@@ -55,30 +55,22 @@ document.addEventListener('DOMContentLoaded', () => {
         }).join(', ');
     };
 
-    let promoSwiperInstance = null;
-
     const initSwiper = () => {
-        if (!document.querySelector('.promo-swiper')) return;
-
-        if (promoSwiperInstance) {
-            promoSwiperInstance.destroy(true, true);
-            promoSwiperInstance = null;
-        }
-
         const isMobile = window.matchMedia('(max-width: 768px)').matches;
 
-        promoSwiperInstance = new Swiper('.promo-swiper', {
+        new Swiper('.promo-swiper', {
             effect: isMobile ? 'slide' : 'cards',
-            cardsEffect: {
-                perSlideOffset: 8,
+            cardsEffect: isMobile ? undefined : {
+                perSlideOffset: 10,
                 perSlideRotate: 2,
-                slideShadows: false
+                slideShadows: false,
             },
             grabCursor: true,
-            centeredSlides: true,
-            slidesPerView: 1,
             initialSlide: 0,
             loop: true,
+            centeredSlides: true,
+            slidesPerView: 1,
+            spaceBetween: isMobile ? 16 : 0,
             autoplay: {
                 delay: 3000,
                 disableOnInteraction: false,
@@ -89,14 +81,6 @@ document.addEventListener('DOMContentLoaded', () => {
             },
         });
     };
-
-    let resizeTimer;
-    window.addEventListener('resize', () => {
-        clearTimeout(resizeTimer);
-        resizeTimer = setTimeout(() => {
-            if (promoCarousel && promoCarousel.children.length > 0) initSwiper();
-        }, 250);
-    });
 
     const displayPromotions = (promotions) => {
         if (!promotions || promotions.length === 0) {
