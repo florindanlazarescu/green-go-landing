@@ -842,65 +842,19 @@ footer {
     }
 }
 
-@media (max-width: 768px) {
-    html,
-    body {
-        width: 100%;
-        max-width: 100%;
-        overflow-x: hidden;
-    }
+@media (max-width: 480px) {
+    section { padding: 60px 0; }
+    h2 { font-size: 2rem; }
+    .hero h1 { font-size: 2.2rem; }
+    .stat-value { font-size: 1.2rem; }
+    .stat-label { font-size: 0.75rem; }
+    .logo { font-size: 1.3rem; }
 
-    header {
-        overflow: hidden;
-    }
+    .promo-swiper { max-width: 100%; }
+    .swiper-slide { width: 280px; height: 280px; }
 
-    nav {
-        width: 100%;
-        max-width: 100%;
-    }
-
-    .nav-links,
-    .nav-links.active,
-    .menu-toggle,
-    .btn-nav {
-        display: none !important;
-    }
-
-    body.no-scroll {
-        overflow: auto;
-    }
-
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero-stats {
-        gap: 20px;
-        flex-wrap: wrap;
-        justify-content: center;
-    }
-
-    .steps-grid {
-        grid-template-columns: 1fr;
-    }
-
-    .footer-links-grid {
-        grid-template-columns: 1fr;
-        gap: 30px;
-    }
-
-    .app-buttons {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .app-btn {
-        width: 100%;
-        max-width: 250px;
-        text-align: center;
-    }
-
-    .signup-form {
-        flex-direction: column;
-    }
+    .promo-card .info { width: 90%; }
+    .promo-card .img-container { width: 80px; height: 80px; margin-bottom: 10px;}
+    .promo-card h4 { font-size: 1.1rem; }
+    .promo-card .promo-name { font-size: 0.85rem; margin-bottom: 5px; }
 }

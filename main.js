@@ -1,23 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
- // Mobile menu toggle - dezactivat complet pe mobil
- const menuToggle = document.querySelector('.menu-toggle');
- const navLinks = document.querySelector('.nav-links');
- const body = document.body;
+    // Mobile menu toggle
+    const menuToggle = document.querySelector('.menu-toggle');
+    const navLinks = document.querySelector('.nav-links');
+    const body = document.body;
 
- if (menuToggle && navLinks) {
-     menuToggle.addEventListener('click', () => {
-         if (window.innerWidth <= 768) {
-             menuToggle.classList.remove('active');
-             navLinks.classList.remove('active');
-             body.classList.remove('no-scroll');
-             return;
-         }
+    if (menuToggle) {
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            navLinks.classList.toggle('active');
+            body.classList.toggle('no-scroll');
+        });
+    }
 
-         menuToggle.classList.toggle('active');
-         navLinks.classList.toggle('active');
-         body.classList.toggle('no-scroll');
-     });
- }
     // Close menu when a link is clicked
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
