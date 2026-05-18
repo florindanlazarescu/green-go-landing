@@ -767,6 +767,11 @@ footer {
 }
 
 @media (max-width: 768px) {
+    /* Prevent horizontal scroll from swiper cards overflow */
+    html, body {
+        overflow-x: hidden;
+    }
+
     /* NAV: hidden by default, shown only when .active toggled via JS */
     .nav-links {
         display: none !important;
@@ -830,8 +835,9 @@ footer {
 
     .hero-image {
         order: 0;
-        max-height: 320px;
-        overflow: visible;
+        max-height: 350px;
+        overflow: hidden;
+        width: 100%;
     }
 
     .hero h1 {
@@ -845,8 +851,10 @@ footer {
 
     /* PROMO CAROUSEL */
     .promo-swiper {
-        max-width: 100%;
+        max-width: 300px;
+        margin: 0 auto;
         padding-bottom: 40px;
+        overflow: hidden;
     }
 
     .swiper-slide {

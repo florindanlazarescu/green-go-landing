@@ -1,5 +1,10 @@
 /* Mobile-only styles - loaded via media query */
 
+/* Prevent horizontal scroll from overflowing elements */
+html, body {
+    overflow-x: hidden;
+}
+
 /* ===== NAV / HAMBURGER FIX ===== */
 /* Hidden by default on mobile - only show when .active is added via JS */
 .nav-links {
@@ -90,24 +95,27 @@
     flex-wrap: wrap;
 }
 
+/* ===== PROMO CAROUSEL FIX ===== */
 .hero-image {
     order: 0;
     justify-content: center;
     margin-bottom: 1.5rem;
-    max-height: 320px;
+    max-height: 350px;
+    overflow: hidden;
+    width: 100%;
 }
 
-/* ===== PROMO CAROUSEL FIX ===== */
 .promo-swiper {
-    max-width: 100%;
+    max-width: 300px;
+    margin: 0 auto;
     padding-top: 20px;
     padding-bottom: 50px;
-    overflow: visible;
+    overflow: hidden;
 }
 
 .swiper-slide {
-    width: 280px !important;
-    height: 280px !important;
+    width: 260px !important;
+    height: 260px !important;
 }
 
 .promo-card {
