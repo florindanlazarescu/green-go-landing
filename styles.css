@@ -139,6 +139,14 @@ nav {
     justify-content: center;
 }
 
+.nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+}
+
 .hamburger {
     width: 24px;
     height: 2px;
@@ -752,10 +760,99 @@ footer {
     .hero-content { text-align: center; padding-top: 0; }
     .hero p { margin-left: auto; margin-right: auto; }
     .hero-stats { justify-content: center; }
-    .hero-image { order: -1; justify-content: center; margin-bottom: 2rem; }
+    .hero-image { justify-content: center; margin-bottom: 2rem; }
     .hero h1 { font-size: 3rem; }
     .restaurant-logos { grid-template-columns: repeat(2, 1fr); }
     .footer-content { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 768px) {
+    /* NAV: hidden by default, shown only when .active toggled via JS */
+    .nav-links {
+        display: none !important;
+        position: fixed;
+        top: 0;
+        right: 0;
+        height: 100vh;
+        height: 100dvh;
+        width: 75%;
+        max-width: 300px;
+        background: var(--bg-light);
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 0;
+        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+        z-index: 1000;
+        padding: 60px 20px;
+    }
+
+    .nav-links.active {
+        display: flex !important;
+    }
+
+    .nav-links li {
+        margin: 1.5rem 0;
+        list-style: none;
+    }
+
+    .nav-links a {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-dark);
+    }
+
+    .menu-toggle {
+        display: flex;
+    }
+
+    .btn-nav {
+        display: none;
+    }
+
+    .nav-overlay.active {
+        display: block;
+    }
+
+    /* HERO: ensure text is visible */
+    .hero {
+        padding: 40px 0;
+    }
+
+    .hero-grid {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .hero-content {
+        order: -1;
+    }
+
+    .hero-image {
+        order: 0;
+        max-height: 320px;
+        overflow: visible;
+    }
+
+    .hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .hero p {
+        font-size: 1rem;
+        line-height: 1.5;
+    }
+
+    /* PROMO CAROUSEL */
+    .promo-swiper {
+        max-width: 100%;
+        padding-bottom: 40px;
+    }
+
+    .swiper-slide {
+        width: 260px !important;
+        height: 260px !important;
+    }
 }
 
 /* Mobile styles are in mobile.css (loaded via media query in HTML) */

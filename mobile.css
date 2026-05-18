@@ -71,6 +71,7 @@
 .hero-content {
     text-align: center;
     padding-top: 0;
+    order: -1;
 }
 
 .hero h1 {
@@ -80,6 +81,7 @@
 .hero p {
     margin-left: auto;
     margin-right: auto;
+    font-size: 1rem;
 }
 
 .hero-stats {
@@ -89,9 +91,10 @@
 }
 
 .hero-image {
-    order: -1;
+    order: 0;
     justify-content: center;
     margin-bottom: 1.5rem;
+    max-height: 320px;
 }
 
 /* ===== PROMO CAROUSEL FIX ===== */
