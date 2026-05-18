@@ -1,26 +1,54 @@
 /* Mobile-only styles - loaded via media query */
 
 /* ===== NAV / HAMBURGER FIX ===== */
-/* Hide nav links by default on mobile - fixes auto-expand bug */
+/* Hidden by default on mobile - only show when .active is added via JS */
 .nav-links {
+    display: none !important;
     position: fixed;
-    right: -100%;
     top: 0;
+    right: 0;
     height: 100vh;
-    width: 85%;
-    max-width: 320px;
-    background: white;
+    height: 100dvh;
+    width: 75%;
+    max-width: 300px;
+    background: var(--bg-light);
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
-    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    gap: 0;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
     z-index: 1000;
-    display: flex;
+    padding: 60px 20px;
 }
 
 .nav-links.active {
-    right: 0;
+    display: flex !important;
+}
+
+.nav-links li {
+    margin: 1.5rem 0;
+    list-style: none;
+}
+
+.nav-links a {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Dark overlay behind menu */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.nav-overlay.active {
+    display: block;
 }
 
 .menu-toggle {
@@ -180,6 +208,26 @@ h2 {
 .footer-links-grid {
     grid-template-columns: 1fr;
     gap: 30px;
+}
+
+.footer-bottom {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+/* ===== TOUCH TARGETS ===== */
+.nav-links a,
+.links-column a,
+.social-links a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.btn {
+    min-height: 44px;
+    min-width: 44px;
 }
 
 /* ===== EXTRA SMALL (< 400px) ===== */
