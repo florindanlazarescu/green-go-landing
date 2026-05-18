@@ -1,0 +1,208 @@
+/* Mobile-only styles - loaded via media query */
+
+/* ===== NAV / HAMBURGER FIX ===== */
+/* Hide nav links by default on mobile - fixes auto-expand bug */
+.nav-links {
+    position: fixed;
+    right: -100%;
+    top: 0;
+    height: 100vh;
+    width: 85%;
+    max-width: 320px;
+    background: white;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.1);
+    transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    z-index: 1000;
+    display: flex;
+}
+
+.nav-links.active {
+    right: 0;
+}
+
+.menu-toggle {
+    display: flex;
+}
+
+.btn-nav {
+    display: none;
+}
+
+/* ===== HERO ===== */
+.hero {
+    padding: 60px 0;
+}
+
+.hero-grid {
+    grid-template-columns: 1fr;
+}
+
+.hero-content {
+    text-align: center;
+    padding-top: 0;
+}
+
+.hero h1 {
+    font-size: 2.4rem;
+}
+
+.hero p {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.hero-stats {
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.hero-image {
+    order: -1;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+}
+
+/* ===== PROMO CAROUSEL FIX ===== */
+.promo-swiper {
+    max-width: 100%;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    overflow: visible;
+}
+
+.swiper-slide {
+    width: 280px !important;
+    height: 280px !important;
+}
+
+.promo-card {
+    padding: 20px;
+}
+
+.promo-card .img-container {
+    width: 75px;
+    height: 75px;
+    margin-bottom: 10px;
+}
+
+.promo-card h4 {
+    font-size: 1rem;
+}
+
+.promo-card .promo-name {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.promo-card .promo-schedule {
+    font-size: 0.7rem;
+}
+
+.promo-card .discount {
+    width: 50px;
+    height: 50px;
+    font-size: 0.9rem;
+    top: 10px;
+    right: 10px;
+}
+
+.promo-card .info {
+    width: 85%;
+}
+
+/* ===== SECTIONS ===== */
+section {
+    padding: 60px 0;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+/* ===== STEPS ===== */
+.steps-grid {
+    grid-template-columns: 1fr;
+}
+
+/* ===== COMMUNITY ===== */
+.features-grid {
+    grid-template-columns: 1fr;
+}
+
+.feature-card.featured {
+    padding: 40px 30px;
+    border-radius: 20px;
+}
+
+.feature-card .big-stat {
+    font-size: 3.5rem;
+}
+
+/* ===== RESTAURANTS ===== */
+.restaurant-logos {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* ===== DOWNLOAD ===== */
+.app-buttons {
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-btn {
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+}
+
+.signup-form {
+    flex-direction: column;
+}
+
+.signup-form button {
+    width: 100%;
+}
+
+/* ===== BUSINESS ===== */
+.business-grid {
+    grid-template-columns: 1fr;
+}
+
+/* ===== FOOTER ===== */
+.footer-content {
+    grid-template-columns: 1fr;
+}
+
+.footer-links-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+/* ===== EXTRA SMALL (< 400px) ===== */
+@media (max-width: 400px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+    }
+
+    .logo {
+        font-size: 1.3rem;
+    }
+
+    .swiper-slide {
+        width: 250px !important;
+        height: 250px !important;
+    }
+}
+
