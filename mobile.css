@@ -1,0 +1,267 @@
+/* Mobile-only styles - loaded via media query */
+
+/* Prevent horizontal scroll from overflowing elements */
+html, body {
+    overflow-x: hidden;
+}
+
+/* ===== NAV / HAMBURGER FIX ===== */
+/* Hidden by default on mobile - only show when .active is added via JS */
+.nav-links {
+    display: none !important;
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100vh;
+    height: 100dvh;
+    width: 75%;
+    max-width: 300px;
+    background: var(--bg-light);
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
+    z-index: 1000;
+    padding: 60px 20px;
+}
+
+.nav-links.active {
+    display: flex !important;
+}
+
+.nav-links li {
+    margin: 1.5rem 0;
+    list-style: none;
+}
+
+.nav-links a {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--text-dark);
+}
+
+/* Dark overlay behind menu */
+.nav-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 999;
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+}
+
+.nav-overlay.active {
+    display: block;
+}
+
+.menu-toggle {
+    display: flex;
+}
+
+.btn-nav {
+    display: none;
+}
+
+/* ===== HERO ===== */
+.hero {
+    padding: 60px 0;
+}
+
+.hero-grid {
+    grid-template-columns: 1fr;
+}
+
+.hero-content {
+    text-align: center;
+    padding-top: 0;
+    order: -1;
+}
+
+.hero h1 {
+    font-size: 2.4rem;
+}
+
+.hero p {
+    margin-left: auto;
+    margin-right: auto;
+    font-size: 1rem;
+}
+
+.hero-stats {
+    justify-content: center;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+/* ===== PROMO CAROUSEL FIX ===== */
+.hero-image {
+    order: 0;
+    justify-content: center;
+    margin-bottom: 1.5rem;
+    max-height: 350px;
+    overflow: hidden;
+    width: 100%;
+}
+
+.promo-swiper {
+    max-width: 300px;
+    margin: 0 auto;
+    padding-top: 20px;
+    padding-bottom: 50px;
+    overflow: hidden;
+}
+
+.swiper-slide {
+    width: 260px !important;
+    height: 260px !important;
+}
+
+.promo-card {
+    padding: 20px;
+}
+
+.promo-card .img-container {
+    width: 75px;
+    height: 75px;
+    margin-bottom: 10px;
+}
+
+.promo-card h4 {
+    font-size: 1rem;
+}
+
+.promo-card .promo-name {
+    font-size: 0.85rem;
+    margin-bottom: 5px;
+}
+
+.promo-card .promo-schedule {
+    font-size: 0.7rem;
+}
+
+.promo-card .discount {
+    width: 50px;
+    height: 50px;
+    font-size: 0.9rem;
+    top: 10px;
+    right: 10px;
+}
+
+.promo-card .info {
+    width: 85%;
+}
+
+/* ===== SECTIONS ===== */
+section {
+    padding: 60px 0;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+/* ===== STEPS ===== */
+.steps-grid {
+    grid-template-columns: 1fr;
+}
+
+/* ===== COMMUNITY ===== */
+.features-grid {
+    grid-template-columns: 1fr;
+}
+
+.feature-card.featured {
+    padding: 40px 30px;
+    border-radius: 20px;
+}
+
+.feature-card .big-stat {
+    font-size: 3.5rem;
+}
+
+/* ===== RESTAURANTS ===== */
+.restaurant-logos {
+    grid-template-columns: repeat(2, 1fr);
+}
+
+/* ===== DOWNLOAD ===== */
+.app-buttons {
+    flex-direction: column;
+    align-items: center;
+}
+
+.app-btn {
+    width: 100%;
+    max-width: 250px;
+    text-align: center;
+}
+
+.signup-form {
+    flex-direction: column;
+}
+
+.signup-form button {
+    width: 100%;
+}
+
+/* ===== BUSINESS ===== */
+.business-grid {
+    grid-template-columns: 1fr;
+}
+
+/* ===== FOOTER ===== */
+.footer-content {
+    grid-template-columns: 1fr;
+}
+
+.footer-links-grid {
+    grid-template-columns: 1fr;
+    gap: 30px;
+}
+
+.footer-bottom {
+    flex-direction: column;
+    gap: 10px;
+    text-align: center;
+}
+
+/* ===== TOUCH TARGETS ===== */
+.nav-links a,
+.links-column a,
+.social-links a {
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+}
+
+.btn {
+    min-height: 44px;
+    min-width: 44px;
+}
+
+/* ===== EXTRA SMALL (< 400px) ===== */
+@media (max-width: 400px) {
+    .hero h1 {
+        font-size: 2rem;
+    }
+
+    .stat-value {
+        font-size: 1.2rem;
+    }
+
+    .stat-label {
+        font-size: 0.75rem;
+    }
+
+    .logo {
+        font-size: 1.3rem;
+    }
+
+    .swiper-slide {
+        width: 250px !important;
+        height: 250px !important;
+    }
+}
+

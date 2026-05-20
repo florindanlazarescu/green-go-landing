@@ -31,6 +31,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 
     <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="mobile.css" media="(max-width: 768px)">
 </head>
 <body>
     <header>
@@ -48,6 +49,7 @@
                 <div class="hamburger"></div>
             </div>
         </nav>
+        <div class="nav-overlay" id="nav-overlay"></div>
     </header>
 
     <main>
@@ -169,25 +171,25 @@
                     <!-- Active Merchant links with real images -->
                     <a href="https://app.green-go.ro/merchant/menu?id=6" class="logo-item active" target="_blank" data-aos="zoom-in">
                         <div class="merchant-img-container">
-                            <img src="poze/gyro.jpg" alt="GYRO Mediterranean Flavors">
+                            <img src="poze/gyro.jpg" alt="GYRO Mediterranean Flavors" loading="lazy">
                         </div>
                         <span>GYRO Mediterranean Flavors</span>
                     </a>
                     <a href="https://app.green-go.ro/merchant/menu?id=3" class="logo-item active" target="_blank" data-aos="zoom-in" data-aos-delay="100">
                         <div class="merchant-img-container">
-                            <img src="poze/corner_stuff.jpg" alt="Corner Stuff">
+                            <img src="poze/corner_stuff.jpg" alt="Corner Stuff" loading="lazy">
                         </div>
                         <span>Corner Stuff</span>
                     </a>
                     <a href="https://app.green-go.ro/merchant/menu?id=5" class="logo-item active" target="_blank" data-aos="zoom-in" data-aos-delay="200">
                         <div class="merchant-img-container">
-                            <img src="poze/sareanbucate.png" alt="Sarea'N Bucate">
+                            <img src="poze/sareanbucate.png" alt="Sarea'N Bucate" loading="lazy">
                         </div>
                         <span>Sarea'N Bucate</span>
                     </a>
                     <a href="https://app.green-go.ro/merchant/menu?id=1" class="logo-item active" target="_blank" data-aos="zoom-in" data-aos-delay="300">
                         <div class="merchant-img-container">
-                            <img src="poze/ograda.png" alt="Ograda Urbana">
+                            <img src="poze/ograda.png" alt="Ograda Urbana" loading="lazy">
                         </div>
                         <span>Ograda Urbana</span>
                     </a>
@@ -195,25 +197,25 @@
                     <!-- Inactive stores with Coming Soon banner -->
                     <div class="logo-item" data-aos="zoom-in" data-aos-delay="400">
                         <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
+                            <img src="poze/coming_soon.png" alt="Coming Soon" loading="lazy">
                         </div>
                         <span>Novu</span>
                     </div>
                     <div class="logo-item" data-aos="zoom-in" data-aos-delay="500">
                         <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
+                            <img src="poze/coming_soon.png" alt="Coming Soon" loading="lazy">
                         </div>
                         <span>Bunătățuri Maramureșene</span>
                     </div>
                     <div class="logo-item" data-aos="zoom-in" data-aos-delay="600">
                         <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
+                            <img src="poze/coming_soon.png" alt="Coming Soon" loading="lazy">
                         </div>
                         <span>Krepe Cafe</span>
                     </div>
                     <div class="logo-item" data-aos="zoom-in" data-aos-delay="700">
                         <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon">
+                            <img src="poze/coming_soon.png" alt="Coming Soon" loading="lazy">
                         </div>
                         <span>Botanical Pick me Up</span>
                     </div>
@@ -232,7 +234,8 @@
                 <div class="launch-box">
                     <p>🚀 <strong>Lansăm pe 1 iunie</strong></p>
                     <div class="signup-form">
-                        <input type="email" placeholder="Adresa ta de email">
+                        <label for="signup-email" class="sr-only">Adresa ta de email</label>
+                        <input type="email" id="signup-email" placeholder="Adresa ta de email" aria-label="Adresa ta de email">
                         <button class="btn btn-primary">Anunță-mă</button>
                     </div>
                 </div>
@@ -255,12 +258,17 @@
                 <div class="business-form-card" data-aos="fade-left">
                     <h3>Solicită demo gratuit</h3>
                     <p>Completează formularul și te contactăm în 24h.</p>
-                    <form>
-                        <input type="text" placeholder="Nume Restaurant" required>
-                        <input type="text" placeholder="Persoană contact" required>
-                        <input type="email" placeholder="Email" required>
-                        <input type="tel" placeholder="Telefon" required>
-                        <select>
+                    <form aria-label="Formular parteneriat">
+                        <label for="biz-name" class="sr-only">Nume Restaurant</label>
+                        <input type="text" id="biz-name" placeholder="Nume Restaurant" required>
+                        <label for="biz-contact" class="sr-only">Persoană contact</label>
+                        <input type="text" id="biz-contact" placeholder="Persoană contact" required>
+                        <label for="biz-email" class="sr-only">Email</label>
+                        <input type="email" id="biz-email" placeholder="Email" required>
+                        <label for="biz-phone" class="sr-only">Telefon</label>
+                        <input type="tel" id="biz-phone" placeholder="Telefon" required>
+                        <label for="biz-city" class="sr-only">Localitate</label>
+                        <select id="biz-city">
                             <option value="">Localitate</option>
                             <option value="bucuresti">București</option>
                             <option value="ilfov">Ilfov</option>
@@ -310,6 +318,9 @@
             <span>&copy; 2026 GreenGO Delivery SRL. Toate drepturile rezervate.</span>
         </div>
     </footer>
+
+    <!-- Scroll to Top -->
+    <button class="scroll-top-btn" id="scroll-top" aria-label="Scroll to top">↑</button>
 
     <!-- Swiper JS -->
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
