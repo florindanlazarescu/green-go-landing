@@ -59,7 +59,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const promoCarousel = document.getElementById('promo-carousel');
     const swiperContainer = document.querySelector('.promo-swiper');
 
-    // A small local "database" to map merchantId to its details
     const merchantDetails = {
         1: { name: 'Ograda Urbana', logo: 'poze/ograda.png' },
         3: { name: 'Corner Stuff', logo: 'poze/corner_stuff.jpg' },
@@ -67,24 +66,32 @@ document.addEventListener('DOMContentLoaded', () => {
         6: { name: 'GYRO Mediterranean Flavors', logo: 'poze/gyro.jpg' }
     };
 
-    const formatSchedule = (schedules) => {
-        if (!schedules || schedules.length === 0) return '';
-        const dayMap = ['Dum', 'Lun', 'Mar', 'Mie', 'Joi', 'Vin', 'Sâm'];
-
-        return schedules.map(s => {
-            const day = dayMap[s.dayOfWeek];
-            const start = s.startTime.substring(0, 5);
-            const end = s.endTime.substring(0, 5);
-            return `${day} ${start}-${end}`;
-        }).join(', ');
+    const formatTargets = (promo) => {
+        if (promo.scope === 'ALL') {
+            return 'Ofertă în tot meniul';
+        }
+        if (promo.targets && promo.targets.length > 0) {
+            const category = promo.targets[0].charAt(0).toUpperCase() + promo.targets[0].slice(1).toLowerCase();
+            return `Ofertă la ${category}`;
+        }
+        return promo.name; // Fallback
     };
 
     const initSwiper = () => {
         new Swiper('.promo-swiper', {
-            effect: 'cards',
+            effect: 'coverflow',
             grabCursor: true,
-            initialSlide: 0,
+            centeredSlides: true,
+            slidesPerView: 'auto',
+            coverflowEffect: {
+                rotate: 50,
+                stretch: 0,
+                depth: 100,
+                modifier: 1,
+                slideShadows: false,
+            },
             loop: true,
+            loopedSlides: 4,
             autoplay: {
                 delay: 3000,
                 disableOnInteraction: false,
@@ -93,6 +100,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 el: '.swiper-pagination',
                 clickable: true,
             },
+            touchEventsTarget: 'container',
+            simulateTouch: true,
         });
     };
 
@@ -105,11 +114,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
         promoCarousel.innerHTML = '';
 
-        promotions.forEach(promo => {
+        let promosToDisplay = [...promotions];
+        if (promotions.length < 4 && promotions.length > 0) {
+             while(promosToDisplay.length < 4) {
+                 promosToDisplay = promosToDisplay.concat(promotions);
+             }
+        }
+
+        promosToDisplay.forEach(promo => {
             const merchant = merchantDetails[promo.merchantId];
             if (!merchant) return;
 
-            const scheduleText = formatSchedule(promo.schedules);
+            const targetText = formatTargets(promo);
 
             const card = document.createElement('div');
             card.className = 'swiper-slide';
@@ -122,14 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
                     <div class="info">
                         <h4>${merchant.name}</h4>
                         <p class="promo-name">${promo.name}</p>
-                        <p class="promo-schedule">${scheduleText}</p>
+                        <p class="promo-schedule">${targetText}</p>
                     </div>
                 </a>
             `;
             promoCarousel.appendChild(card);
         });
 
-        // Make the carousel visible and initialize Swiper
         if (swiperContainer) {
             swiperContainer.style.display = 'block';
             initSwiper();
