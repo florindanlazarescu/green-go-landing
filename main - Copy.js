@@ -33,10 +33,12 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    // Close menu on overlay click
     if (navOverlay) {
         navOverlay.addEventListener('click', closeMenu);
     }
 
+    // Close menu when a link is clicked
     document.querySelectorAll('.nav-links a').forEach(link => {
         link.addEventListener('click', () => {
             if (navLinks.classList.contains('active')) {
@@ -69,10 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
             return 'Ofertă în tot meniul';
         }
         if (promo.targets && promo.targets.length > 0) {
-            const formattedTargets = promo.targets.map(target =>
-                target.charAt(0).toUpperCase() + target.slice(1).toLowerCase()
-            ).join(', ');
-            return `Ofertă la ${formattedTargets}`;
+            const category = promo.targets[0].charAt(0).toUpperCase() + promo.targets[0].slice(1).toLowerCase();
+            return `Ofertă la ${category}`;
         }
         return promo.name; // Fallback
     };
@@ -113,7 +113,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         promoCarousel.innerHTML = '';
-        
+
         let promosToDisplay = [...promotions];
         if (promotions.length < 4 && promotions.length > 0) {
              while(promosToDisplay.length < 4) {
