@@ -598,12 +598,47 @@ nav {
 }
 
 .app-btn {
-    padding: 15px 35px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 28px;
     background: #111;
     color: white;
-    border-radius: 10px;
+    border-radius: 12px;
     text-decoration: none;
     font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    transition: background 0.2s, transform 0.2s;
+}
+
+.app-btn:hover {
+    background: #2a2a2a;
+    transform: translateY(-2px);
+}
+
+.store-icon {
+    width: 28px;
+    height: 28px;
+    flex-shrink: 0;
+}
+
+.store-label {
+    display: flex;
+    flex-direction: column;
+    text-align: left;
+    line-height: 1.2;
+}
+
+.store-label small {
+    font-size: 0.7rem;
+    font-weight: 400;
+    opacity: 0.75;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.store-label {
+    font-size: 1rem;
 }
 
 .launch-box {
