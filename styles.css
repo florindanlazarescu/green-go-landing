@@ -38,26 +38,6 @@ body.no-scroll {
     padding: 0 20px;
 }
 
-/* OVERLAY FOR MOBILE MENU */
-.overlay {
-    display: none;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0,0,0,0.5);
-    z-index: 999;
-    opacity: 0;
-    transition: opacity 0.3s ease-in-out;
-}
-
-.overlay.active {
-    display: block;
-    opacity: 1;
-}
-
-
 /* Sections */
 section {
     padding: 80px 0;
@@ -71,20 +51,6 @@ section {
 }
 
 .text-center { text-align: center; }
-
-.subtitle {
-    display: block;
-    font-size: 0.75rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    color: var(--primary-green);
-    letter-spacing: 1px;
-    margin-bottom: 1rem;
-}
-
-.text-black {
-    color: #000;
-}
 
 h2 {
     font-size: 2.5rem;
@@ -119,15 +85,6 @@ nav {
 }
 
 .logo span { color: #000; }
-
-.logo-style {
-    font-weight: 800;
-    color: var(--primary-green);
-}
-
-.logo-style span {
-    color: #000;
-}
 
 .nav-links {
     display: flex;
@@ -210,6 +167,7 @@ nav {
     transition: all 0.3s ease;
     border: none;
     cursor: pointer;
+    text-align: center;
 }
 
 .btn-primary {
@@ -227,6 +185,58 @@ nav {
     color: white;
     padding: 10px 20px;
     font-size: 0.9rem;
+}
+
+/* App Store & Google Play Badges */
+.app-buttons {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin: 30px 0;
+    flex-wrap: wrap;
+}
+
+.app-badge {
+    display: flex;
+    align-items: center;
+    background: #000;
+    color: white !important;
+    padding: 8px 20px;
+    border-radius: 10px;
+    text-decoration: none !important;
+    border: 1px solid #333;
+    transition: transform 0.2s, background-color 0.2s;
+    min-width: 175px;
+    text-align: left;
+}
+
+.app-badge:hover {
+    transform: translateY(-2px);
+    background: #111;
+}
+
+.app-badge .badge-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 12px;
+    flex-shrink: 0;
+}
+
+.app-badge .badge-text {
+    display: flex;
+    flex-direction: column;
+    line-height: 1.1;
+}
+
+.app-badge .small-text {
+    font-size: 0.6rem;
+    font-weight: 500;
+    text-transform: uppercase;
+}
+
+.app-badge .large-text {
+    font-size: 1.15rem;
+    font-weight: 700;
 }
 
 /* Hero Section */
@@ -297,7 +307,7 @@ nav {
 
 .swiper-slide {
     width: 340px;
-    height: 340px; /* Pătrat pentru a deveni cerc */
+    height: 340px;
     background-color: transparent;
     display: flex;
     align-items: center;
@@ -318,16 +328,15 @@ nav {
     text-decoration: none;
     color: var(--text-dark);
     position: relative;
-    /* Transformare în farfurie ceramică */
     border-radius: 50%;
     background: #fdfdfd;
     background: radial-gradient(circle at 30% 30%, #ffffff 0%, #f4f4f4 60%, #e8e8e8 100%);
     box-shadow:
-        15px 25px 35px rgba(0,0,0,0.15), /* Umbra pe masă (efect 3D) */
-        inset -15px -15px 30px rgba(255,255,255,0.8), /* Lumină pe marginea de jos */
-        inset 15px 15px 30px rgba(0,0,0,0.05), /* Umbră pe marginea de sus */
-        inset 0 0 0 25px #ffffff, /* Buza plată a farfuriei (rim) */
-        inset 0 0 20px 25px rgba(0,0,0,0.08); /* Adâncimea farfuriei (inner shadow) */
+        15px 25px 35px rgba(0,0,0,0.15),
+        inset -15px -15px 30px rgba(255,255,255,0.8),
+        inset 15px 15px 30px rgba(0,0,0,0.05),
+        inset 0 0 0 25px #ffffff,
+        inset 0 0 20px 25px rgba(0,0,0,0.08);
     transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
@@ -341,7 +350,7 @@ nav {
     border-radius: 50%;
     overflow: hidden;
     margin-bottom: 15px;
-    border: 3px solid #fff; /* Ramă albă ca o porție în centru */
+    border: 3px solid #fff;
     background: #fff;
     display: flex;
     align-items: center;
@@ -357,7 +366,7 @@ nav {
 }
 
 .promo-card .info {
-    width: 75%; /* Mai îngust ca să încapă în centrul "farfuriei" */
+    width: 75%;
     z-index: 2;
 }
 
@@ -382,10 +391,9 @@ nav {
     padding: 4px 10px;
     border-radius: 20px;
     display: inline-block;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05); /* Umbră mică pentru text */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
-/* Reducerea ca un sticker atașat pe marginea farfuriei */
 .promo-card .discount {
     position: absolute;
     top: 15px;
@@ -402,21 +410,13 @@ nav {
     font-size: 1.1rem;
     box-shadow:
         0 8px 20px rgba(231, 76, 60, 0.4),
-        inset 2px 2px 5px rgba(255,255,255,0.3); /* Mic highlight pe sticker */
+        inset 2px 2px 5px rgba(255,255,255,0.3);
     z-index: 10;
     transform: rotate(15deg);
 }
 
 .swiper-pagination-bullet-active {
     background: var(--primary-green) !important;
-}
-
-/* Default egg styling if no promotions */
-.mockup {
-    width: 100%;
-    max-width: 450px;
-    border-radius: 40px;
-    box-shadow: 0 30px 60px rgba(0,0,0,0.1);
 }
 
 /* Steps Section */
@@ -589,46 +589,6 @@ nav {
     transform: scale(1.05);
 }
 
-/* Download Section */
-.app-buttons {
-    display: flex;
-    gap: 20px;
-    justify-content: center;
-    margin-bottom: 40px;
-}
-
-.app-btn {
-    padding: 15px 35px;
-    background: #111;
-    color: white;
-    border-radius: 10px;
-    text-decoration: none;
-    font-weight: 600;
-}
-
-.launch-box {
-    margin-top: 50px;
-    background: rgba(255,255,255,0.05);
-    padding: 40px;
-    border-radius: 20px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.signup-form {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.signup-form input {
-    flex: 1;
-    padding: 12px 20px;
-    border-radius: 50px;
-    border: none;
-}
-
 /* Business Section */
 .business-grid {
     display: grid;
@@ -787,12 +747,10 @@ footer {
 }
 
 @media (max-width: 768px) {
-    /* Prevent horizontal scroll from swiper cards overflow */
     html, body {
         overflow-x: hidden;
     }
 
-    /* NAV: hidden by default, shown only when .active toggled via JS */
     .nav-links {
         display: none !important;
         position: fixed;
@@ -839,7 +797,6 @@ footer {
         display: block;
     }
 
-    /* HERO: ensure text is visible */
     .hero {
         padding: 40px 0;
     }
@@ -869,7 +826,6 @@ footer {
         line-height: 1.5;
     }
 
-    /* PROMO CAROUSEL */
     .promo-swiper {
         max-width: 300px;
         margin: 0 auto;
@@ -883,9 +839,7 @@ footer {
     }
 }
 
-/* Mobile styles are in mobile.css (loaded via media query in HTML) */
-
-/* Screen reader only - accessible labels */
+/* Screen reader only */
 .sr-only {
     position: absolute;
     width: 1px;
@@ -930,4 +884,3 @@ footer {
     transform: translateY(-3px);
     background: var(--primary-hover);
 }
-
