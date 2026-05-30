@@ -590,78 +590,78 @@ nav {
 }
 
 /* Download Section */
+.download-content {
+    text-align: center;
+}
+
+.download-content h2 {
+    color: var(--white);
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.download-content p {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 1.1rem;
+    margin: 0 auto 2rem;
+    max-width: 560px;
+}
+
 .app-buttons {
     display: flex;
-    gap: 20px;
+    gap: 15px;
     justify-content: center;
-    margin-bottom: 40px;
+    margin: 30px 0 0;
+    flex-wrap: wrap;
 }
 
-.app-btn {
+.app-badge {
     display: inline-flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 28px;
-    background: #111;
-    color: white;
-    border-radius: 12px;
-    text-decoration: none;
-    font-weight: 600;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    transition: background 0.2s, transform 0.2s;
+    background: #000;
+    color: white !important;
+    padding: 8px 18px;
+    border-radius: 10px;
+    text-decoration: none !important;
+    border: 1px solid rgba(255, 255, 255, 0.18);
+    transition: transform 0.2s, background-color 0.2s;
+    width: 190px;
+    min-height: 56px;
+    text-align: left;
 }
 
-.app-btn:hover {
-    background: #2a2a2a;
+.app-badge:hover {
     transform: translateY(-2px);
+    background: #111;
 }
 
-.store-icon {
-    width: 28px;
-    height: 28px;
-    flex-shrink: 0;
+.app-badge .badge-icon {
+    display: block;
+    width: 24px;
+    height: 24px;
+    max-width: 24px;
+    max-height: 24px;
+    margin-right: 12px;
+    flex: 0 0 24px;
 }
 
-.store-label {
+.app-badge .badge-text {
     display: flex;
     flex-direction: column;
-    text-align: left;
-    line-height: 1.2;
+    line-height: 1.1;
+    min-width: 0;
 }
 
-.store-label small {
-    font-size: 0.7rem;
-    font-weight: 400;
-    opacity: 0.75;
+.app-badge .small-text {
+    font-size: 0.6rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
 }
 
-.store-label {
-    font-size: 1rem;
-}
-
-.launch-box {
-    margin-top: 50px;
-    background: rgba(255,255,255,0.05);
-    padding: 40px;
-    border-radius: 20px;
-    max-width: 500px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.signup-form {
-    display: flex;
-    gap: 10px;
-    margin-top: 20px;
-}
-
-.signup-form input {
-    flex: 1;
-    padding: 12px 20px;
-    border-radius: 50px;
-    border: none;
+.app-badge .large-text {
+    font-size: 1.05rem;
+    font-weight: 700;
+    white-space: nowrap;
 }
 
 /* Business Section */
