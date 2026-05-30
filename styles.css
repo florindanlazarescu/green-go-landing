@@ -222,6 +222,17 @@ nav {
     transform: translateY(-2px);
 }
 
+.btn-secondary {
+    background-color: var(--white);
+    color: var(--dark-green);
+    box-shadow: 0 0 0 1px rgba(10, 61, 46, 0.14);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(10, 61, 46, 0.12);
+}
+
 .btn-nav {
     background-color: var(--dark-green);
     color: white;
@@ -672,23 +683,45 @@ nav {
     align-items: center;
 }
 
-.check-list {
-    list-style: none;
+.collab-options {
+    display: grid;
+    gap: 16px;
     margin-top: 30px;
 }
 
-.check-list li {
-    margin-bottom: 15px;
-    padding-left: 30px;
-    position: relative;
+.collab-card {
+    background: var(--bg-mint);
+    border: 1px solid #e4f2ea;
+    border-radius: 14px;
+    padding: 18px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 4px 14px;
+    align-items: start;
 }
 
-.check-list li::before {
-    content: "✓";
-    position: absolute;
-    left: 0;
-    color: var(--primary-green);
-    font-weight: 900;
+.collab-icon {
+    align-items: center;
+    background: var(--white);
+    border-radius: 12px;
+    display: flex;
+    font-size: 1.35rem;
+    grid-row: span 2;
+    height: 44px;
+    justify-content: center;
+    width: 44px;
+}
+
+.collab-card h3 {
+    color: var(--dark-green);
+    font-size: 1rem;
+    line-height: 1.2;
+}
+
+.collab-card p {
+    color: var(--text-muted);
+    font-size: 0.95rem;
+    line-height: 1.45;
 }
 
 .business-form-card {
@@ -706,11 +739,18 @@ nav {
     margin-top: 25px;
 }
 
-.business-form-card input, .business-form-card select {
+.business-form-card input,
+.business-form-card select,
+.business-form-card textarea {
     padding: 12px 15px;
     border-radius: 8px;
     border: 1px solid #ddd;
     font-family: inherit;
+}
+
+.business-form-card textarea {
+    min-height: 110px;
+    resize: vertical;
 }
 
 .full-width { width: 100%; }

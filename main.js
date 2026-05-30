@@ -95,21 +95,23 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             const fields = {
-                restaurant: document.getElementById('biz-name').value.trim(),
-                contact: document.getElementById('biz-contact').value.trim(),
+                interest: document.getElementById('biz-interest').value,
+                name: document.getElementById('biz-name').value.trim(),
                 email: document.getElementById('biz-email').value.trim(),
                 phone: document.getElementById('biz-phone').value.trim(),
-                city: document.getElementById('biz-city').value || 'Nespecificat'
+                city: document.getElementById('biz-city').value || 'Nespecificat',
+                message: document.getElementById('biz-message').value.trim() || 'Nespecificat'
             };
 
-            const subject = encodeURIComponent(`Solicitare parteneriat GreenGO - ${fields.restaurant}`);
+            const subject = encodeURIComponent(`Solicitare colaborare GreenGO - ${fields.interest}`);
             const body = encodeURIComponent(
-                `Bună,\n\nVreau să discutăm despre un parteneriat GreenGO.\n\n` +
-                `Restaurant: ${fields.restaurant}\n` +
-                `Persoană contact: ${fields.contact}\n` +
+                `Bună,\n\nVreau să discutăm despre o colaborare GreenGO.\n\n` +
+                `Interes: ${fields.interest}\n` +
+                `Nume / Companie: ${fields.name}\n` +
                 `Email: ${fields.email}\n` +
                 `Telefon: ${fields.phone}\n` +
-                `Localitate: ${fields.city}\n\n` +
+                `Oraș / Zonă: ${fields.city}\n` +
+                `Mesaj: ${fields.message}\n\n` +
                 `Mulțumesc!`
             );
 
