@@ -205,21 +205,22 @@ nav {
     display: flex;
     gap: 15px;
     justify-content: center;
-    margin: 30px 0;
+    margin: 30px 0 0;
     flex-wrap: wrap;
 }
 
 .app-badge {
-    display: flex;
+    display: inline-flex;
     align-items: center;
     background: #000;
     color: white !important;
-    padding: 8px 20px;
+    padding: 8px 18px;
     border-radius: 10px;
     text-decoration: none !important;
-    border: 1px solid #333;
+    border: 1px solid rgba(255, 255, 255, 0.18);
     transition: transform 0.2s, background-color 0.2s;
-    min-width: 175px;
+    width: 190px;
+    min-height: 56px;
     text-align: left;
 }
 
@@ -229,16 +230,20 @@ nav {
 }
 
 .app-badge .badge-icon {
+    display: block;
     width: 24px;
     height: 24px;
+    max-width: 24px;
+    max-height: 24px;
     margin-right: 12px;
-    flex-shrink: 0;
+    flex: 0 0 24px;
 }
 
 .app-badge .badge-text {
     display: flex;
     flex-direction: column;
     line-height: 1.1;
+    min-width: 0;
 }
 
 .app-badge .small-text {
@@ -248,8 +253,9 @@ nav {
 }
 
 .app-badge .large-text {
-    font-size: 1.15rem;
+    font-size: 1.05rem;
     font-weight: 700;
+    white-space: nowrap;
 }
 
 /* Hero Section */
@@ -314,84 +320,8 @@ nav {
     justify-content: center;
     perspective: 1200px;
     padding: 30px 0;
-    min-height: 420px;
     position: relative;
     align-items: center;
-}
-
-.hero-showcase {
-    width: min(100%, 420px);
-    min-height: 360px;
-    position: relative;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.showcase-card {
-    background: rgba(255, 255, 255, 0.94);
-    border: 1px solid rgba(10, 61, 46, 0.1);
-    border-radius: 24px;
-    box-shadow: 0 24px 60px rgba(10, 61, 46, 0.14);
-    color: var(--dark-green);
-    display: flex;
-    gap: 16px;
-    align-items: center;
-}
-
-.showcase-card img {
-    flex-shrink: 0;
-    object-fit: cover;
-    background: var(--bg-mint);
-}
-
-.showcase-card strong {
-    display: block;
-    font-size: 1.25rem;
-    line-height: 1.2;
-}
-
-.showcase-label {
-    color: var(--primary-hover);
-    display: block;
-    font-size: 0.78rem;
-    font-weight: 800;
-    letter-spacing: 0;
-    margin-bottom: 4px;
-    text-transform: uppercase;
-}
-
-.showcase-card-main {
-    width: 320px;
-    min-height: 320px;
-    padding: 34px;
-    flex-direction: column;
-    justify-content: center;
-    text-align: center;
-}
-
-.showcase-card-main img {
-    width: 170px;
-    height: 170px;
-    border-radius: 42px;
-}
-
-.showcase-card-float {
-    position: absolute;
-    right: 0;
-    bottom: 18px;
-    width: 270px;
-    padding: 16px;
-}
-
-.showcase-card-float img {
-    width: 64px;
-    height: 64px;
-    border-radius: 18px;
-}
-
-.hero-image.has-promotions .hero-showcase {
-    display: none;
 }
 
 /* SWIPER 3D PLATE EFFECT (CSS ART) */
@@ -514,6 +444,24 @@ nav {
 
 .swiper-pagination-bullet-active {
     background: var(--primary-green) !important;
+}
+
+/* Download Section */
+.download-content {
+    text-align: center;
+}
+
+.download-content h2 {
+    color: var(--white);
+    font-weight: 800;
+    margin-bottom: 1rem;
+}
+
+.download-content p {
+    color: rgba(255, 255, 255, 0.78);
+    font-size: 1.1rem;
+    margin: 0 auto 2rem;
+    max-width: 560px;
 }
 
 /* Steps Section */
