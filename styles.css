@@ -114,6 +114,8 @@ nav {
     z-index: 1001;
     align-items: center;
     justify-content: center;
+    border: 0;
+    background: transparent;
 }
 
 .nav-overlay {
@@ -178,6 +180,17 @@ nav {
 .btn-primary:hover {
     background-color: var(--primary-hover);
     transform: translateY(-2px);
+}
+
+.btn-secondary {
+    background-color: var(--white);
+    color: var(--dark-green);
+    box-shadow: 0 0 0 1px rgba(10, 61, 46, 0.14);
+}
+
+.btn-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 24px rgba(10, 61, 46, 0.12);
 }
 
 .btn-nav {
@@ -272,6 +285,12 @@ nav {
     max-width: 500px;
 }
 
+.hero-actions {
+    display: flex;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
 .hero-stats {
     display: flex;
     gap: 40px;
@@ -295,6 +314,84 @@ nav {
     justify-content: center;
     perspective: 1200px;
     padding: 30px 0;
+    min-height: 420px;
+    position: relative;
+    align-items: center;
+}
+
+.hero-showcase {
+    width: min(100%, 420px);
+    min-height: 360px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.showcase-card {
+    background: rgba(255, 255, 255, 0.94);
+    border: 1px solid rgba(10, 61, 46, 0.1);
+    border-radius: 24px;
+    box-shadow: 0 24px 60px rgba(10, 61, 46, 0.14);
+    color: var(--dark-green);
+    display: flex;
+    gap: 16px;
+    align-items: center;
+}
+
+.showcase-card img {
+    flex-shrink: 0;
+    object-fit: cover;
+    background: var(--bg-mint);
+}
+
+.showcase-card strong {
+    display: block;
+    font-size: 1.25rem;
+    line-height: 1.2;
+}
+
+.showcase-label {
+    color: var(--primary-hover);
+    display: block;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0;
+    margin-bottom: 4px;
+    text-transform: uppercase;
+}
+
+.showcase-card-main {
+    width: 320px;
+    min-height: 320px;
+    padding: 34px;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+}
+
+.showcase-card-main img {
+    width: 170px;
+    height: 170px;
+    border-radius: 42px;
+}
+
+.showcase-card-float {
+    position: absolute;
+    right: 0;
+    bottom: 18px;
+    width: 270px;
+    padding: 16px;
+}
+
+.showcase-card-float img {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+}
+
+.hero-image.has-promotions .hero-showcase {
+    display: none;
 }
 
 /* SWIPER 3D PLATE EFFECT (CSS ART) */
@@ -638,6 +735,12 @@ nav {
     font-family: inherit;
 }
 
+.form-status {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    min-height: 1.4em;
+}
+
 .full-width { width: 100%; }
 
 /* Footer */
@@ -744,99 +847,6 @@ footer {
     .hero h1 { font-size: 3rem; }
     .restaurant-logos { grid-template-columns: repeat(2, 1fr); }
     .footer-content { grid-template-columns: 1fr; }
-}
-
-@media (max-width: 768px) {
-    html, body {
-        overflow-x: hidden;
-    }
-
-    .nav-links {
-        display: none !important;
-        position: fixed;
-        top: 0;
-        right: 0;
-        height: 100vh;
-        height: 100dvh;
-        width: 75%;
-        max-width: 300px;
-        background: var(--bg-light);
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        gap: 0;
-        box-shadow: -10px 0 30px rgba(0, 0, 0, 0.15);
-        z-index: 1000;
-        padding: 60px 20px;
-    }
-
-    .nav-links.active {
-        display: flex !important;
-    }
-
-    .nav-links li {
-        margin: 1.5rem 0;
-        list-style: none;
-    }
-
-    .nav-links a {
-        font-size: 1.2rem;
-        font-weight: 600;
-        color: var(--text-dark);
-    }
-
-    .menu-toggle {
-        display: flex;
-    }
-
-    .btn-nav {
-        display: none;
-    }
-
-    .nav-overlay.active {
-        display: block;
-    }
-
-    .hero {
-        padding: 40px 0;
-    }
-
-    .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .hero-content {
-        order: -1;
-    }
-
-    .hero-image {
-        order: 0;
-        max-height: 350px;
-        overflow: hidden;
-        width: 100%;
-    }
-
-    .hero h1 {
-        font-size: 2.2rem;
-    }
-
-    .hero p {
-        font-size: 1rem;
-        line-height: 1.5;
-    }
-
-    .promo-swiper {
-        max-width: 300px;
-        margin: 0 auto;
-        padding-bottom: 40px;
-        overflow: hidden;
-    }
-
-    .swiper-slide {
-        width: 260px !important;
-        height: 260px !important;
-    }
 }
 
 /* Screen reader only */
