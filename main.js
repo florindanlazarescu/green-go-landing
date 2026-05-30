@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navOverlay) navOverlay.classList.remove('active');
         body.classList.remove('no-scroll');
         menuToggle.setAttribute('aria-expanded', 'false');
+        menuToggle.setAttribute('aria-label', 'Deschide meniul');
     };
 
     const openMenu = () => {
@@ -19,11 +20,11 @@ document.addEventListener('DOMContentLoaded', () => {
         if (navOverlay) navOverlay.classList.add('active');
         body.classList.add('no-scroll');
         menuToggle.setAttribute('aria-expanded', 'true');
+        menuToggle.setAttribute('aria-label', 'Închide meniul');
     };
 
     if (menuToggle) {
         menuToggle.setAttribute('aria-expanded', 'false');
-        menuToggle.setAttribute('aria-label', 'Toggle navigation menu');
         menuToggle.addEventListener('click', () => {
             if (navLinks.classList.contains('active')) {
                 closeMenu();
@@ -45,22 +46,15 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
 
-    // Initialize Animate on Scroll
-    AOS.init({
-        duration: 800,
-        easing: 'ease-in-out',
-        once: true,
-        mirror: false,
-    });
-
     // --- Promotions Carousel ---
     const promoCarousel = document.getElementById('promo-carousel');
     const swiperContainer = document.querySelector('.promo-swiper');
+    const heroImage = document.querySelector('.hero-image');
 
     const merchantDetails = {
-        1: { name: 'Ograda Urbana', logo: 'poze/ograda.png' },
+        1: { name: 'Ograda Urbana', logo: 'poze/optimized/ograda-320.jpg' },
         3: { name: 'Corner Stuff', logo: 'poze/corner_stuff.jpg' },
-        5: { name: 'Sarea\'N Bucate', logo: 'poze/sareanbucate.png' },
+        5: { name: 'Sarea\'N Bucate', logo: 'poze/optimized/sareanbucate-320.jpg' },
         6: { name: 'GYRO Mediterranean Flavors', logo: 'poze/gyro.jpg' }
     };
 
@@ -78,6 +72,8 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const initSwiper = () => {
+        if (!window.Swiper) return;
+
         new Swiper('.promo-swiper', {
             effect: 'coverflow',
             grabCursor: true,
@@ -105,14 +101,20 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
+    const appendText = (parent, tagName, className, text) => {
+        const element = document.createElement(tagName);
+        if (className) element.className = className;
+        element.textContent = text;
+        parent.appendChild(element);
+        return element;
+    };
+
     const displayPromotions = (promotions) => {
         if (!promotions || promotions.length === 0) {
-            if (swiperContainer) swiperContainer.style.display = 'block';
-            promoCarousel.innerHTML = '<p class="text-center" style="padding: 20px;">Momentan nu sunt promoții active.</p>';
             return;
         }
 
-        promoCarousel.innerHTML = '';
+        promoCarousel.replaceChildren();
         
         let promosToDisplay = [...promotions];
         if (promotions.length < 4 && promotions.length > 0) {
@@ -129,24 +131,46 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const card = document.createElement('div');
             card.className = 'swiper-slide';
-            card.innerHTML = `
-                <a href="https://app.green-go.ro/merchant/menu?id=${promo.merchantId}" class="promo-card" target="_blank">
-                    <div class="discount">-${Math.round(promo.discountPercent)}%</div>
-                    <div class="img-container">
-                        <img src="${merchant.logo}" alt="${merchant.name}">
-                    </div>
-                    <div class="info">
-                        <h4>${merchant.name}</h4>
-                        <p class="promo-name">${promo.name}</p>
-                        <p class="promo-schedule">${targetText}</p>
-                    </div>
-                </a>
-            `;
+
+            const link = document.createElement('a');
+            link.href = `https://app.green-go.ro/merchant/menu?id=${promo.merchantId}`;
+            link.className = 'promo-card';
+            link.target = '_blank';
+            link.rel = 'noopener';
+
+            appendText(link, 'div', 'discount', `-${Math.round(promo.discountPercent)}%`);
+
+            const imageContainer = document.createElement('div');
+            imageContainer.className = 'img-container';
+            const image = document.createElement('img');
+            image.src = merchant.logo;
+            image.alt = merchant.name;
+            image.loading = 'lazy';
+            imageContainer.appendChild(image);
+            link.appendChild(imageContainer);
+
+            const info = document.createElement('div');
+            info.className = 'info';
+            appendText(info, 'h4', '', merchant.name);
+            appendText(info, 'p', 'promo-name', promo.name || 'Promoție GreenGO');
+            appendText(info, 'p', 'promo-schedule', targetText);
+            link.appendChild(info);
+
+            card.appendChild(link);
             promoCarousel.appendChild(card);
         });
 
+        if (!promoCarousel.children.length) {
+            return;
+        }
+
+        if (!window.Swiper) {
+            return;
+        }
+
         if (swiperContainer) {
-            swiperContainer.style.display = 'block';
+            swiperContainer.hidden = false;
+            if (heroImage) heroImage.classList.add('has-promotions');
             initSwiper();
         }
     };
@@ -159,13 +183,48 @@ document.addEventListener('DOMContentLoaded', () => {
             displayPromotions(promotions);
         } catch (error) {
             console.error('Could not fetch live promotions. Error:', error);
-            if (swiperContainer) swiperContainer.style.display = 'block';
-            promoCarousel.innerHTML = '<p class="text-center" style="padding: 20px;">Eroare la încărcarea promoțiilor.</p>';
         }
     };
 
     if (promoCarousel) {
         fetchAndDisplayPromotions();
+    }
+
+    const partnerForm = document.getElementById('partner-form');
+    const partnerFormStatus = document.getElementById('partner-form-status');
+    if (partnerForm) {
+        partnerForm.addEventListener('submit', (event) => {
+            event.preventDefault();
+
+            if (!partnerForm.checkValidity()) {
+                partnerForm.reportValidity();
+                return;
+            }
+
+            const fields = {
+                restaurant: document.getElementById('biz-name').value.trim(),
+                contact: document.getElementById('biz-contact').value.trim(),
+                email: document.getElementById('biz-email').value.trim(),
+                phone: document.getElementById('biz-phone').value.trim(),
+                city: document.getElementById('biz-city').value || 'Nespecificat'
+            };
+
+            const subject = encodeURIComponent(`Solicitare parteneriat GreenGO - ${fields.restaurant}`);
+            const body = encodeURIComponent(
+                `Bună,\n\nVreau să discutăm despre un parteneriat GreenGO.\n\n` +
+                `Restaurant: ${fields.restaurant}\n` +
+                `Persoană contact: ${fields.contact}\n` +
+                `Email: ${fields.email}\n` +
+                `Telefon: ${fields.phone}\n` +
+                `Localitate: ${fields.city}\n\n` +
+                `Mulțumesc!`
+            );
+
+            window.location.href = `mailto:info@green-go.ro?subject=${subject}&body=${body}`;
+            if (partnerFormStatus) {
+                partnerFormStatus.textContent = 'Se deschide clientul de email cu solicitarea completată.';
+            }
+        });
     }
 
     // Scroll to Top Button
