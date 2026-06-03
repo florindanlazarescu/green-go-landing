@@ -753,6 +753,28 @@ nav {
     resize: vertical;
 }
 
+.business-form-card button:disabled {
+    cursor: wait;
+    opacity: 0.75;
+    transform: none;
+}
+
+.form-status {
+    color: var(--text-muted);
+    font-size: 0.9rem;
+    min-height: 1.4em;
+}
+
+.form-status.success {
+    color: var(--primary-hover);
+    font-weight: 600;
+}
+
+.form-status.error {
+    color: #c0392b;
+    font-weight: 600;
+}
+
 .full-width { width: 100%; }
 
 /* Footer */

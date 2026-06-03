@@ -86,12 +86,23 @@ document.addEventListener('DOMContentLoaded', () => {
     const partnerForm = document.getElementById('partner-form');
     const partnerFormStatus = document.getElementById('partner-form-status');
     if (partnerForm) {
-        partnerForm.addEventListener('submit', (event) => {
+        partnerForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             if (!partnerForm.checkValidity()) {
                 partnerForm.reportValidity();
                 return;
+            }
+
+            const submitButton = partnerForm.querySelector('button[type="submit"]');
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = 'Se trimite...';
+            }
+
+            if (partnerFormStatus) {
+                partnerFormStatus.className = 'form-status';
+                partnerFormStatus.textContent = 'Trimitem solicitarea...';
             }
 
             const fields = {
@@ -103,21 +114,38 @@ document.addEventListener('DOMContentLoaded', () => {
                 message: document.getElementById('biz-message').value.trim() || 'Nespecificat'
             };
 
-            const subject = encodeURIComponent(`Solicitare colaborare GreenGO - ${fields.interest}`);
-            const body = encodeURIComponent(
-                `Bună,\n\nVreau să discutăm despre o colaborare GreenGO.\n\n` +
-                `Interes: ${fields.interest}\n` +
-                `Nume / Companie: ${fields.name}\n` +
-                `Email: ${fields.email}\n` +
-                `Telefon: ${fields.phone}\n` +
-                `Oraș / Zonă: ${fields.city}\n` +
-                `Mesaj: ${fields.message}\n\n` +
-                `Mulțumesc!`
-            );
+            const emailParams = new URLSearchParams({
+                subject: fields.interest,
+                company: fields.name,
+                email: fields.email,
+                phone: fields.phone,
+                city: fields.city,
+                message: fields.message
+            });
 
-            window.location.href = `mailto:info@green-go.ro?subject=${subject}&body=${body}`;
-            if (partnerFormStatus) {
-                partnerFormStatus.textContent = 'Se deschide clientul de email cu solicitarea completată.';
+            try {
+                await fetch(`https://app.green-go.ro/api/email?${emailParams.toString()}`, {
+                    method: 'GET',
+                    mode: 'no-cors',
+                    keepalive: true
+                });
+
+                partnerForm.reset();
+                if (partnerFormStatus) {
+                    partnerFormStatus.className = 'form-status success';
+                    partnerFormStatus.textContent = 'Solicitarea a fost trimisă. Te contactăm în curând.';
+                }
+            } catch (error) {
+                console.error('Could not send contact request:', error);
+                if (partnerFormStatus) {
+                    partnerFormStatus.className = 'form-status error';
+                    partnerFormStatus.textContent = 'Nu am putut trimite solicitarea. Te rugăm să încerci din nou.';
+                }
+            } finally {
+                if (submitButton) {
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Trimite solicitarea';
+                }
             }
         });
     }
