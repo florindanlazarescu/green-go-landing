@@ -1,0 +1,32 @@
+name = "production-worker"
+main = "src/worker.js"
+compatibility_date = "2025-01-01"
+
+# Static assets served from the repo root
+[assets]
+directory = "."
+binding = "ASSETS"
+
+# ── Production (main branch → npx wrangler deploy) ────────────────────────────
+[vars]
+APP_BASE_URL = "https://app.green-go.ro"
+
+[[routes]]
+pattern = "green-go.ro/*"
+zone_name = "green-go.ro"
+
+[[routes]]
+pattern = "www.green-go.ro/*"
+zone_name = "green-go.ro"
+
+# ── Staging (staging branch → npx wrangler deploy --env staging) ──────────────
+[env.staging]
+name = "production-worker-staging"
+
+[env.staging.vars]
+APP_BASE_URL = "https://delivery-staging.green-go.ro"
+
+[[env.staging.routes]]
+pattern = "staging.green-go.ro/*"
+zone_name = "green-go.ro"
+
