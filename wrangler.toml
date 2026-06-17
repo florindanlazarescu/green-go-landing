@@ -1,6 +1,7 @@
 name = "production-worker"
 main = "src/worker.js"
 compatibility_date = "2025-01-01"
+account_id = "593378a2358be7e781872db66b7891dc"
 
 # Static assets served from the repo root
 [assets]
