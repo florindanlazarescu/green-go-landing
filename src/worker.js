@@ -29,6 +29,10 @@ export default {
     const headers = new Headers(response.headers);
     // Remove content-length — it may have changed after text replacement
     headers.delete('content-length');
+    // Prevent the browser and Cloudflare's edge from caching transformed HTML/JS.
+    // Without this, a browser may serve a stale cached page that still contains
+    // the original "https://app.green-go.ro" URLs instead of the substituted ones.
+    headers.set('cache-control', 'no-store');
 
     return new Response(transformed, {
       status: response.status,
