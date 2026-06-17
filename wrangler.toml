@@ -3,10 +3,14 @@ main = "src/worker.js"
 compatibility_date = "2025-01-01"
 account_id = "593378a2358be7e781872db66b7891dc"
 
-# Static assets served from the repo root
+# Static assets served from the repo root.
+# run_worker_first = true is required: without it, wrangler v4 serves matching
+# static files (e.g. index.html) directly from edge storage, bypassing the
+# worker's fetch handler entirely — so the APP_BASE_URL replacement never runs.
 [assets]
 directory = "."
 binding = "ASSETS"
+run_worker_first = true
 
 # ── Production (main branch → npx wrangler deploy) ────────────────────────────
 [vars]
