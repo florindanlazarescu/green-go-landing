@@ -216,6 +216,16 @@ h2 {
     grid-template-columns: 1fr;
 }
 
+/* ===== SUPPORT ===== */
+.support-grid {
+    grid-template-columns: 1fr;
+    gap: 35px;
+}
+
+.support-card {
+    padding: 30px 24px;
+}
+
 /* ===== FOOTER ===== */
 .footer-content {
     grid-template-columns: 1fr;
@@ -269,4 +279,3 @@ h2 {
         height: 250px !important;
     }
 }
-
