@@ -65,7 +65,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 slideShadows: false,
             },
             loop: true,
-            loopedSlides: 4,
+            loopedSlides: 2,
             autoplay: {
                 delay: 3000,
                 disableOnInteraction: false,
