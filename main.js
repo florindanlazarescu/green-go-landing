@@ -48,11 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // --- Promotions Carousel ---
     const swiperContainer = document.querySelector('.promo-swiper');
+    const promoCarousel = document.getElementById('promo-carousel');
+    const promoStatus = document.getElementById('promo-status');
 
-    const initSwiper = () => {
+    const initSwiper = (promotionCount) => {
         if (!window.Swiper) return;
 
-        new Swiper('.promo-swiper', {
+        new Swiper(swiperContainer, {
             effect: 'coverflow',
             grabCursor: true,
             centeredSlides: true,
@@ -64,12 +66,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 modifier: 1,
                 slideShadows: false,
             },
-            loop: true,
-            loopedSlides: 2,
-            autoplay: {
+            loop: promotionCount > 2,
+            rewind: promotionCount === 2,
+            autoplay: promotionCount > 1 ? {
                 delay: 3000,
                 disableOnInteraction: false,
-            },
+            } : false,
             pagination: {
                 el: '.swiper-pagination',
                 clickable: true,
@@ -79,9 +81,69 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     };
 
-    if (swiperContainer) {
-        initSwiper();
-    }
+    const createPromotionSlide = (promotion) => {
+        const slide = document.createElement('div');
+        slide.className = 'swiper-slide';
+
+        const link = document.createElement('a');
+        link.className = 'promo-card';
+        link.href = `https://app.green-go.ro/merchant/menu?id=${encodeURIComponent(promotion.merchantId)}`;
+        link.target = '_blank';
+        link.rel = 'noopener noreferrer';
+
+        const discount = document.createElement('div');
+        discount.className = 'discount';
+        discount.textContent = `-${promotion.discountPercent}%`;
+
+        const info = document.createElement('div');
+        info.className = 'info';
+        const merchantName = document.createElement('h4');
+        merchantName.textContent = promotion.merchantName;
+        const targets = document.createElement('p');
+        targets.className = 'promo-name';
+        targets.textContent = promotion.targets.join(', ');
+        info.append(merchantName, targets);
+        link.append(discount, info);
+        slide.appendChild(link);
+        return slide;
+    };
+
+    const fetchAndDisplayPromotions = async () => {
+        if (!swiperContainer || !promoCarousel || !promoStatus) return;
+
+        try {
+            const response = await fetch('https://app.green-go.ro/api/promotions/active');
+            if (!response.ok) throw new Error(`Promotions request failed: HTTP ${response.status}`);
+            const promotions = await response.json();
+            if (!Array.isArray(promotions) || !promotions.every(promotion =>
+                promotion !== null &&
+                Number.isFinite(promotion.merchantId) &&
+                typeof promotion.merchantName === 'string' &&
+                Number.isFinite(promotion.discountPercent) &&
+                Array.isArray(promotion.targets) &&
+                promotion.targets.every(target => typeof target === 'string')
+            )) {
+                throw new Error('Invalid promotions response');
+            }
+
+            promoCarousel.replaceChildren(...promotions.map(createPromotionSlide));
+            if (promotions.length === 0) {
+                promoStatus.textContent = 'Momentan nu sunt promoții active.';
+                return;
+            }
+
+            swiperContainer.hidden = false;
+            initSwiper(promotions.length);
+            promoStatus.hidden = true;
+        } catch (error) {
+            console.error('Could not load active promotions:', error);
+            swiperContainer.hidden = true;
+            promoStatus.hidden = false;
+            promoStatus.textContent = 'Nu am putut încărca promoțiile. Reîncarcă pagina pentru a încerca din nou.';
+        }
+    };
+
+    fetchAndDisplayPromotions();
 
     const partnerForm = document.getElementById('partner-form');
     const partnerFormStatus = document.getElementById('partner-form-status');

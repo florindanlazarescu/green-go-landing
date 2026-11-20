@@ -299,6 +299,16 @@ nav {
 }
 
 /* SWIPER 3D PLATE EFFECT (CSS ART) */
+.promo-status {
+    align-self: center;
+    text-align: center;
+    color: var(--text-muted);
+}
+
+.promo-swiper[hidden] {
+    display: none;
+}
+
 .promo-swiper {
     width: 100%;
     max-width: 480px;
