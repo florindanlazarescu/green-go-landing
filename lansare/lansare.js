@@ -18,7 +18,7 @@
     }
 
     /* ---------- harta Greenfield: blocuri, curier, cronometru, categorii ---------- */
-    (function map() {
+    try { (function map() {
         var NS = 'http://www.w3.org/2000/svg';
         var housesG = document.getElementById('houses');
         var route = document.getElementById('route');
@@ -73,13 +73,13 @@
             }
         });
 
-        // câte un traseu pe categorie: pe străzile reale, din puncte diferite ale cartierului
+        // curierul pleacă mereu din zona plaza; fiecare categorie ajunge în alt loc din cartier, pe străzile reale
         var ROUTES = [
-            'M300 168L300 265L440 288L560 293',
-            'M525 485L525 355.4L310 348.8',
-            'M610 480L610 295L440 288L270 260',
-            'M213 150L212 200L222 225L270 260L440 288L500 290.5',
-            'M560 490L200 320.5'
+            'M300 168L300 265L440 288L500 290.5',
+            'M300 168L300 265L440 288L610 295L610 358L525 355.4L525 430',
+            'M300 168L300 265L270 260L222 225L200 320.5',
+            'M300 168L300 265L440 288L610 295L610 420',
+            'M300 168L300 265L440 288L610 295L610 358L310 348.8'
         ];
         var ghost = document.getElementById('route-ghost');
         var pinS = document.getElementById('pin-start'), pinE = document.getElementById('pin-end');
@@ -90,8 +90,8 @@
             L = route.getTotalLength();
             route.style.strokeDasharray = L;
             var s = route.getPointAtLength(0), e = route.getPointAtLength(L);
-            pinS.setAttribute('transform', 'translate(' + s.x + ' ' + s.y + ')');
-            pinE.setAttribute('transform', 'translate(' + e.x + ' ' + e.y + ')');
+            if (pinS) pinS.setAttribute('transform', 'translate(' + s.x + ' ' + s.y + ')');
+            if (pinE) pinE.setAttribute('transform', 'translate(' + e.x + ' ' + e.y + ')');
         }
 
         function setCat(i) {
@@ -151,7 +151,7 @@
             requestAnimationFrame(frame);
         }
         requestAnimationFrame(frame);
-    })();
+    })(); } catch (err) { /* harta e decorativă: formularul trebuie să apară oricum */ }
 
     /* ---------- telefoane care răspund la cursor ---------- */
     (function tilt() {
