@@ -152,10 +152,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Invalid promotions response');
             }
 
-            // Doar promoțiile programate pentru azi (0 = duminică ... 6 = sâmbătă, ora României)
-            const todayIdx = new Date(
+            // Programul API: luni = 0 ... duminică = 6, ora României.
+            const todayIdx = (new Date(
                 new Date().toLocaleString('en-US', { timeZone: 'Europe/Bucharest' })
-            ).getDay();
+            ).getDay() + 6) % 7;
             const promotions = allPromotions.filter(promotion =>
                 !Array.isArray(promotion.schedules) || promotion.schedules.length === 0 ||
                 promotion.schedules.some(schedule => schedule.dayOfWeek === todayIdx)
