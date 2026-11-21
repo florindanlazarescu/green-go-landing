@@ -160,3 +160,10 @@
     .phone-1 { left: calc(50% - 172px); top: 36px; }
     .phone-2 { left: calc(50% + 4px); }
 }
+
+/* Mobil: slider necropit + spațiu între butoanele din hero */
+@media (max-width: 768px) {
+    .hero-image { max-height: none; overflow: visible; }
+    .promo-swiper { padding-bottom: 56px; }
+    .hero-actions { display: flex; flex-direction: column; align-items: center; gap: 14px; }
+}
