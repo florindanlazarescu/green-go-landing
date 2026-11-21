@@ -161,9 +161,12 @@
     .phone-2 { left: calc(50% + 4px); }
 }
 
-/* Mobil: slider necropit + spațiu între butoanele din hero */
+/* Mobil: slider necropit, fără tăietură laterală, fără spațiu în plus dedesubt */
 @media (max-width: 768px) {
-    .hero-image { max-height: none; overflow: visible; }
-    .promo-swiper { padding-bottom: 56px; }
+    .hero { padding-bottom: 28px; }
+    .hero-image { max-height: none; overflow: visible; margin-bottom: 0; padding-bottom: 0; }
+    .hero-grid > *, .hero-image { min-width: 0; }
+    .promo-swiper { min-width: 0; max-width: none; width: 100%; overflow: visible; padding-top: 14px; padding-bottom: 34px; }
+    .promo-swiper .swiper-pagination { bottom: 4px; }
     .hero-actions { display: flex; flex-direction: column; align-items: center; gap: 14px; }
 }
