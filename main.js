@@ -1,4 +1,29 @@
 document.addEventListener('DOMContentLoaded', () => {
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Animații la scroll (AOS găzduit local). Cu "reduce motion", conținutul apare direct.
+    if (window.AOS) {
+        AOS.init({ duration: 700, easing: 'ease-out-cubic', once: true, offset: 60, disable: prefersReducedMotion });
+    } else {
+        // Dacă biblioteca nu s-a încărcat, conținutul trebuie să rămână vizibil
+        document.querySelectorAll('[data-aos]').forEach(node => node.removeAttribute('data-aos'));
+    }
+
+    // Butoanele "Comandă acum" / "Descarcă": pe iPhone duc la App Store, pe Android la Google Play,
+    // pe desktop rămân pe secțiunea de descărcare.
+    const iosLink = document.querySelector('.store-apple');
+    const androidLink = document.querySelector('.store-google');
+    const ua = navigator.userAgent || '';
+    const isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const isAndroid = /Android/i.test(ua);
+    const storeUrl = isIOS && iosLink ? iosLink.href : (isAndroid && androidLink ? androidLink.href : null);
+    if (storeUrl) {
+        document.querySelectorAll('[data-store-cta]').forEach(cta => {
+            cta.href = storeUrl;
+            cta.target = '_blank';
+            cta.rel = 'noopener noreferrer';
+        });
+    }
     // Mobile menu toggle
     const menuToggle = document.querySelector('.menu-toggle');
     const navLinks = document.querySelector('.nav-links');
@@ -68,7 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             loop: promotionCount > 2,
             rewind: promotionCount === 2,
-            autoplay: promotionCount > 1 ? {
+            autoplay: promotionCount > 1 && !prefersReducedMotion ? {
                 delay: 3000,
                 disableOnInteraction: false,
             } : false,
@@ -110,12 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const fetchAndDisplayPromotions = async () => {
         if (!swiperContainer || !promoCarousel || !promoStatus) return;
+        const promoHeading = document.getElementById('promo-heading');
 
         try {
             const response = await fetch('https://app.green-go.ro/api/promotions/active');
             if (!response.ok) throw new Error(`Promotions request failed: HTTP ${response.status}`);
-            const promotions = await response.json();
-            if (!Array.isArray(promotions) || !promotions.every(promotion =>
+            const allPromotions = await response.json();
+            if (!Array.isArray(allPromotions) || !allPromotions.every(promotion =>
                 promotion !== null &&
                 Number.isFinite(promotion.merchantId) &&
                 typeof promotion.merchantName === 'string' &&
@@ -126,9 +152,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 throw new Error('Invalid promotions response');
             }
 
+            // Doar promoțiile programate pentru azi (0 = duminică ... 6 = sâmbătă, ora României)
+            const todayIdx = new Date(
+                new Date().toLocaleString('en-US', { timeZone: 'Europe/Bucharest' })
+            ).getDay();
+            const promotions = allPromotions.filter(promotion =>
+                !Array.isArray(promotion.schedules) || promotion.schedules.length === 0 ||
+                promotion.schedules.some(schedule => schedule.dayOfWeek === todayIdx)
+            );
+
             promoCarousel.replaceChildren(...promotions.map(createPromotionSlide));
             if (promotions.length === 0) {
-                promoStatus.textContent = 'Momentan nu sunt promoții active.';
+                if (promoHeading) promoHeading.hidden = true;
+                promoStatus.textContent = 'Momentan nu sunt promoții active azi.';
                 return;
             }
 
@@ -138,6 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error('Could not load active promotions:', error);
             swiperContainer.hidden = true;
+            if (promoHeading) promoHeading.hidden = true;
             promoStatus.hidden = false;
             promoStatus.textContent = 'Nu am putut încărca promoțiile. Reîncarcă pagina pentru a încerca din nou.';
         }
@@ -147,12 +184,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const partnerForm = document.getElementById('partner-form');
     const partnerFormStatus = document.getElementById('partner-form-status');
+    const formOpenedAt = Date.now();
     if (partnerForm) {
         partnerForm.addEventListener('submit', async (event) => {
             event.preventDefault();
 
             if (!partnerForm.checkValidity()) {
                 partnerForm.reportValidity();
+                return;
+            }
+
+            // Anti-spam: câmpul ascuns completat sau trimitere sub 3 secunde = bot. Nu trimitem nimic.
+            const honeypot = document.getElementById('biz-website');
+            if ((honeypot && honeypot.value) || Date.now() - formOpenedAt < 3000) {
+                partnerForm.reset();
+                if (partnerFormStatus) {
+                    partnerFormStatus.className = 'form-status success';
+                    partnerFormStatus.textContent = 'Solicitarea a fost trimisă. Te contactăm în curând.';
+                }
                 return;
             }
 
@@ -210,6 +259,22 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+    }
+
+    // Bara "Descarcă aplicația" pe mobil
+    const mobileCta = document.getElementById('mobile-cta');
+    const downloadSection = document.getElementById('download');
+    if (mobileCta) {
+        let pastHero = false;
+        let downloadVisible = false;
+        const updateMobileCta = () => mobileCta.classList.toggle('visible', pastHero && !downloadVisible);
+        window.addEventListener('scroll', () => { pastHero = window.scrollY > 500; updateMobileCta(); }, { passive: true });
+        if (downloadSection && 'IntersectionObserver' in window) {
+            new IntersectionObserver(entries => {
+                downloadVisible = entries[0].isIntersecting;
+                updateMobileCta();
+            }, { threshold: 0.2 }).observe(downloadSection);
+        }
     }
 
     // Scroll to Top Button
