@@ -73,12 +73,30 @@
             }
         });
 
-        var L = route.getTotalLength();
-        route.style.strokeDasharray = L;
+        // câte un traseu pe categorie: pe străzile reale, din puncte diferite ale cartierului
+        var ROUTES = [
+            'M300 168L300 265L440 288L560 293',
+            'M525 485L525 355.4L310 348.8',
+            'M610 480L610 295L440 288L270 260',
+            'M213 150L212 200L222 225L270 260L440 288L500 290.5',
+            'M560 490L200 320.5'
+        ];
+        var ghost = document.getElementById('route-ghost');
+        var pinS = document.getElementById('pin-start'), pinE = document.getElementById('pin-end');
+        var L = 0;
         var cat = 0;
+        function setRoute(d) {
+            route.setAttribute('d', d); ghost.setAttribute('d', d);
+            L = route.getTotalLength();
+            route.style.strokeDasharray = L;
+            var s = route.getPointAtLength(0), e = route.getPointAtLength(L);
+            pinS.setAttribute('transform', 'translate(' + s.x + ' ' + s.y + ')');
+            pinE.setAttribute('transform', 'translate(' + e.x + ' ' + e.y + ')');
+        }
 
         function setCat(i) {
             cat = (i + CATS.length) % CATS.length;
+            setRoute(ROUTES[cat]);
             card.setAttribute('data-cat', cat);
             bubbleT.textContent = CATS[cat];
             chips.forEach(function (b, k) { b.setAttribute('aria-pressed', k === cat ? 'true' : 'false'); });
