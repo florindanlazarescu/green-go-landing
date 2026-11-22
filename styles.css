@@ -554,6 +554,11 @@ nav {
 }
 
 /* Restaurant Logos */
+.merchant-status {
+    text-align: center;
+    color: var(--text-muted);
+}
+
 .restaurant-logos {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -622,9 +627,6 @@ nav {
     height: 100%;
     object-fit: contain;
 }
-
-.merchant-img-container:has(img[src*="sareanbucate"]) { background: #211e17; }
-.merchant-img-container:has(img[src*="ograda"]) { background: #0c1013; }
 
 .logo-item .soon-badge {
     position: absolute;

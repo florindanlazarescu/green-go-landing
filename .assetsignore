@@ -1,5 +1,6 @@
 # Files excluded from static asset upload
 src/
+tests/
 node_modules/
 .git/
 .gitignore
@@ -7,4 +8,3 @@ node_modules/
 wrangler.toml
 package.json
 package-lock.json
-

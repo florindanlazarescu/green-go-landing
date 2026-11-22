@@ -140,14 +140,9 @@
         <section class="places">
             <div class="wrap">
                 <h2>Începem cu restaurantele cartierului.</h2>
-                <p class="sub">Două sunt gata la lansare, iar altele se alătură în curând.</p>
-                <div class="tiles">
-                    <div class="tile dark-1"><img src="/poze/optimized/sareanbucate-320.jpg" width="320" height="83" alt="Sarea'N Bucate" loading="lazy"><span class="st">La lansare</span></div>
-                    <div class="tile dark-2"><img src="/poze/optimized/ograda-320.jpg" width="320" height="172" alt="Ograda Urbană" loading="lazy"><span class="st">La lansare</span></div>
-                    <div class="tile"><img src="/poze/optimized/novu-440.png" width="440" height="236" alt="Novu" loading="lazy"><span class="st soon">În curând</span></div>
-                    <div class="tile"><span class="nm">Bunătățuri Maramureșene</span><span class="st soon">În curând</span></div>
-                    <div class="tile"><img src="/poze/optimized/krepe-440.png" width="440" height="236" alt="Krepe Cafe" loading="lazy"><span class="st soon">În curând</span></div>
-                </div>
+                <p class="sub">Descoperă restaurantele din cartier și pe cele care se alătură în curând.</p>
+                <p class="merchant-status" id="merchant-status" role="status">Se încarcă restaurantele...</p>
+                <div class="tiles" id="merchant-list" data-layout="launch"></div>
             </div>
         </section>
 
@@ -194,6 +189,7 @@
     </template>
 
     <script src="/consent.js"></script>
+    <script src="/merchants.js"></script>
     <script src="/lansare/lansare.js"></script>
 </body>
 </html>
