@@ -82,7 +82,7 @@
                             <span class="stat-label">Timp mediu</span>
                         </div>
                         <div class="stat" data-aos="fade-up" data-aos-delay="200">
-                            <span class="stat-value">2</span>
+                            <span class="stat-value" id="merchant-count" aria-live="polite">...</span>
                             <span class="stat-label">Restaurante active</span>
                         </div>
                         <div class="stat" data-aos="fade-up" data-aos-delay="300">
@@ -206,40 +206,8 @@
                 <div class="section-header text-center" data-aos="fade-up">
                     <h2>Locurile tale preferate,<br>acum la un click distanță</h2>
                 </div>
-                <div class="restaurant-logos">
-                    <a href="https://app.green-go.ro/merchant/menu?id=5" class="logo-item active" target="_blank" rel="noopener" data-aos="zoom-in" data-aos-delay="100">
-                        <div class="merchant-img-container">
-                            <img src="poze/optimized/sareanbucate-320.jpg" alt="Sarea'N Bucate" loading="lazy">
-                        </div>
-                        <span>Sarea'N Bucate</span>
-                    </a>
-                    <a href="https://app.green-go.ro/merchant/menu?id=1" class="logo-item active" target="_blank" rel="noopener" data-aos="zoom-in" data-aos-delay="200">
-                        <div class="merchant-img-container">
-                            <img src="poze/optimized/ograda-320.jpg" alt="Ograda Urbana" loading="lazy">
-                        </div>
-                        <span>Ograda Urbana</span>
-                    </a>
-                    <div class="logo-item" data-aos="zoom-in" data-aos-delay="300">
-                        <span class="soon-badge">În curând</span>
-                        <div class="merchant-img-container">
-                            <img src="poze/optimized/novu-440.png" alt="Novu" loading="lazy">
-                        </div>
-                        <span>Novu</span>
-                    </div>
-                    <div class="logo-item" data-aos="zoom-in" data-aos-delay="400">
-                        <div class="merchant-img-container">
-                            <img src="poze/coming_soon.png" alt="Coming Soon" loading="lazy">
-                        </div>
-                        <span>Delicii Țărănești</span>
-                    </div>
-                    <div class="logo-item" data-aos="zoom-in" data-aos-delay="500">
-                        <span class="soon-badge">În curând</span>
-                        <div class="merchant-img-container">
-                            <img src="poze/optimized/krepe-440.png" alt="Krepe Cafe" loading="lazy">
-                        </div>
-                        <span>Krepe Cafe</span>
-                    </div>
-                </div>
+                <p class="merchant-status" id="merchant-status" role="status">Se încarcă restaurantele...</p>
+                <div class="restaurant-logos" id="merchant-list" data-layout="landing"></div>
             </div>
         </section>
 
@@ -435,6 +403,7 @@
     <script src="vendor/swiper-bundle.min.js"></script>
     <script src="vendor/aos.js"></script>
     <script src="consent.js"></script>
+    <script src="merchants.js"></script>
     <script src="main.js"></script>
 </body>
 </html>
