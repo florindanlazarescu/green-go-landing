@@ -1,5 +1,8 @@
 # Files excluded from static asset upload
 src/
+tests/
+.tmp/
+.wrangler/
 node_modules/
 .git/
 .gitignore

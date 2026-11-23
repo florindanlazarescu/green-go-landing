@@ -206,6 +206,7 @@
     var tpl = document.getElementById('tpl-form');
     var mounts = document.querySelectorAll('[data-form-mount]');
     var submitted = false;
+    var submitting = false;
 
     function normalizePhone(v) {
         var s = (v || '').replace(/[^\d+]/g, '');
@@ -217,7 +218,7 @@
         return (d.length >= 8 && d.length <= 15) ? s : null;
     }
 
-    function showDone(form, emailed) {
+    function showDone(form) {
         var wrap = document.createElement('div');
         wrap.className = 'wl done';
         var url = 'https://www.green-go.ro/lansare/';
@@ -225,7 +226,7 @@
         wrap.innerHTML =
             '<div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
             '<h3>Ești pe listă.</h3>' +
-            '<p>' + (emailed ? 'Ți-am trimis un email de confirmare. Dacă nu îl vezi, verifică și Spam sau Promoții.' : 'Îți scriem în ziua lansării.') + '</p>' +
+            '<p>Înscrierea ta a ajuns la echipa GreenGO. Îți scriem în ziua lansării.</p>' +
             '<div class="share"><a class="wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(text) + '">Trimite vecinilor pe WhatsApp</a>' +
             '<button type="button" data-copy>Copiază linkul</button></div>';
         form.replaceWith(wrap);
@@ -234,8 +235,6 @@
             (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function () { b.textContent = 'Copiat'; }, function () { b.textContent = url; });
         });
     }
-    var form; // referință folosită în showDone
-
     mounts.forEach(function (mount, idx) {
         var f = tpl.content.firstElementChild.cloneNode(true);
         f.querySelectorAll('.field').forEach(function (fld, i) {
@@ -247,9 +246,9 @@
 
         f.addEventListener('submit', function (e) {
             e.preventDefault();
-            form = f;
+            if (submitted || submitting) return;
             var msg = f.querySelector('.msg');
-            var email = f.elements.email, phone = f.elements.phone, consent = f.elements.consent, btn = f.querySelector('.go');
+            var email = f.elements.email, phone = f.elements.phone, consent = f.elements.consent;
             email.removeAttribute('aria-invalid'); phone.removeAttribute('aria-invalid'); msg.textContent = '';
 
             var ev = email.value.trim();
@@ -258,26 +257,33 @@
             if (pv === null) { phone.setAttribute('aria-invalid', 'true'); msg.textContent = 'Telefonul nu pare corect. Poți să-l lași gol sau să scrii, de exemplu, 0712 345 678.'; phone.focus(); return; }
             if (!consent.checked) { msg.textContent = 'Bifează acordul ca să te putem anunța la lansare.'; consent.focus(); return; }
 
-            // anti-bot: câmp ascuns completat sau trimitere sub 2 secunde
-            if (f.elements.website.value || Date.now() - pageLoadedAt < 2000) { submitted = true; showDone(f); return; }
+            if (f.elements.website.value) { submitted = true; showDone(f); return; }
+            if (Date.now() - pageLoadedAt < 2000) {
+                msg.textContent = 'Așteaptă câteva secunde și încearcă din nou.';
+                return;
+            }
 
-            btn.disabled = true; var label = btn.textContent; btn.textContent = 'Se trimite...';
+            submitting = true;
+            var buttons = document.querySelectorAll('.wl .go');
+            buttons.forEach(function (b) { b.disabled = true; b.textContent = 'Se trimite...'; });
             fetch('/api/waitlist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: ev, phone: pv || '', consent: true, source: location.search.slice(1, 200) })
+                body: JSON.stringify({ email: ev, phone: pv || '', consent: true, source: location.search.slice(1, 200), website: f.elements.website.value })
             }).then(function (r) {
                 return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j }; });
             }).then(function (res) {
                 if (!res.ok) throw new Error(res.j && res.j.error || 'x');
                 submitted = true;
                 try { window.dispatchEvent(new CustomEvent('greengo:lead')); } catch (e2) {}
-                showDone(f, !!res.j.emailed); confetti();
+                showDone(f); confetti();
                 // celelalte formulare devin inutile după înscriere
-                document.querySelectorAll('.wl:not(.done)').forEach(function (o) { if (o !== f) { form = o; showDone(o, !!res.j.emailed); } });
+                document.querySelectorAll('.wl:not(.done)').forEach(function (o) { if (o !== f) showDone(o); });
             }).catch(function (err) {
-                btn.disabled = false; btn.textContent = label;
-                msg.textContent = err && err.message === 'email' ? 'Emailul nu pare valid. Verifică-l și încearcă din nou.' : 'Nu am putut salva înscrierea. Încearcă din nou în câteva secunde.';
+                msg.textContent = err && err.message === 'email' ? 'Emailul nu pare valid. Verifică-l și încearcă din nou.' : 'Nu am putut trimite înscrierea. Încearcă din nou în câteva secunde.';
+            }).finally(function () {
+                submitting = false;
+                buttons.forEach(function (b) { b.disabled = false; b.textContent = 'Anunță-mă la lansare'; });
             });
         });
     });

@@ -9,10 +9,11 @@
  *    Staging     → APP_BASE_URL = https://delivery-staging.green-go.ro
  *
  * 2) Waitlist for the launch teaser page (/lansare):
- *    POST /api/waitlist              – saves email (+ optional phone) in D1 and sends an auto-reply
+ *    POST /api/waitlist              – notifies info@green-go.ro through the contact email API
  *    GET  /api/waitlist/export?key=  – CSV export, protected by the EXPORT_KEY secret
  *
- *    Needs (all optional – without them the page keeps working, the form just answers 503):
+ *    Uses APP_BASE_URL for the same /api/email endpoint as the main contact form.
+ *    Optional storage and subscriber confirmation:
  *      D1 binding        DB
  *      secret            EXPORT_KEY      (CSV export)
  *      secret            RESEND_API_KEY  (auto-reply via Resend)
@@ -89,9 +90,31 @@ async function sendWelcome(env, to) {
   return res.ok;
 }
 
-async function handleSignup(request, env, ctx) {
-  if (!env.DB) return json({ ok: false, error: 'unavailable' }, 503);
+async function notifyLaunchSignup(env, email, phone, source) {
+  const url = new URL('/api/email', env.APP_BASE_URL);
+  url.search = new URLSearchParams({
+    subject: 'Înscriere lansare GreenGO',
+    company: 'Vizitator pagină lansare',
+    email,
+    phone: phone || 'Nespecificat',
+    city: 'Greenfield',
+    message: [
+      'Doresc să fiu anunțat la lansarea GreenGO în Greenfield.',
+      'Am acceptat să fiu contactat prin email și, dacă am completat telefonul, prin mesaj.',
+      `Sursă: /lansare/${source ? `?${source}` : ''}`,
+    ].join('\n'),
+  }).toString();
 
+  const response = await fetch(url, {
+    method: 'GET',
+    cache: 'no-store',
+    redirect: 'error',
+    signal: AbortSignal.timeout(15000),
+  });
+  return response.ok;
+}
+
+async function handleSignup(request, env, ctx) {
   // Accept only same-origin browser requests.
   const origin = request.headers.get('origin');
   if (origin && new URL(origin).host !== new URL(request.url).host) {
@@ -104,6 +127,10 @@ async function handleSignup(request, env, ctx) {
   } catch {
     return json({ ok: false, error: 'bad_request' }, 400);
   }
+  if (!data || typeof data !== 'object' || Array.isArray(data)) {
+    return json({ ok: false, error: 'bad_request' }, 400);
+  }
+  if (data.website) return json({ ok: true, emailed: false });
 
   const email = String(data.email || '').trim().toLowerCase().slice(0, 254);
   if (!EMAIL_RE.test(email)) return json({ ok: false, error: 'email' }, 400);
@@ -114,13 +141,28 @@ async function handleSignup(request, env, ctx) {
   const source = String(data.source || '').slice(0, 200);
   const country = request.cf && request.cf.country ? String(request.cf.country) : '';
 
-  await ensureTable(env.DB);
-  const result = await env.DB
-    .prepare('INSERT OR IGNORE INTO waitlist (email, phone, consent_at, source, country) VALUES (?1, ?2, ?3, ?4, ?5)')
-    .bind(email, phone || null, new Date().toISOString(), source, country)
-    .run();
+  if (!env.APP_BASE_URL) return json({ ok: false, error: 'unavailable' }, 503);
+  try {
+    const notified = await notifyLaunchSignup(env, email, phone, source);
+    if (!notified) return json({ ok: false, error: 'notification' }, 502);
+  } catch {
+    return json({ ok: false, error: 'notification' }, 502);
+  }
 
-  const inserted = (result.meta && result.meta.changes) > 0;
+  // An email accepted by the contact API remains successful if optional storage fails.
+  let inserted = !env.DB;
+  if (env.DB) {
+    try {
+      await ensureTable(env.DB);
+      const result = await env.DB
+        .prepare('INSERT OR IGNORE INTO waitlist (email, phone, consent_at, source, country) VALUES (?1, ?2, ?3, ?4, ?5)')
+        .bind(email, phone || null, new Date().toISOString(), source, country)
+        .run();
+      inserted = (result.meta && result.meta.changes) > 0;
+    } catch {
+      console.error('Could not save launch signup to the optional waitlist database.');
+    }
+  }
   let emailed = false;
   if (inserted && env.RESEND_API_KEY && env.MAIL_FROM) {
     // Reply is sent in the background; the visitor does not wait for it.
