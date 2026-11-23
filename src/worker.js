@@ -108,7 +108,8 @@ async function notifyLaunchSignup(env, email, phone, source) {
   const response = await fetch(url, {
     method: 'GET',
     cache: 'no-store',
-    redirect: 'error',
+    // Workers support manual/follow; response.ok below also rejects redirects.
+    redirect: 'manual',
     signal: AbortSignal.timeout(15000),
   });
   return response.ok;

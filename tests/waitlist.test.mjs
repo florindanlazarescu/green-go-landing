@@ -38,7 +38,7 @@ test('launch signup notifies the contact API without requiring D1', async (t) =>
   assert.ok(url.searchParams.get('message').includes('Am acceptat'));
   assert.equal(options.method, 'GET');
   assert.equal(options.cache, 'no-store');
-  assert.equal(options.redirect, 'error');
+  assert.equal(options.redirect, 'manual');
 });
 
 test('signup supports an omitted phone and a staging backend', async (t) => {
