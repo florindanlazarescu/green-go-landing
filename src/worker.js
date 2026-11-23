@@ -9,13 +9,14 @@
  *    Staging     → APP_BASE_URL = https://delivery-staging.green-go.ro
  *
  * 2) Waitlist for the launch teaser page (/lansare):
- *    POST /api/waitlist              – notifies info@green-go.ro through the contact email API
- *    GET  /api/waitlist/export?key=  – CSV export, protected by the EXPORT_KEY secret
+ *    POST /api/waitlist              – stores signups and notifies info@green-go.ro
+ *    GET  /api/waitlist/subscribers – protected, paginated campaign list
+ *    GET  /api/waitlist/export      – protected CSV export
  *
  *    Uses APP_BASE_URL for the same /api/email endpoint as the main contact form.
- *    Optional storage and subscriber confirmation:
- *      D1 binding        DB
- *      secret            EXPORT_KEY      (CSV export)
+ *      D1 binding        DB              (required signup storage)
+ *      secret            EXPORT_KEY      (administration and CSV export)
+ *    Optional subscriber confirmation:
  *      secret            RESEND_API_KEY  (auto-reply via Resend)
  *      var               MAIL_FROM       e.g. "GreenGO <salut@green-go.ro>"
  *      var               MAIL_REPLY_TO   e.g. "info@green-go.ro"
@@ -142,7 +143,20 @@ async function handleSignup(request, env, ctx) {
   const source = String(data.source || '').slice(0, 200);
   const country = request.cf && request.cf.country ? String(request.cf.country) : '';
 
-  if (!env.APP_BASE_URL) return json({ ok: false, error: 'unavailable' }, 503);
+  if (!env.APP_BASE_URL || !env.DB) return json({ ok: false, error: 'unavailable' }, 503);
+  let inserted;
+  try {
+    await ensureTable(env.DB);
+    const result = await env.DB
+      .prepare('INSERT OR IGNORE INTO waitlist (email, phone, consent_at, source, country) VALUES (?1, ?2, ?3, ?4, ?5)')
+      .bind(email, phone || null, new Date().toISOString(), source, country)
+      .run();
+    inserted = (result.meta && result.meta.changes) > 0;
+  } catch {
+    console.error('Could not save launch signup to the waitlist database.');
+    return json({ ok: false, error: 'storage' }, 503);
+  }
+
   try {
     const notified = await notifyLaunchSignup(env, email, phone, source);
     if (!notified) return json({ ok: false, error: 'notification' }, 502);
@@ -150,20 +164,6 @@ async function handleSignup(request, env, ctx) {
     return json({ ok: false, error: 'notification' }, 502);
   }
 
-  // An email accepted by the contact API remains successful if optional storage fails.
-  let inserted = !env.DB;
-  if (env.DB) {
-    try {
-      await ensureTable(env.DB);
-      const result = await env.DB
-        .prepare('INSERT OR IGNORE INTO waitlist (email, phone, consent_at, source, country) VALUES (?1, ?2, ?3, ?4, ?5)')
-        .bind(email, phone || null, new Date().toISOString(), source, country)
-        .run();
-      inserted = (result.meta && result.meta.changes) > 0;
-    } catch {
-      console.error('Could not save launch signup to the optional waitlist database.');
-    }
-  }
   let emailed = false;
   if (inserted && env.RESEND_API_KEY && env.MAIL_FROM) {
     // Reply is sent in the background; the visitor does not wait for it.
@@ -179,9 +179,12 @@ function csvCell(value) {
   return `"${s.replace(/"/g, '""')}"`;
 }
 
-async function handleExport(request, env) {
-  if (!env.DB || !env.EXPORT_KEY) return new Response('Not found', { status: 404 });
-  const key = new URL(request.url).searchParams.get('key') || '';
+async function waitlistAccessError(request, env) {
+  if (!env.DB || !env.EXPORT_KEY) return json({ ok: false, error: 'unavailable' }, 503);
+  const authorization = request.headers.get('authorization') || '';
+  const bearer = authorization.match(/^Bearer (.+)$/i);
+  const key = bearer ? bearer[1] : new URL(request.url).searchParams.get('key') || '';
+  if (!key || key.length > 4096) return json({ ok: false, error: 'unauthorized' }, 401);
   const enc = new TextEncoder();
   const [a, b] = await Promise.all([
     crypto.subtle.digest('SHA-256', enc.encode(key)),
@@ -191,12 +194,58 @@ async function handleExport(request, env) {
   const y = new Uint8Array(b);
   let diff = 0;
   for (let i = 0; i < x.length; i++) diff |= x[i] ^ y[i];
-  if (diff !== 0) return new Response('Not found', { status: 404 });
+  return diff !== 0 ? json({ ok: false, error: 'unauthorized' }, 401) : null;
+}
 
-  await ensureTable(env.DB);
-  const { results } = await env.DB
-    .prepare('SELECT email, phone, created_at, consent_at, source, country FROM waitlist ORDER BY id')
-    .all();
+function waitlistSearch(url) {
+  const query = (url.searchParams.get('q') || '').trim().toLowerCase().slice(0, 200);
+  return {
+    where: query
+      ? " WHERE instr(lower(email), ?1) > 0 OR instr(COALESCE(phone, ''), ?1) > 0 OR instr(lower(COALESCE(source, '')), ?1) > 0"
+      : '',
+    args: query ? [query] : [],
+  };
+}
+
+async function handleSubscribers(request, env) {
+  const accessError = await waitlistAccessError(request, env);
+  if (accessError) return accessError;
+  const url = new URL(request.url);
+  const requestedPage = Number(url.searchParams.get('page') || 1);
+  if (!Number.isSafeInteger(requestedPage) || requestedPage < 1) {
+    return json({ ok: false, error: 'page' }, 400);
+  }
+  const pageSize = 50;
+  const { where, args } = waitlistSearch(url);
+  try {
+    await ensureTable(env.DB);
+    const { total } = await env.DB.prepare(`SELECT COUNT(*) AS total FROM waitlist${where}`).bind(...args).first();
+    const page = Math.min(requestedPage, Math.max(1, Math.ceil(total / pageSize)));
+    const { results } = await env.DB
+      .prepare(`SELECT email, phone, created_at, consent_at, source, country FROM waitlist${where} ORDER BY id DESC LIMIT ?${args.length + 1} OFFSET ?${args.length + 2}`)
+      .bind(...args, pageSize, (page - 1) * pageSize)
+      .all();
+    return json({ ok: true, items: results, total, page, pageSize });
+  } catch {
+    return json({ ok: false, error: 'storage' }, 503);
+  }
+}
+
+async function handleExport(request, env) {
+  const accessError = await waitlistAccessError(request, env);
+  if (accessError) return accessError;
+  const { where, args } = waitlistSearch(new URL(request.url));
+
+  let results;
+  try {
+    await ensureTable(env.DB);
+    ({ results } = await env.DB
+      .prepare(`SELECT email, phone, created_at, consent_at, source, country FROM waitlist${where} ORDER BY id`)
+      .bind(...args)
+      .all());
+  } catch {
+    return json({ ok: false, error: 'storage' }, 503);
+  }
   const lines = ['email,telefon,data_inscrierii,data_acord,sursa,tara'];
   for (const r of results) {
     lines.push([r.email, r.phone, r.created_at, r.consent_at, r.source, r.country].map(csvCell).join(','));
@@ -221,6 +270,9 @@ export default {
     }
     if (url.pathname === '/api/waitlist/export' && request.method === 'GET') {
       return handleExport(request, env);
+    }
+    if (url.pathname === '/api/waitlist/subscribers' && request.method === 'GET') {
+      return handleSubscribers(request, env);
     }
 
     const response = await env.ASSETS.fetch(request);
