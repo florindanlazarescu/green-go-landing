@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Înscrieri campanie | GreenGO</title>
+    <link rel="icon" type="image/jpeg" href="/poze/optimized/greengo-logo-360.jpg">
+    <link rel="stylesheet" href="/vendor/fonts.css">
+    <link rel="stylesheet" href="/administrare/inscrieri/inscrieri.css">
+    <script src="/administrare/inscrieri/inscrieri.js" defer></script>
+</head>
+<body>
+    <header>
+        <div class="header-inner">
+            <a href="/" class="brand">Green<span>GO</span></a>
+            <a href="/lansare/" class="launch-link">Pagina de lansare</a>
+        </div>
+    </header>
+    <main>
+        <h1>Înscrieri campanie</h1>
+
+        <form id="access-form" class="access-form" method="post">
+            <label for="access-key">Parolă de acces</label>
+            <div class="access-controls">
+                <input id="access-key" type="password" autocomplete="current-password" required>
+                <button type="submit" class="primary">Deschide lista</button>
+            </div>
+            <p id="access-status" class="status error" role="alert"></p>
+        </form>
+
+        <section id="campaign-panel" hidden aria-label="Lista înscrierilor">
+            <div class="toolbar">
+                <p class="count"><strong id="total">0</strong> înscrieri</p>
+                <label class="search">
+                    <span class="sr-only">Caută email, telefon sau sursă</span>
+                    <input id="search" type="search" placeholder="Caută email, telefon sau sursă">
+                </label>
+                <div class="actions">
+                    <button id="refresh" type="button">Actualizează</button>
+                    <button id="download" type="button" class="primary">Exportă CSV</button>
+                    <button id="logout" type="button">Ieșire</button>
+                </div>
+            </div>
+            <p id="list-status" class="status" role="status" aria-live="polite"></p>
+            <div class="table-scroll" tabindex="0" role="region" aria-label="Tabel înscrieri">
+                <table>
+                    <thead>
+                        <tr><th scope="col">Email</th><th scope="col">Telefon</th><th scope="col">Data înscrierii</th><th scope="col">Sursă</th></tr>
+                    </thead>
+                    <tbody id="subscribers"></tbody>
+                </table>
+            </div>
+            <div class="pagination">
+                <span id="page-label">Pagina 1 din 1</span>
+                <div class="actions">
+                    <button id="previous" type="button" aria-label="Pagina anterioară">Anterior</button>
+                    <button id="next" type="button" aria-label="Pagina următoare">Următor</button>
+                </div>
+            </div>
+        </section>
+    </main>
+</body>
+</html>
