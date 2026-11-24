@@ -606,3 +606,25 @@ a.tile:hover { border-color: #b7d3bc; transform: translateY(-2px); }
   .ticker-track, .app-phones .device, .hero-phone, .hero-chip .dot { animation: none !important; }
   .js-reveal .reveal { opacity: 1 !important; transform: none !important; }
 }
+
+/* mobil: fără carusel orizontal. Swipe-ul lateral declanșa gestul „înapoi”
+   al browserului și ducea vizitatorul la pagina anterioară. */
+html, body { overscroll-behavior-x: none; }
+@media (max-width: 599px) {
+  .uses-grid {
+    grid-auto-flow: row; grid-auto-columns: auto; grid-template-columns: 1fr;
+    gap: 12px; overflow: visible; padding: 0; margin: 0; scroll-snap-type: none;
+  }
+  .use {
+    display: grid; grid-template-columns: 108px 1fr; column-gap: 14px;
+    align-items: center; padding: 12px; border-radius: 18px;
+  }
+  .use-photo {
+    grid-row: 1 / span 2; width: 108px; height: 108px; max-width: none;
+    margin: 0; aspect-ratio: 1; border-radius: 14px;
+  }
+  .use h3 { font-size: 1.05rem; align-self: end; }
+  .use p { margin-top: 4px; font-size: .88rem; line-height: 1.45; align-self: start; }
+  .use:hover { transform: none; box-shadow: none; }
+  .use:hover .use-photo { transform: none; }
+}
