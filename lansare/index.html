@@ -60,7 +60,7 @@
                     { "@type": "Question", "name": "Când se lansează GreenGO?", "acceptedAnswer": { "@type": "Answer", "text": "Ne pregătim de lansare la începutul lunii decembrie. Înscrie-te pe lista de prelansare și te vom anunța imediat ce aplicația devine disponibilă." } },
                     { "@type": "Question", "name": "Unde va fi disponibil serviciul?", "acceptedAnswer": { "@type": "Answer", "text": "GreenGO este dedicat locuitorilor cartierului Greenfield din București." } },
                     { "@type": "Question", "name": "Livrarea chiar este gratuită la orice comandă?", "acceptedAnswer": { "@type": "Answer", "text": "Da. De la lansarea oficială până la 31 decembrie 2026, inclusiv, beneficiezi de livrare gratuită la orice comandă." } },
-                    { "@type": "Question", "name": "Cât durează livrarea?", "acceptedAnswer": { "@type": "Answer", "text": "Timpul estimat de livrare este de aproximativ 20 de minute, în funcție de preparatele comandate, disponibilitatea restaurantelor și volumul comenzilor." } },
+                    { "@type": "Question", "name": "Cât durează livrarea?", "acceptedAnswer": { "@type": "Answer", "text": "Livrarea durează maximum 15 minute. Restaurantele partenere sunt chiar în cartier, așa că preparatele ajung repede la ușa ta." } },
                     { "@type": "Question", "name": "Cât va costa livrarea după terminarea promoției?", "acceptedAnswer": { "@type": "Answer", "text": "După încheierea perioadei promoționale, costul livrării va fi afișat în aplicație înainte de finalizarea comenzii." } },
                     { "@type": "Question", "name": "Sunt obligat să comand dacă mă înscriu?", "acceptedAnswer": { "@type": "Answer", "text": "Nu. Înscrierea pe lista de prelansare este gratuită și nu presupune nicio obligație." } },
                     { "@type": "Question", "name": "Cum pot transmite sugestii sau reclamații?", "acceptedAnswer": { "@type": "Answer", "text": "Poți comunica direct cu echipa GreenGO prin comunitatea oficială WhatsApp. Pentru situațiile care implică date personale sau informații despre comenzi, folosește comunicarea în privat." } }
@@ -128,8 +128,8 @@
             <div class="wrap hero-grid">
                 <div class="hero-copy">
                     <p class="eyebrow">Din cartier, pentru cartier.</p>
-                    <h1 id="hero-title">Mâncarea ta preferată.<br><span>Mai mult timp pentru tine.</span></h1>
-                    <p class="lede">Restaurantele din Greenfield, într-o singură aplicație. Comanzi simplu, iar preparatele preferate ajung direct la ușa ta.</p>
+                    <h1 id="hero-title">Comanzi din cartier.<br><span>Primești acasă, fără taxă&nbsp;de&nbsp;livrare.</span></h1>
+                    <p class="lede">Restaurantele din Greenfield, într-o singură aplicație. Alegi ce îți place, iar comanda ajunge la ușa ta în maximum 15 minute.</p>
 
                     <div class="offer-badge" role="note" aria-label="Oferta de lansare">
                         <span class="offer-icon" aria-hidden="true">
@@ -156,19 +156,12 @@
                 </div>
 
                 <div class="hero-media">
-                    <!--
-                        Imaginea editorială aprobată pentru campanie se pune aici, în locul panoului cu capturi:
-                        <picture>
-                            <source srcset="/poze/lansare/hero-1200.avif" type="image/avif">
-                            <source srcset="/poze/lansare/hero-1200.webp" type="image/webp">
-                            <img src="/poze/lansare/hero-1200.jpg" width="1200" height="1400" alt="…" fetchpriority="high">
-                        </picture>
-                        (fără loading="lazy": va fi imaginea LCP; scoate și regula care ascunde .hero-media pe mobil din lansare.css, dacă vrei fotografia și pe telefon, sub formular)
-                    -->
-                    <div class="hero-panel">
-                        <div class="device device-back"><img src="/poze/optimized/app-restaurante-560.jpg" width="560" height="1214" alt="Ecranul cu restaurantele din cartier în aplicația GreenGO" loading="lazy" decoding="async"></div>
-                        <div class="device device-front"><img src="/poze/optimized/app-meniu-560.jpg" width="560" height="1214" alt="Meniul unui restaurant, cu fotografii și prețuri în lei, în aplicația GreenGO" loading="lazy" decoding="async"></div>
-                    </div>
+                    <!-- Imaginea de campanie: se poate înlocui cu fotografia finală aprobată (același raport 4:5). -->
+                    <figure class="hero-photo">
+                        <img src="/poze/lansare/hero-ploaie.jpg" width="869" height="1086" alt="Castron de supă caldă și pâine pe pervaz, lângă o fereastră cu ploaie de toamnă" fetchpriority="high" decoding="async">
+                    </figure>
+                    <div class="device hero-phone"><img src="/poze/optimized/app-supe-560.jpg" width="560" height="1094" alt="Categoria Ciorbă / Supă din aplicația GreenGO, cu fotografii și prețuri în lei" loading="lazy" decoding="async"></div>
+                    <p class="hero-chip" aria-hidden="true"><span class="dot"></span>Restaurante din Greenfield</p>
                 </div>
             </div>
         </section>
@@ -178,7 +171,7 @@
             <ul class="wrap perks-list">
                 <li>
                     <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9.5 2.5h5"/></svg></span>
-                    <div><strong>Aproximativ 20 min</strong><span>Livrare rapidă, în funcție de comandă și disponibilitate.</span></div>
+                    <div><strong>Maximum 15 minute</strong><span>Livrare rapidă, direct la ușa ta din Greenfield.</span></div>
                 </li>
                 <li>
                     <span class="ico" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6h-6v6H4a1 1 0 0 1-1-1Z"/></svg></span>
@@ -190,6 +183,14 @@
                 </li>
             </ul>
         </section>
+
+        <!-- bandă animată discretă (se oprește pentru prefers-reduced-motion) -->
+        <div class="ticker" aria-hidden="true">
+            <div class="ticker-track">
+                <span>Livrare gratuită până la 31 decembrie</span><i></i><span>Restaurantele din Greenfield</span><i></i><span>Livrare în maximum 15 minute</span><i></i><span>Din cartier, pentru cartier</span><i></i>
+                <span>Livrare gratuită până la 31 decembrie</span><i></i><span>Restaurantele din Greenfield</span><i></i><span>Livrare în maximum 15 minute</span><i></i><span>Din cartier, pentru cartier</span><i></i>
+            </div>
+        </div>
 
         <!-- ===================== SITUAȚII REALE ===================== -->
         <section class="section uses" aria-labelledby="uses-title">
@@ -378,7 +379,7 @@
                     </details>
                     <details>
                         <summary><h3>Cât durează livrarea?</h3></summary>
-                        <div class="faq-a"><p>Timpul estimat de livrare este de aproximativ 20 de minute, în funcție de preparatele comandate, disponibilitatea restaurantelor și volumul comenzilor.</p></div>
+                        <div class="faq-a"><p>Livrarea durează maximum 15 minute. Restaurantele partenere sunt chiar în cartier, așa că preparatele ajung repede la ușa ta.</p></div>
                     </details>
                     <details>
                         <summary><h3>Cât va costa livrarea după terminarea promoției?</h3></summary>
@@ -411,7 +412,7 @@
                         <p class="micro">Afli de lansare, oferte și restaurante noi direct pe WhatsApp.</p>
                     </div>
                 </div>
-                <p class="tagline">Mâncarea ta preferată. Mai mult timp pentru tine.<br><span>Din cartier, pentru cartier.</span></p>
+                <p class="tagline"><span>Din cartier, pentru cartier.</span></p>
             </div>
         </section>
     </main>
@@ -420,7 +421,7 @@
         <div class="wrap foot-grid">
             <div class="foot-brand">
                 <span class="foot-logo"><img src="/poze/optimized/greengo-logo-mark.png" width="199" height="180" alt="GreenGO" loading="lazy"></span>
-                <p>Mâncarea ta preferată. Mai mult timp pentru tine.<br>Din cartier, pentru cartier.</p>
+                <p>Comanzi din cartier. Primești acasă.<br>Din cartier, pentru cartier.</p>
             </div>
             <div class="foot-social">
                 <p class="foot-handle">@greengoromania</p>

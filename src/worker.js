@@ -78,7 +78,7 @@ function welcomeEmail() {
 <tr><td style="padding:16px 32px 0;"><a href="${whatsapp}" style="display:inline-block;background:#25d366;color:#0b3d23;font-weight:700;text-decoration:none;padding:14px 24px;border-radius:12px;font-size:16px;">Alătură-te comunității GreenGO</a></td></tr>
 <tr><td style="padding:22px 32px 0;font-size:15px;line-height:1.6;">Știi pe cineva din Greenfield căruia i-ar plăcea? <a href="${share}" style="color:#157020;font-weight:700;">Spune-i și unui vecin</a>.</td></tr>
 <tr><td style="padding:28px 32px 0;"><div style="border-top:1px solid #e2ebe4;"></div></td></tr>
-<tr><td style="padding:16px 32px 0;font-size:14px;line-height:1.5;font-weight:700;color:#10221a;">Mâncarea ta preferată. Mai mult timp pentru tine.<br><span style="color:#157020;">Din cartier, pentru cartier.</span></td></tr>
+<tr><td style="padding:16px 32px 0;font-size:14px;line-height:1.5;font-weight:700;color:#10221a;">Comanzi din cartier. Primești acasă.<br><span style="color:#157020;">Din cartier, pentru cartier.</span></td></tr>
 <tr><td style="padding:14px 32px 0;font-size:13px;line-height:1.6;"><a href="https://www.facebook.com/greengoromania" style="color:#157020;text-decoration:none;">Facebook</a> &nbsp;·&nbsp; <a href="https://www.instagram.com/greengoromania" style="color:#157020;text-decoration:none;">Instagram</a> &nbsp;·&nbsp; <a href="https://www.tiktok.com/@greengoromania" style="color:#157020;text-decoration:none;">TikTok</a> &nbsp;·&nbsp; @greengoromania</td></tr>
 <tr><td style="padding:16px 32px 28px;font-size:12px;line-height:1.5;color:#5d6f64;">Ai primit acest mesaj pentru că te-ai înscris pe lista de prelansare GreenGO, pe green-go.ro. Dacă nu ai fost tu sau nu mai vrei să primești e-mailul de lansare, răspunde la acest mesaj și te ștergem din listă. Detalii în <a href="https://www.green-go.ro/Legal/Politica%20de%20Confidentialitate%20Green%20GO%20Delivery.html" style="color:#5d6f64;">Politica de confidențialitate</a>.</td></tr>
 </table></td></tr></table></body></html>`;
@@ -89,7 +89,7 @@ function welcomeEmail() {
     'OFERTA DE LANSARE: livrare GRATUITĂ la orice comandă, de la lansarea oficială până la 31 decembrie 2026, inclusiv.\n\n' +
     `Până atunci, rămâi aproape de noi și pe WhatsApp: ${whatsapp}\n\n` +
     `Spune-i și unui vecin: ${share}\n\n` +
-    'Mâncarea ta preferată. Mai mult timp pentru tine. Din cartier, pentru cartier.\n' +
+    'Comanzi din cartier. Primești acasă. Din cartier, pentru cartier.\n' +
     'Facebook, Instagram și TikTok: @greengoromania\n\n' +
     'Ai primit acest mesaj pentru că te-ai înscris pe lista de prelansare GreenGO. Dacă nu ai fost tu sau nu mai vrei să primești e-mailul de lansare, răspunde la acest mesaj și te ștergem din listă.';
   return { subject: 'Ești pe lista GreenGO 💚', html, text };

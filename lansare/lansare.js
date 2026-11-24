@@ -310,4 +310,57 @@
         });
         Array.prototype.forEach.call(others, function (el) { io.observe(el); });
     })();
+
+    /* ---------- header: umbră discretă după derulare ---------- */
+    (function header() {
+        var top = document.querySelector && document.querySelector('.top');
+        if (!top) return;
+        var ticking = false;
+        window.addEventListener('scroll', function () {
+            if (ticking) return;
+            ticking = true;
+            requestAnimationFrame(function () {
+                ticking = false;
+                top.classList.toggle('scrolled', window.scrollY > 8);
+            });
+        }, { passive: true });
+    })();
+
+    /* ---------- apariție lină la derulare (fără bibliotecă, respectă reduced-motion) ---------- */
+    (function reveal() {
+        if (typeof IntersectionObserver === 'undefined' || !document.documentElement) return;
+        if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+        var SELECTORS = '.section-head, .perks-list li, .use, .app-copy, .app-phones, .steps-list li, .tile:not(.skeleton), .offer-copy, .offer-form, .wa-card, .faq-list details, .final-card';
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) {
+                if (!en.isIntersecting) return;
+                var el = en.target;
+                el.classList.add('in');
+                io.unobserve(el);
+                // după apariție, efectele de hover revin la viteza lor normală
+                setTimeout(function () {
+                    el.classList.remove('reveal', 'in');
+                    el.style.transitionDelay = '';
+                    el.setAttribute('data-revealed', '');
+                }, 1200);
+            });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+        function prepare(root) {
+            Array.prototype.forEach.call(root.querySelectorAll(SELECTORS), function (el) {
+                if (el.classList.contains('reveal') || el.hasAttribute('data-revealed')) return;
+                // decalaj mic între elementele surori (carduri, pași, întrebări)
+                var i = Array.prototype.indexOf.call(el.parentNode.children, el);
+                el.style.transitionDelay = Math.min(i, 5) * 70 + 'ms';
+                el.classList.add('reveal');
+                io.observe(el);
+            });
+        }
+        document.documentElement.classList.add('js-reveal');
+        prepare(document);
+        // restaurantele se încarcă ulterior din API
+        var list = document.getElementById('merchant-list');
+        if (list && typeof MutationObserver !== 'undefined') {
+            new MutationObserver(function () { prepare(list); }).observe(list, { childList: true });
+        }
+    })();
 })();

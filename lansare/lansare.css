@@ -458,11 +458,151 @@ a.tile:hover { border-color: #b7d3bc; transform: translateY(-2px); }
 }
 
 /* ---------- mobil: imaginea nu împinge formularul în jos ---------- */
-@media (max-width: 959px) {
-  .hero-media { display: none; }
-}
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
+
+/* =====================================================================
+   STRAT MODERN: header translucid, hero cu fotografie, bandă animată,
+   apariție la derulare, interacțiuni discrete. Fără glow, fără 3D.
+   ===================================================================== */
+
+/* header fix, translucid */
+.top {
+  position: sticky; top: 0; z-index: 40;
+  background: rgba(255, 255, 255, .82);
+  -webkit-backdrop-filter: saturate(160%) blur(14px);
+  backdrop-filter: saturate(160%) blur(14px);
+  transition: box-shadow .25s ease, border-color .25s ease;
+}
+.top.scrolled { box-shadow: 0 6px 24px rgba(16, 34, 26, .06); }
+.signup-card { scroll-margin-top: 96px; }
+
+/* hero */
+.hero { position: relative; overflow: hidden; }
+.hero::before {
+  content: ''; position: absolute; inset: 0 0 auto 0; height: 100%;
+  background: linear-gradient(180deg, #f3f8f3 0%, rgba(243, 248, 243, 0) 70%);
+  pointer-events: none; z-index: -1;
+}
+.hero .eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 6px 12px; border-radius: 999px;
+  background: #e5f3e7; color: var(--brand-ink);
+  letter-spacing: .1em;
+}
+.hero .eyebrow::before { content: ''; width: 7px; height: 7px; border-radius: 50%; background: var(--brand); }
+.hero h1 { letter-spacing: -.035em; }
+
+.hero-media { position: relative; }
+.hero-photo { margin: 0; border-radius: 28px; overflow: hidden; aspect-ratio: 4 / 3; background: #e9efe9; }
+.hero-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 70%; }
+.hero-phone { display: none; }
+.hero-chip {
+  position: absolute; left: 14px; bottom: 14px;
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 9px 14px; border-radius: 999px;
+  background: rgba(255, 255, 255, .92);
+  -webkit-backdrop-filter: blur(8px); backdrop-filter: blur(8px);
+  font-size: .85rem; font-weight: 700; color: var(--ink);
+  box-shadow: 0 4px 16px rgba(16, 34, 26, .12);
+}
+.hero-chip .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--brand); animation: pulse 2.4s ease-in-out infinite; }
+@keyframes pulse { 50% { opacity: .35; } }
+
+/* butoane: săgeată care alunecă la hover */
+.btn-primary::after, .go::after {
+  content: ''; width: 16px; height: 16px; flex: none;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+          mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6'/%3E%3C/svg%3E") center / contain no-repeat;
+  transition: transform .25s ease;
+}
+.go[aria-busy="true"]::after { display: none; }
+.btn-primary:hover::after, .go:hover::after { transform: translateX(4px); }
+.btn-primary, .go, .btn-wa { box-shadow: 0 6px 16px rgba(23, 128, 42, .18); }
+.btn-wa { box-shadow: 0 6px 16px rgba(37, 211, 102, .22); }
+.btn-primary:hover, .go:hover, .btn-wa:hover { transform: translateY(-1px); }
+
+/* bara de beneficii: carduri */
+.perks { background: transparent; border: 0; }
+.perks-list li {
+  background: #fff; border: 1px solid var(--line); border-radius: 18px;
+  padding: 16px; transition: transform .25s ease, box-shadow .25s ease;
+}
+.perks-list li:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.perks-list .ico { background: #e5f3e7; border: 0; }
+
+/* bandă animată */
+.ticker { overflow: hidden; background: var(--deep); color: #fff; padding: 14px 0; margin-top: 8px; }
+.ticker-track { display: flex; width: max-content; align-items: center; gap: 28px; animation: ticker 38s linear infinite; }
+.ticker span { font-family: var(--display); font-weight: 700; font-size: 1.05rem; white-space: nowrap; letter-spacing: -.01em; }
+.ticker i { width: 8px; height: 8px; border-radius: 50%; background: var(--mint); flex: none; }
+@keyframes ticker { to { transform: translateX(-50%); } }
+
+/* titluri de secțiune */
+.section-head h2, .app h2, .wa-card h2, .final-card h2, .offer h2 { letter-spacing: -.035em; }
+
+/* carduri cu fotografii */
+.use { background: #fff; overflow: hidden; transition: transform .3s ease, box-shadow .3s ease; border-radius: 22px; }
+.use:hover { transform: translateY(-4px); box-shadow: 0 14px 34px rgba(16, 34, 26, .10); }
+.use-photo { transition: transform .6s ease; border-radius: 0; }
+.use:hover .use-photo { transform: scale(1.04); }
+.use h3 { font-size: 1.25rem; }
+
+/* aplicația: telefoane care plutesc ușor */
+.app-phones .device { animation: float 7s ease-in-out infinite; }
+.app-phones .device:nth-child(2) { animation-delay: -3.5s; }
+@keyframes float { 50% { transform: translateY(-10px); } }
+
+/* pași cu numere mari */
+.steps-list li { position: relative; background: #fff; transition: transform .25s ease, box-shadow .25s ease; border-radius: 22px; }
+.steps-list li:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+.step-n { font-size: 2.4rem; line-height: 1; padding: 0; background: none; color: var(--brand); letter-spacing: -.04em; }
+
+/* restaurante */
+.tile { border-radius: 20px; transition: transform .25s ease, box-shadow .25s ease; }
+.tile:not(.skeleton):hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+
+/* oferta: fotografie discretă în fundal */
+.offer {
+  background:
+    linear-gradient(180deg, rgba(12, 43, 24, .94), rgba(12, 43, 24, .97)),
+    url(/poze/lansare/musafiri-800.jpg) center / cover no-repeat;
+}
+.zero span { letter-spacing: -.06em; }
+
+/* whatsapp */
+.wa-card { border-radius: 28px; background: linear-gradient(135deg, #effaf2 0%, #e3f6e8 100%); }
+
+/* faq */
+.faq-list details { transition: background-color .2s ease; }
+.faq-list summary:hover h3 { color: var(--brand-ink); }
+
+/* final */
+.final-card { background: linear-gradient(180deg, #f3f8f3, #e9f4ec); border-radius: 32px; }
+
+/* apariție la derulare (activată doar din JS, doar fără reduced-motion) */
+.js-reveal .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s cubic-bezier(.2, .7, .2, 1); }
+.js-reveal .reveal.in { opacity: 1; transform: none; }
+
+@media (min-width: 960px) {
+  .hero-photo { aspect-ratio: 4 / 5; }
+  .hero-phone {
+    display: block; position: absolute; left: -48px; bottom: 36px;
+    width: 34%; max-width: 190px; border-radius: 24px; padding: 6px;
+    box-shadow: 0 18px 40px rgba(12, 43, 24, .28);
+    animation: float 7s ease-in-out infinite;
+  }
+  .hero-phone img { border-radius: 18px; }
+  .hero-chip { left: auto; right: 18px; bottom: auto; top: 18px; }
+  .hero h1 { font-size: clamp(2.6rem, 3.6vw, 3.4rem); }
+  .ticker span { font-size: 1.2rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-track, .app-phones .device, .hero-phone, .hero-chip .dot { animation: none !important; }
+  .js-reveal .reveal { opacity: 1 !important; transform: none !important; }
 }
