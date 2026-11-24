@@ -5,6 +5,12 @@
     if (!merchantList || !merchantStatus) return;
 
     const isLaunch = merchantList.dataset.layout === 'launch';
+    const activeMerchantPriority = new Map([
+        [1, 0], // Ograda Urbana
+        [5, 1], // Sarea'N Bucate
+        [7, 2], // Krepe Cafe
+        [8, 3], // Wake Up Cafe
+    ]);
 
     const createMerchantCard = (merchant) => {
         const card = document.createElement(isLaunch ? 'div' : 'a');
@@ -66,9 +72,15 @@
                 throw new Error('Invalid merchants response');
             }
 
-            merchantList.replaceChildren(...data.merchants.map(createMerchantCard));
+            const activeMerchants = data.merchants.filter(merchant => !merchant.isTempClosed);
+            const upcomingMerchants = data.merchants.filter(merchant => merchant.isTempClosed);
+            const priorityOf = merchant => activeMerchantPriority.get(merchant.id) ?? activeMerchantPriority.size;
+            activeMerchants.sort((left, right) => priorityOf(left) - priorityOf(right));
+
+            const orderedMerchants = [...activeMerchants, ...upcomingMerchants];
+            merchantList.replaceChildren(...orderedMerchants.map(createMerchantCard));
             if (merchantCount) {
-                merchantCount.textContent = String(data.merchants.filter(merchant => !merchant.isTempClosed).length);
+                merchantCount.textContent = String(activeMerchants.length);
             }
             merchantStatus.hidden = data.merchants.length > 0;
             if (data.merchants.length === 0) {
