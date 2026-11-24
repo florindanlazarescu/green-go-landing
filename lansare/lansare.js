@@ -1,295 +1,313 @@
 (function () {
     'use strict';
-    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
     var pageLoadedAt = Date.now();
+    var PAGE_URL = 'https://www.green-go.ro/lansare/';
+    var WA_URL = 'https://chat.whatsapp.com/EdRMVjhPgU95lKDiJLzgzs';
+    var UTM_KEYS = ['utm_source', 'utm_medium', 'utm_campaign', 'utm_content', 'utm_term'];
+    var SIGNED_KEY = 'greengo_launch_signed';
 
-    /* ---------- lumină care urmărește cursorul ---------- */
-    if (finePointer && !reduce) {
-        var raf = 0;
-        window.addEventListener('pointermove', function (e) {
-            if (raf) return;
-            raf = requestAnimationFrame(function () {
-                raf = 0;
-                document.documentElement.style.setProperty('--mx', e.clientX + 'px');
-                document.documentElement.style.setProperty('--my', e.clientY + 'px');
-            });
-        }, { passive: true });
+    function store(kind) {
+        try { return window[kind] || null; } catch (e) { return null; }
+    }
+    function storeGet(kind, key) {
+        var s = store(kind);
+        try { return s ? s.getItem(key) : null; } catch (e) { return null; }
+    }
+    function storeSet(kind, key, value) {
+        var s = store(kind);
+        try { if (s) s.setItem(key, value); } catch (e) { /* fără stocare: pagina funcționează oricum */ }
     }
 
-    /* ---------- harta Greenfield: blocuri, curier, cronometru, categorii ---------- */
-    try { (function map() {
-        var NS = 'http://www.w3.org/2000/svg';
-        var housesG = document.getElementById('houses');
-        var route = document.getElementById('route');
-        var rider = document.getElementById('rider');
-        var glow = document.getElementById('rider-glow');
-        var clockT = document.getElementById('clock-t');
-        var clockL = document.getElementById('clock-l');
-        var clock = document.getElementById('clock');
-        var card = document.getElementById('map-card');
-        var svg = document.getElementById('map-svg');
-        var bubble = document.getElementById('bubble');
-        var bubbleT = document.getElementById('bubble-t');
-        var chips = document.querySelectorAll('#chips button');
-        if (!housesG || !route) return;
-
-        var CATS = ['Mic dejun', 'Prânz', 'Cină', 'Dulciuri', 'Cumpărături'];
-
-        // axele străzilor reale (px din harta OSM), ca să nu punem clădiri peste ele
-        var roads = [
-            [[-20, 217], [720, 565]], [[250, 347], [610, 358]], [[222, 222], [270, 260], [440, 288], [610, 295]],
-            [[215, 90], [212, 200], [222, 225], [200, 322]], [[300, 75], [300, 265]], [[300, 172], [396, 172]],
-            [[300, 112], [392, 112]], [[610, 295], [610, 500]], [[525, 358], [525, 485]], [[440, 358], [440, 445]]
-        ];
-        function dseg(px, py, a, b) {
-            var dx = b[0] - a[0], dy = b[1] - a[1], t = ((px - a[0]) * dx + (py - a[1]) * dy) / (dx * dx + dy * dy);
-            t = Math.max(0, Math.min(1, t));
-            return Math.hypot(px - (a[0] + t * dx), py - (a[1] + t * dy));
-        }
-        function nearRoad(px, py, min) {
-            for (var i = 0; i < roads.length; i++) for (var k = 0; k < roads[i].length - 1; k++) if (dseg(px, py, roads[i][k], roads[i][k + 1]) < min) return true;
-            return false;
-        }
-        // zonele construite din Greenfield: [x0, y0, x1, y1]
-        var zones = [[200, 96, 272, 218], [304, 96, 396, 270], [272, 298, 604, 345], [380, 364, 518, 480], [530, 366, 604, 480], [305, 362, 372, 400]];
-        var seed = 11;
-        function rnd() { seed = (seed * 16807) % 2147483647; return (seed - 1) / 2147483646; }
-        zones.forEach(function (z) {
-            for (var x = z[0]; x + 14 <= z[2]; x += 20) {
-                for (var y = z[1]; y + 11 <= z[3]; y += 16) {
-                    var cx = x + 7, cy = y + 5.5;
-                    if (rnd() < .2) continue;
-                    if (nearRoad(cx, cy, 9.5)) continue;
-                    if (cx > 350 && cx < 410 && cy > 180 && cy < 276) continue; // pietonalul
-                    if (cx > 303 && cx < 345 && cy > 282 && cy < 336) continue;  // parcul
-                    if (cx < 385 && cy < 124) continue;                          // sub cronometru
-                    var r = document.createElementNS(NS, 'rect');
-                    r.setAttribute('class', 'house');
-                    r.setAttribute('x', x); r.setAttribute('y', y);
-                    r.setAttribute('width', 14); r.setAttribute('height', 11); r.setAttribute('rx', 2.5);
-                    housesG.appendChild(r);
-                }
-            }
+    /* ---------- atribuire: parametrii UTM se păstrează pe durata vizitei ---------- */
+    var attribution = (function () {
+        var search = (typeof location !== 'undefined' && location.search) || '';
+        var params = {};
+        search.replace(/^\?/, '').split('&').forEach(function (pair) {
+            if (!pair) return;
+            var i = pair.indexOf('=');
+            var k = decodeSafe(i < 0 ? pair : pair.slice(0, i));
+            var v = decodeSafe(i < 0 ? '' : pair.slice(i + 1));
+            if (UTM_KEYS.indexOf(k) >= 0 && v) params[k] = v.slice(0, 100);
         });
-
-        // curierul pleacă mereu din zona plaza; fiecare categorie ajunge în alt loc din cartier, pe străzile reale
-        var ROUTES = [
-            'M300 168L300 265L440 288L500 290.5',
-            'M300 168L300 265L440 288L610 295L610 358L525 355.4L525 430',
-            'M300 168L300 265L270 260L222 225L200 320.5',
-            'M300 168L300 265L440 288L610 295L610 420',
-            'M300 168L300 265L440 288L610 295L610 358L310 348.8'
-        ];
-        var ghost = document.getElementById('route-ghost');
-        var pinS = document.getElementById('pin-start'), pinE = document.getElementById('pin-end');
-        var L = 0;
-        var cat = 0;
-        function setRoute(d) {
-            route.setAttribute('d', d); ghost.setAttribute('d', d);
-            L = route.getTotalLength();
-            route.style.strokeDasharray = L;
-            var s = route.getPointAtLength(0), e = route.getPointAtLength(L);
-            if (pinS) pinS.setAttribute('transform', 'translate(' + s.x + ' ' + s.y + ')');
-            if (pinE) pinE.setAttribute('transform', 'translate(' + e.x + ' ' + e.y + ')');
-        }
-
-        function setCat(i) {
-            cat = (i + CATS.length) % CATS.length;
-            setRoute(ROUTES[cat]);
-            card.setAttribute('data-cat', cat);
-            bubbleT.textContent = CATS[cat];
-            chips.forEach(function (b, k) { b.setAttribute('aria-pressed', k === cat ? 'true' : 'false'); });
-        }
-
-        function place(p) {
-            route.style.strokeDashoffset = L * (1 - p);
-            var pt = route.getPointAtLength(L * p);
-            rider.setAttribute('cx', pt.x); rider.setAttribute('cy', pt.y);
-            glow.setAttribute('cx', pt.x); glow.setAttribute('cy', pt.y);
-            var secs = Math.max(0, Math.round(20 * 60 * (1 - p)));
-            var m = Math.floor(secs / 60), s = secs % 60;
-            clockT.textContent = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-            // bula urmărește curierul
-            var sp = svg.createSVGPoint(); sp.x = pt.x; sp.y = pt.y;
-            var m2 = rider.getScreenCTM();
-            if (m2) {
-                var q = sp.matrixTransform(m2), cr = card.getBoundingClientRect();
-                bubble.style.left = (q.x - cr.left) + 'px';
-                bubble.style.top = (q.y - cr.top) + 'px';
-            }
-        }
-
-        var RUN = 8000, HOLD = 2600, start = 0;
-        chips.forEach(function (b) {
-            b.addEventListener('click', function () { setCat(+b.getAttribute('data-i')); start = 0; });
-        });
-        setCat(0);
-
-        if (reduce) { place(1); clockT.textContent = '20 min'; clockL.textContent = 'timp mediu de livrare'; bubble.style.display = 'none'; return; }
-
-        function ease(t) { return .5 - Math.cos(Math.PI * t) / 2; }
-        var lastRun = -1;
-        function frame(now) {
-            if (!start) { start = now; lastRun = 0; }
-            var cycle = RUN + HOLD, el = now - start;
-            var run = Math.floor(el / cycle), t = el % cycle;
-            if (run !== lastRun) { lastRun = run; setCat(cat + 1); }
-            if (t < RUN) {
-                clock.classList.remove('arrived');
-                bubble.style.opacity = 1;
-                clockL.textContent = 'minute până la ușa ta';
-                place(ease(t / RUN));
-            } else {
-                place(1);
-                bubble.style.opacity = 0;
-                if (!clock.classList.contains('arrived')) {
-                    clock.classList.add('arrived');
-                    clockL.textContent = 'Ai ajuns acasă. Poftă bună!';
-                }
-            }
-            requestAnimationFrame(frame);
-        }
-        requestAnimationFrame(frame);
-    })(); } catch (err) { /* harta e decorativă: formularul trebuie să apară oricum */ }
-
-    /* ---------- telefoane care răspund la cursor ---------- */
-    (function tilt() {
-        var box = document.getElementById('phones');
-        if (!box || reduce || !finePointer) return;
-        var phones = box.querySelectorAll('.phone');
-        box.addEventListener('pointermove', function (e) {
-            var r = box.getBoundingClientRect();
-            var dx = (e.clientX - r.left) / r.width - .5;
-            var dy = (e.clientY - r.top) / r.height - .5;
-            phones.forEach(function (p, i) {
-                var k = i ? 1 : -1;
-                var base = i ? 5 : -6;
-                p.style.transform = 'rotate(' + (base + dx * 6 * k) + 'deg) translate(' + (dx * 14 * k) + 'px,' + (dy * 12) + 'px)';
-            });
-        });
-        box.addEventListener('pointerleave', function () {
-            phones.forEach(function (p, i) { p.style.transform = 'rotate(' + (i ? 5 : -6) + 'deg)'; });
-        });
+        var found = UTM_KEYS.filter(function (k) { return params[k]; });
+        var utm = found.map(function (k) { return k + '=' + encodeURIComponent(params[k]); }).join('&');
+        if (utm) storeSet('sessionStorage', 'greengo_utm', utm);
+        else utm = storeGet('sessionStorage', 'greengo_utm') || '';
+        // fără UTM: păstrăm comportamentul vechi (query string-ul paginii)
+        return utm || search.slice(1);
     })();
-
-    /* ---------- confetti ---------- */
-    function confetti() {
-        if (reduce) return;
-        var c = document.getElementById('confetti');
-        var ctx = c.getContext('2d');
-        var W = c.width = window.innerWidth, H = c.height = window.innerHeight;
-        var colors = ['#5ef0a6', '#ff7a3d', '#f2fff7', '#2ecc71', '#ffd166'];
-        var parts = [];
-        for (var i = 0; i < 140; i++) {
-            parts.push({
-                x: W / 2 + (Math.random() - .5) * 200, y: H * .55,
-                vx: (Math.random() - .5) * 16, vy: -Math.random() * 16 - 4,
-                s: 5 + Math.random() * 6, r: Math.random() * 6, vr: (Math.random() - .5) * .4,
-                c: colors[(Math.random() * colors.length) | 0]
-            });
-        }
-        var t0 = performance.now();
-        (function tick(now) {
-            ctx.clearRect(0, 0, W, H);
-            parts.forEach(function (p) {
-                p.vy += .35; p.vx *= .99; p.x += p.vx; p.y += p.vy; p.r += p.vr;
-                ctx.save(); ctx.translate(p.x, p.y); ctx.rotate(p.r);
-                ctx.fillStyle = p.c; ctx.fillRect(-p.s / 2, -p.s / 4, p.s, p.s / 2);
-                ctx.restore();
-            });
-            if (now - t0 < 3200) requestAnimationFrame(tick); else ctx.clearRect(0, 0, W, H);
-        })(t0);
+    function decodeSafe(s) {
+        try { return decodeURIComponent(String(s).replace(/\+/g, ' ')); } catch (e) { return String(s); }
     }
 
-    /* ---------- formular ---------- */
+    /* ---------- tracking: respectă consimțământul; nu trimite niciodată adresa de e-mail ---------- */
+    var GA4_NAMES = {
+        Lead: 'generate_lead', WhatsAppClick: 'whatsapp_click', RestaurantClick: 'restaurant_click',
+        ShareClick: 'share', SocialClick: 'social_click', PageView: 'page_view'
+    };
+    function track(name, params) {
+        params = params || {};
+        try {
+            window.dataLayer = window.dataLayer || [];
+            var entry = { event: 'greengo_' + name };
+            Object.keys(params).forEach(function (k) { entry[k] = params[k]; });
+            window.dataLayer.push(entry);
+        } catch (e) { /* dataLayer indisponibil */ }
+        if (name === 'PageView') return; // PageView este trimis de scripturile GA4 / Meta la încărcare
+        var consent = window.GreenGoConsent;
+        try {
+            if (typeof window.gtag === 'function' && consent && consent.has('analytics')) {
+                window.gtag('event', GA4_NAMES[name] || name, params);
+            }
+            if (typeof window.fbq === 'function' && consent && consent.has('marketing')) {
+                if (name === 'Lead') window.fbq('track', 'Lead', params);
+                else window.fbq('trackCustom', name, params);
+            }
+        } catch (e) { /* un script de tracking blocat nu trebuie să strice pagina */ }
+    }
+    window.GreenGoTrack = track;
+    track('PageView', { page: '/lansare/' });
+
+    document.addEventListener('click', function (e) {
+        var t = e.target && e.target.closest ? e.target : null;
+        if (!t) return;
+        var link = t.closest('[data-track]');
+        if (link) {
+            var name = link.getAttribute('data-track');
+            var p = {};
+            if (link.getAttribute('data-track-place')) p.placement = link.getAttribute('data-track-place');
+            if (link.getAttribute('data-track-network')) p.network = link.getAttribute('data-track-network');
+            track(name, p);
+        }
+        var tile = t.closest('#merchant-list a.tile');
+        if (tile) {
+            var nm = tile.querySelector('.nm');
+            track('RestaurantClick', { restaurant: nm ? nm.textContent : '' });
+        }
+        var jump = t.closest('[data-scroll-form]');
+        if (jump) { e.preventDefault(); goToForm(); }
+    });
+
+    /* ---------- derulare către formularul principal ---------- */
+    function goToForm() {
+        var card = document.getElementById('inscriere');
+        if (!card) return;
+        var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        card.scrollIntoView({ behavior: reduce ? 'auto' : 'smooth', block: 'start' });
+        var input = card.querySelector('input[type="email"]');
+        var target = input || card;
+        try { target.focus({ preventScroll: true }); } catch (e) { target.focus(); }
+    }
+
+    /* ---------- formulare ---------- */
     var tpl = document.getElementById('tpl-form');
     var mounts = document.querySelectorAll('[data-form-mount]');
+    var forms = [];
     var submitted = false;
     var submitting = false;
+    var EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/;
 
-    function normalizePhone(v) {
-        var s = (v || '').replace(/[^\d+]/g, '');
-        if (!s) return '';
-        if (s.indexOf('00') === 0) s = '+' + s.slice(2);
-        if (/^07\d{8}$/.test(s)) s = '+4' + s;
-        else if (/^40\d{9}$/.test(s)) s = '+' + s;
-        var d = s.replace(/\D/g, '');
-        return (d.length >= 8 && d.length <= 15) ? s : null;
+    var ERRORS = {
+        email: 'Adresa de e-mail nu pare corectă. Verific-o și încearcă din nou.',
+        consent: 'Nu am putut confirma acordul. Reîncarcă pagina și încearcă din nou.',
+        origin: 'Înscrierea trebuie făcută direct de pe green-go.ro.',
+        storage: 'Serverul nu a putut salva înscrierea. Încearcă din nou în câteva minute.',
+        unavailable: 'Înscrierile sunt temporar indisponibile. Încearcă din nou în câteva minute.',
+        notification: 'Nu am putut finaliza înscrierea. Încearcă din nou în câteva secunde.',
+        network: 'Nu ne-am putut conecta la server. Verifică internetul și încearcă din nou.'
+    };
+
+    function setBusy(busy) {
+        forms.forEach(function (f) {
+            if (f.done) return;
+            var b = f.querySelector('.go');
+            b.disabled = busy;
+            b.setAttribute('aria-busy', busy ? 'true' : 'false');
+            b.innerHTML = busy
+                ? '<span class="spin" aria-hidden="true"></span><span>Se trimite...</span>'
+                : '<span class="go-label"></span>';
+            if (!busy) b.querySelector('.go-label').textContent = f.cta;
+        });
     }
 
-    function showDone(form) {
+    function share(btn) {
+        track('ShareClick', { method: navigator.share ? 'native' : 'copy' });
+        var data = {
+            title: 'GreenGO se lansează în Greenfield',
+            text: 'GreenGO, aplicația de livrare a cartierului Greenfield, se lansează în curând. Livrare gratuită la orice comandă până la finalul anului:',
+            url: PAGE_URL
+        };
+        if (navigator.share) {
+            navigator.share(data).catch(function () { /* utilizatorul a închis fereastra */ });
+            return;
+        }
+        var label = btn.textContent;
+        var copied = navigator.clipboard && navigator.clipboard.writeText
+            ? navigator.clipboard.writeText(PAGE_URL)
+            : Promise.reject(new Error('clipboard'));
+        copied.then(function () {
+            btn.textContent = 'Link copiat';
+        }, function () {
+            btn.textContent = PAGE_URL;
+        });
+        setTimeout(function () { btn.textContent = label; }, 2600);
+    }
+
+    function confirmation(duplicate) {
         var wrap = document.createElement('div');
         wrap.className = 'wl done';
-        var url = 'https://www.green-go.ro/lansare/';
-        var text = 'Se lansează GreenGO în Greenfield: mâncare din restaurantele cartierului, la ușă în ~20 de minute. Înscrie-te aici: ' + url;
+        wrap.setAttribute('tabindex', '-1');
+        wrap.setAttribute('role', 'status');
         wrap.innerHTML =
-            '<div class="tick"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>' +
-            '<h3>Ești pe listă.</h3>' +
-            '<p>Înscrierea ta a ajuns la echipa GreenGO. Îți scriem în ziua lansării.</p>' +
-            '<div class="share"><a class="wa" target="_blank" rel="noopener" href="https://wa.me/?text=' + encodeURIComponent(text) + '">Trimite vecinilor pe WhatsApp</a>' +
-            '<button type="button" data-copy>Copiază linkul</button></div>';
-        form.replaceWith(wrap);
-        wrap.querySelector('[data-copy]').addEventListener('click', function (e) {
-            var b = e.currentTarget;
-            (navigator.clipboard ? navigator.clipboard.writeText(url) : Promise.reject()).then(function () { b.textContent = 'Copiat'; }, function () { b.textContent = url; });
-        });
+            '<h3>' + (duplicate ? 'Ești deja pe lista GreenGO! 💚' : 'Ești pe lista GreenGO! 💚') + '</h3>' +
+            '<p>' + (duplicate
+                ? 'Adresa ta era deja înscrisă, nu trebuie să mai faci nimic.'
+                : 'Îți mulțumim pentru înscriere!') + '</p>' +
+            '<p>Te vom anunța prin e-mail imediat ce aplicația devine disponibilă, pentru a putea instala GreenGO și plasa prima comandă.</p>' +
+            '<p class="done-offer">Nu uita: beneficiezi de livrare gratuită la orice comandă până la finalul anului!</p>' +
+            '<p class="done-next">Până atunci, rămâi aproape de noi și pe WhatsApp.</p>' +
+            '<div class="done-actions">' +
+                '<a class="btn btn-wa" href="' + WA_URL + '" target="_blank" rel="noopener" data-track="WhatsAppClick" data-track-place="confirmation">' +
+                    '<svg viewBox="0 0 24 24" aria-hidden="true"><use href="#i-wa"/></svg>Alătură-te comunității GreenGO</a>' +
+                '<button type="button" class="btn btn-ghost" data-share>Spune-i și unui vecin</button>' +
+            '</div>';
+        var btn = wrap.querySelector('[data-share]');
+        if (btn) btn.addEventListener('click', function () { share(btn); });
+        return wrap;
     }
+
+    function mini() {
+        var wrap = document.createElement('div');
+        wrap.className = 'wl done';
+        wrap.innerHTML = '<p class="done-mini"><span class="tick" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></span>Ești pe lista GreenGO. Te anunțăm la lansare.</p>';
+        return wrap;
+    }
+
+    function finish(form, duplicate) {
+        submitted = true;
+        storeSet('localStorage', SIGNED_KEY, '1');
+        forms.forEach(function (f) {
+            var node = f === form ? confirmation(duplicate) : mini();
+            var card = f.closest ? f.closest('.signup-card') : null;
+            if (card) card.classList.add('is-done');
+            f.done = node;
+            f.replaceWith(node);
+            if (f === form && node.focus) { try { node.focus({ preventScroll: true }); } catch (e) { node.focus(); } }
+        });
+        if (document.documentElement) document.documentElement.classList.add('gg-signed');
+        hideSticky(true);
+    }
+
+    function friendlyError(code) {
+        return ERRORS[code] || ERRORS.notification;
+    }
+
     mounts.forEach(function (mount, idx) {
         var f = tpl.content.firstElementChild.cloneNode(true);
-        f.querySelectorAll('.field').forEach(function (fld, i) {
-            var id = 'wl' + idx + '-' + i;
-            fld.querySelector('label').setAttribute('for', id);
-            fld.querySelector('input').id = id;
-        });
+        f.cta = (mount.getAttribute && mount.getAttribute('data-cta')) || 'Anunță-mă la lansare';
+        f.formId = (mount.getAttribute && mount.getAttribute('data-form-id')) || String(idx);
+        var id = 'wl-' + f.formId;
+        var label = f.querySelector('label');
+        var email = f.querySelector('input[type="email"]');
+        var privacy = f.querySelector('.privacy');
+        var msg = f.querySelector('.msg');
+        if (label) label.setAttribute('for', id);
+        if (email) { email.id = id; email.setAttribute('aria-describedby', id + '-msg ' + id + '-privacy'); }
+        if (msg) msg.id = id + '-msg';
+        if (privacy) privacy.id = id + '-privacy';
+        var go = f.querySelector('.go-label');
+        if (go) go.textContent = f.cta;
         mount.appendChild(f);
+        forms.push(f);
 
         f.addEventListener('submit', function (e) {
             e.preventDefault();
             if (submitted || submitting) return;
-            var msg = f.querySelector('.msg');
-            var email = f.elements.email, phone = f.elements.phone, consent = f.elements.consent;
-            email.removeAttribute('aria-invalid'); phone.removeAttribute('aria-invalid'); msg.textContent = '';
+            var input = f.elements.email;
+            input.removeAttribute('aria-invalid');
+            msg.textContent = '';
 
-            var ev = email.value.trim();
-            if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(ev)) { email.setAttribute('aria-invalid', 'true'); msg.textContent = 'Scrie un email valid, de exemplu nume@email.ro.'; email.focus(); return; }
-            var pv = normalizePhone(phone.value);
-            if (pv === null) { phone.setAttribute('aria-invalid', 'true'); msg.textContent = 'Telefonul nu pare corect. Poți să-l lași gol sau să scrii, de exemplu, 0712 345 678.'; phone.focus(); return; }
-            if (!consent.checked) { msg.textContent = 'Bifează acordul ca să te putem anunța la lansare.'; consent.focus(); return; }
-
-            if (f.elements.website.value) { submitted = true; showDone(f); return; }
+            var ev = input.value.trim();
+            if (!ev) { input.setAttribute('aria-invalid', 'true'); msg.textContent = 'Scrie adresa ta de e-mail.'; input.focus(); return; }
+            if (!EMAIL_RE.test(ev) || ev.length > 254) {
+                input.setAttribute('aria-invalid', 'true');
+                msg.textContent = 'Adresa de e-mail nu pare corectă. Exemplu: nume@email.ro';
+                input.focus();
+                return;
+            }
+            // capcana pentru roboți: nu trimitem nimic și nu înregistrăm Lead
+            if (f.elements.website.value) { finish(f, false); return; }
             if (Date.now() - pageLoadedAt < 2000) {
                 msg.textContent = 'Așteaptă câteva secunde și încearcă din nou.';
                 return;
             }
 
             submitting = true;
-            var buttons = document.querySelectorAll('.wl .go');
-            buttons.forEach(function (b) { b.disabled = true; b.textContent = 'Se trimite...'; });
+            setBusy(true);
+            var source = attribution;
+            source = (source ? source + '&' : '') + 'form=' + f.formId;
             fetch('/api/waitlist', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ email: ev, phone: pv || '', consent: true, source: location.search.slice(1, 200), website: f.elements.website.value })
+                body: JSON.stringify({ email: ev, consent: true, source: source.slice(0, 200), website: f.elements.website.value })
             }).then(function (r) {
-                return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j.ok, j: j }; });
+                return r.json().catch(function () { return {}; }).then(function (j) { return { ok: r.ok && j && j.ok === true, j: j || {} }; });
+            }, function () {
+                return { ok: false, j: { error: 'network' } };
             }).then(function (res) {
-                if (!res.ok) throw new Error(res.j && res.j.error || 'x');
-                submitted = true;
-                try { window.dispatchEvent(new CustomEvent('greengo:lead')); } catch (e2) {}
-                showDone(f); confetti();
-                // celelalte formulare devin inutile după înscriere
-                document.querySelectorAll('.wl:not(.done)').forEach(function (o) { if (o !== f) showDone(o); });
-            }).catch(function (err) {
-                msg.textContent = err && err.message === 'email' ? 'Emailul nu pare valid. Verifică-l și încearcă din nou.' : 'Nu am putut trimite înscrierea. Încearcă din nou în câteva secunde.';
-            }).finally(function () {
                 submitting = false;
-                buttons.forEach(function (b) { b.disabled = false; b.textContent = 'Anunță-mă la lansare'; });
+                setBusy(false);
+                if (!res.ok) {
+                    var code = res.j.error || 'notification';
+                    if (code === 'email') input.setAttribute('aria-invalid', 'true');
+                    msg.textContent = friendlyError(code);
+                    return;
+                }
+                var duplicate = res.j.duplicate === true;
+                if (!duplicate) {
+                    // Lead numai după confirmarea serverului că înscrierea este nouă
+                    track('Lead', { form: f.formId });
+                    try { window.dispatchEvent(new CustomEvent('greengo:lead')); } catch (e2) { /* fără CustomEvent */ }
+                }
+                finish(f, duplicate);
             });
         });
     });
 
-    document.addEventListener('click', function (e) {
-        var t = e.target.closest && e.target.closest('[data-open-consent]');
-        if (t && window.GreenGoConsent) { e.preventDefault(); window.GreenGoConsent.open(); }
-    });
+    /* ---------- CTA lipicios pe mobil ---------- */
+    var sticky = document.getElementById('sticky-cta');
+    var stickyOff = storeGet('localStorage', SIGNED_KEY) === '1';
+    function hideSticky(forever) {
+        if (forever) stickyOff = true;
+        if (!sticky) return;
+        sticky.classList.remove('show');
+        if (forever) sticky.hidden = true;
+    }
+    (function stickyCta() {
+        var hero = document.getElementById('inscriere');
+        if (!sticky || !hero || typeof IntersectionObserver === 'undefined') return;
+        var heroPassed = false;
+        var visibleForms = 0;
+        function update() {
+            if (stickyOff) return hideSticky(true);
+            var show = heroPassed && visibleForms === 0;
+            sticky.hidden = false;
+            sticky.classList.toggle('show', show);
+            sticky.setAttribute('aria-hidden', show ? 'false' : 'true');
+            Array.prototype.forEach.call(sticky.querySelectorAll('a'), function (a) { a.tabIndex = show ? 0 : -1; });
+        }
+        new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { heroPassed = !en.isIntersecting && en.boundingClientRect.top < 0; });
+            update();
+        }).observe(hero);
+        var others = document.querySelectorAll('.offer-form, .final-form');
+        var seen = new Map();
+        var io = new IntersectionObserver(function (entries) {
+            entries.forEach(function (en) { seen.set(en.target, en.isIntersecting); });
+            visibleForms = 0;
+            seen.forEach(function (v) { if (v) visibleForms++; });
+            update();
+        });
+        Array.prototype.forEach.call(others, function (el) { io.observe(el); });
+    })();
 })();

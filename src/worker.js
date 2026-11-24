@@ -55,22 +55,44 @@ async function ensureTable(db) {
 }
 
 function welcomeEmail() {
-  const html = `<!doctype html><html lang="ro"><body style="margin:0;background:#06231a;font-family:Arial,Helvetica,sans-serif;">
-<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#06231a;padding:32px 12px;"><tr><td align="center">
-<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="max-width:560px;background:#0b3a2b;border-radius:18px;overflow:hidden;">
-<tr><td style="padding:32px 32px 8px;font-size:28px;font-weight:800;color:#f2fff7;">Green<span style="color:#5ef0a6;">GO</span></td></tr>
-<tr><td style="padding:8px 32px 0;font-size:30px;line-height:1.15;font-weight:800;color:#f2fff7;">Ești pe listă. Mulțumim!</td></tr>
-<tr><td style="padding:16px 32px 0;font-size:16px;line-height:1.6;color:#cfe8da;">Îți scriem imediat ce GreenGO se lansează în Greenfield: mâncare din restaurantele cartierului, la ușa ta în aproximativ 20 de minute.</td></tr>
-<tr><td style="padding:16px 32px 0;font-size:16px;line-height:1.6;color:#cfe8da;">Până atunci, spune-le și vecinilor, ca să comandăm toți din același cartier.</td></tr>
-<tr><td style="padding:24px 32px 8px;"><a href="https://www.green-go.ro/lansare/" style="display:inline-block;background:#5ef0a6;color:#04261b;font-weight:800;text-decoration:none;padding:14px 24px;border-radius:12px;font-size:16px;">Trimite linkul vecinilor</a></td></tr>
-<tr><td style="padding:24px 32px 32px;font-size:12px;line-height:1.5;color:#86ac98;">Ai primit acest mesaj pentru că te-ai înscris pe lista de lansare GreenGO. Dacă nu ai fost tu sau nu mai vrei să fii anunțat, răspunde la acest email și te ștergem din listă.</td></tr>
+  const whatsapp = 'https://chat.whatsapp.com/EdRMVjhPgU95lKDiJLzgzs';
+  const share = 'https://www.green-go.ro/lansare/?utm_source=email&utm_medium=welcome&utm_campaign=prelansare';
+  const html = `<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Ești pe lista GreenGO</title></head>
+<body style="margin:0;padding:0;background:#f3f8f3;font-family:Arial,Helvetica,sans-serif;color:#34463c;">
+<div style="display:none;max-height:0;overflow:hidden;">Te anunțăm prin e-mail imediat ce aplicația devine disponibilă. Livrare gratuită la orice comandă până la finalul anului.</div>
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f3f8f3;padding:32px 12px;"><tr><td align="center">
+<table role="presentation" width="560" cellpadding="0" cellspacing="0" style="width:100%;max-width:560px;background:#ffffff;border:1px solid #e2ebe4;border-radius:18px;">
+<tr><td style="padding:28px 32px 0;"><img src="https://www.green-go.ro/poze/optimized/greengo-logo-mark.png" width="66" height="60" alt="GreenGO" style="display:block;border:0;"></td></tr>
+<tr><td style="padding:22px 32px 0;font-size:28px;line-height:1.2;font-weight:800;color:#10221a;">Ești pe lista GreenGO! 💚</td></tr>
+<tr><td style="padding:14px 32px 0;font-size:16px;line-height:1.6;">Îți mulțumim pentru înscriere!</td></tr>
+<tr><td style="padding:10px 32px 0;font-size:16px;line-height:1.6;">Te vom anunța prin e-mail imediat ce aplicația devine disponibilă, pentru a putea instala GreenGO și plasa prima comandă de la restaurantele din Greenfield.</td></tr>
+<tr><td style="padding:22px 32px 0;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#0c2b18;border-radius:14px;"><tr><td style="padding:18px 20px;">
+    <div style="font-size:11px;font-weight:700;letter-spacing:2px;text-transform:uppercase;color:#9be8a6;">Oferta de lansare</div>
+    <div style="font-size:22px;font-weight:800;color:#ffffff;margin-top:4px;">Livrare GRATUITĂ</div>
+    <div style="font-size:14px;line-height:1.5;color:#d3e6d8;margin-top:4px;">La orice comandă, de la lansarea oficială până la 31 decembrie 2026, inclusiv.</div>
+  </td></tr></table>
+</td></tr>
+<tr><td style="padding:24px 32px 0;font-size:16px;line-height:1.6;font-weight:700;color:#10221a;">Până atunci, rămâi aproape de noi și pe WhatsApp.</td></tr>
+<tr><td style="padding:6px 32px 0;font-size:15px;line-height:1.6;">În comunitatea oficială GreenGO afli noutățile, ofertele și restaurantele noi, și ne poți scrie direct sugestiile tale.</td></tr>
+<tr><td style="padding:16px 32px 0;"><a href="${whatsapp}" style="display:inline-block;background:#25d366;color:#0b3d23;font-weight:700;text-decoration:none;padding:14px 24px;border-radius:12px;font-size:16px;">Alătură-te comunității GreenGO</a></td></tr>
+<tr><td style="padding:22px 32px 0;font-size:15px;line-height:1.6;">Știi pe cineva din Greenfield căruia i-ar plăcea? <a href="${share}" style="color:#157020;font-weight:700;">Spune-i și unui vecin</a>.</td></tr>
+<tr><td style="padding:28px 32px 0;"><div style="border-top:1px solid #e2ebe4;"></div></td></tr>
+<tr><td style="padding:16px 32px 0;font-size:14px;line-height:1.5;font-weight:700;color:#10221a;">Mâncarea ta preferată. Mai mult timp pentru tine.<br><span style="color:#157020;">Din cartier, pentru cartier.</span></td></tr>
+<tr><td style="padding:14px 32px 0;font-size:13px;line-height:1.6;"><a href="https://www.facebook.com/greengoromania" style="color:#157020;text-decoration:none;">Facebook</a> &nbsp;·&nbsp; <a href="https://www.instagram.com/greengoromania" style="color:#157020;text-decoration:none;">Instagram</a> &nbsp;·&nbsp; <a href="https://www.tiktok.com/@greengoromania" style="color:#157020;text-decoration:none;">TikTok</a> &nbsp;·&nbsp; @greengoromania</td></tr>
+<tr><td style="padding:16px 32px 28px;font-size:12px;line-height:1.5;color:#5d6f64;">Ai primit acest mesaj pentru că te-ai înscris pe lista de prelansare GreenGO, pe green-go.ro. Dacă nu ai fost tu sau nu mai vrei să primești e-mailul de lansare, răspunde la acest mesaj și te ștergem din listă. Detalii în <a href="https://www.green-go.ro/Legal/Politica%20de%20Confidentialitate%20Green%20GO%20Delivery.html" style="color:#5d6f64;">Politica de confidențialitate</a>.</td></tr>
 </table></td></tr></table></body></html>`;
   const text =
-    'Ești pe listă. Mulțumim!\n\n' +
-    'Îți scriem imediat ce GreenGO se lansează în Greenfield: mâncare din restaurantele cartierului, la ușa ta în aproximativ 20 de minute.\n\n' +
-    'Poți trimite linkul și vecinilor: https://www.green-go.ro/lansare/\n\n' +
-    'Dacă nu ai fost tu sau nu mai vrei să fii anunțat, răspunde la acest email și te ștergem din listă.';
-  return { subject: 'Ești pe lista GreenGO', html, text };
+    'Ești pe lista GreenGO! 💚\n\n' +
+    'Îți mulțumim pentru înscriere!\n\n' +
+    'Te vom anunța prin e-mail imediat ce aplicația devine disponibilă, pentru a putea instala GreenGO și plasa prima comandă de la restaurantele din Greenfield.\n\n' +
+    'OFERTA DE LANSARE: livrare GRATUITĂ la orice comandă, de la lansarea oficială până la 31 decembrie 2026, inclusiv.\n\n' +
+    `Până atunci, rămâi aproape de noi și pe WhatsApp: ${whatsapp}\n\n` +
+    `Spune-i și unui vecin: ${share}\n\n` +
+    'Mâncarea ta preferată. Mai mult timp pentru tine. Din cartier, pentru cartier.\n' +
+    'Facebook, Instagram și TikTok: @greengoromania\n\n' +
+    'Ai primit acest mesaj pentru că te-ai înscris pe lista de prelansare GreenGO. Dacă nu ai fost tu sau nu mai vrei să primești e-mailul de lansare, răspunde la acest mesaj și te ștergem din listă.';
+  return { subject: 'Ești pe lista GreenGO 💚', html, text };
 }
 
 async function sendWelcome(env, to) {
@@ -170,7 +192,7 @@ async function handleSignup(request, env, ctx) {
     ctx.waitUntil(sendWelcome(env, email).catch(() => false));
     emailed = true;
   }
-  return json({ ok: true, emailed });
+  return json({ ok: true, emailed, duplicate: !inserted });
 }
 
 function csvCell(value) {

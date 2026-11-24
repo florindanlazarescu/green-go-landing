@@ -85,7 +85,7 @@ for (const layout of ['landing', 'launch']) {
         } else {
             assert.equal(first.children[0].src, merchants[0].image);
             assert.equal(first.children[1].textContent, '<Restaurant>');
-            assert.equal(first.children[2].textContent, 'La lansare');
+            assert.equal(first.children[2].textContent, 'Partener GreenGO');
             assert.equal(closed.children[0].textContent, 'Imagine indisponibilă');
         }
         assert.equal(closed.children[2].textContent, 'În curând');

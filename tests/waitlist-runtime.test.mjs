@@ -37,7 +37,7 @@ for (const status of [200, 302, 503]) {
     assert.equal(url.searchParams.get('email'), 'test@example.com');
     assert.equal(response.status, status === 200 ? 200 : 502);
     assert.deepEqual(await response.json(), status === 200
-      ? { ok: true, emailed: false }
+      ? { ok: true, emailed: false, duplicate: false }
       : { ok: false, error: 'notification' });
   });
 }

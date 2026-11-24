@@ -102,7 +102,7 @@
             '<div class="consent-card">' +
               '<div class="consent-main">' +
                 '<h2 id="consent-title">Folosim cookie-uri</h2>' +
-                '<p id="consent-desc">Folosim cookie-uri necesare pentru funcționarea site-ului. Cu acordul tău, folosim și cookie-uri de analiză și de marketing, ca să îmbunătățim GreenGO și să măsurăm reclamele. Poți alege oricând. Detalii în <a href="Legal/Politica%20Cookie%20Green%20GO%20Delivery.html">Politica Cookie</a>.</p>' +
+                '<p id="consent-desc">Folosim cookie-uri necesare pentru funcționarea site-ului. Cu acordul tău, folosim și cookie-uri de analiză și de marketing, ca să îmbunătățim GreenGO și să măsurăm reclamele. Poți alege oricând. Detalii în <a href="/Legal/Politica%20Cookie%20Green%20GO%20Delivery.html">Politica Cookie</a>.</p>' +
               '</div>' +
               '<div class="consent-prefs" hidden>' +
                 '<label class="consent-row"><span><strong>Necesare</strong><small>Fac site-ul să funcționeze. Nu pot fi dezactivate.</small></span><input type="checkbox" checked disabled></label>' +

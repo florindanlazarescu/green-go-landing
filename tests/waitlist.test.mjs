@@ -28,7 +28,7 @@ test('launch signup is stored before notifying the contact API', async (t) => {
   const response = await worker.fetch(request(), environment(), {});
 
   assert.equal(response.status, 200);
-  assert.deepEqual(await response.json(), { ok: true, emailed: false });
+  assert.deepEqual(await response.json(), { ok: true, emailed: false, duplicate: false });
   assert.equal(outbound.mock.callCount(), 1);
   const [url, options] = outbound.mock.calls[0].arguments;
   assert.equal(url.origin, backend);
@@ -174,6 +174,7 @@ test('an existing D1 subscriber can still notify the team on retry', async (t) =
   const response = await worker.fetch(request(), { APP_BASE_URL: backend, DB: database(false) }, {});
 
   assert.equal(response.status, 200);
+  assert.equal((await response.json()).duplicate, true);
   assert.equal(outbound.mock.callCount(), 1);
 });
 

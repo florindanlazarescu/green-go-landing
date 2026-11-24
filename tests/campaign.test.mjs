@@ -43,6 +43,8 @@ test('campaign stores a single normalized email across retries', async (t) => {
   const retry = await c.signup({ email: 'vecin@example.com' });
   assert.equal(first.status, 200);
   assert.equal(retry.status, 200);
+  assert.equal((await first.json()).duplicate, false);
+  assert.equal((await retry.json()).duplicate, true);
   const rows = await c.db.prepare('SELECT * FROM waitlist').all();
   assert.equal(rows.results.length, 1);
   assert.equal(rows.results[0].email, 'vecin@example.com');
