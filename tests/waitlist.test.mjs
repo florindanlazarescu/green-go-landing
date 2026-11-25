@@ -206,3 +206,31 @@ test('static pages still use the environment-specific app URL', async () => {
   assert.ok((await response.text()).includes('https://delivery-staging.green-go.ro'));
   assert.equal(response.headers.get('cache-control'), 'no-store');
 });
+
+function assets() {
+  return { async fetch() {
+    return new Response('<h1>GreenGO</h1>', { headers: { 'content-type': 'text/html' } });
+  } };
+}
+
+test('before launch the homepage redirects to /lansare/ and keeps UTM parameters', async () => {
+  const env = { APP_BASE_URL: backend, ASSETS: assets(), LAUNCH_AT: '2999-01-01T00:00:00+02:00' };
+  for (const path of ['/', '/index.html']) {
+    const response = await worker.fetch(new Request(`${origin}${path}?utm_source=facebook&utm_campaign=lansare`), env, {});
+    assert.equal(response.status, 302);
+    assert.equal(response.headers.get('location'), `${origin}/lansare/?utm_source=facebook&utm_campaign=lansare`);
+  }
+  const launchPage = await worker.fetch(new Request(`${origin}/lansare/`), env, {});
+  assert.equal(launchPage.status, 200);
+  const legal = await worker.fetch(new Request(`${origin}/Legal/x.html`), env, {});
+  assert.equal(legal.status, 200);
+  const preview = await worker.fetch(new Request(`${origin}/?preview`), env, {});
+  assert.equal(preview.status, 200);
+});
+
+test('after launch, or without a launch date, the homepage is served normally', async () => {
+  for (const LAUNCH_AT of ['2000-01-01T00:00:00+02:00', undefined, 'not-a-date']) {
+    const response = await worker.fetch(new Request(`${origin}/`), { APP_BASE_URL: backend, ASSETS: assets(), LAUNCH_AT }, {});
+    assert.equal(response.status, 200);
+  }
+});

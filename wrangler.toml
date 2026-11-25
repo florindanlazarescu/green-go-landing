@@ -15,6 +15,9 @@ run_worker_first = true
 # ── Production (main branch → npx wrangler deploy) ────────────────────────────
 [vars]
 APP_BASE_URL = "https://app.green-go.ro"
+# Lansarea oficială. Până atunci, green-go.ro/ redirecționează temporar (302) către /lansare/.
+# După această dată redirectul se oprește singur. Ora este a României (+02:00).
+LAUNCH_AT = "2026-12-04T00:00:00+02:00"
 
 # Use the existing D1 database without provisioning it from CI.
 [[d1_databases]]
@@ -36,6 +39,7 @@ name = "production-worker-staging"
 
 [env.staging.vars]
 APP_BASE_URL = "https://delivery-staging.green-go.ro"
+LAUNCH_AT = "2026-12-04T00:00:00+02:00"
 
 [[env.staging.d1_databases]]
 binding = "DB"

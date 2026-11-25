@@ -282,6 +282,26 @@ async function handleExport(request, env) {
   });
 }
 
+/**
+ * Până la lansarea oficială, pagina principală trimite vizitatorii pe /lansare/.
+ * LAUNCH_AT (în wrangler.toml) este momentul lansării; după el, redirectul se oprește singur.
+ * Redirect temporar (302), ca Google să păstreze pagina principală.
+ * Parametrii (UTM) se păstrează. Echipa poate vedea pagina principală cu ?preview.
+ */
+function launchRedirect(request, env, url) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') return null;
+  if (url.pathname !== '/' && url.pathname !== '/index.html') return null;
+  if (url.searchParams.has('preview')) return null;
+  const launchAt = Date.parse(env.LAUNCH_AT || '');
+  if (!Number.isFinite(launchAt) || Date.now() >= launchAt) return null;
+  const target = new URL('/lansare/', url);
+  target.search = url.search;
+  return new Response(null, {
+    status: 302,
+    headers: { location: target.toString(), 'cache-control': 'no-store' },
+  });
+}
+
 export default {
   async fetch(request, env, ctx) {
     const url = new URL(request.url);
@@ -296,6 +316,9 @@ export default {
     if (url.pathname === '/api/waitlist/subscribers' && request.method === 'GET') {
       return handleSubscribers(request, env);
     }
+
+    const redirect = launchRedirect(request, env, url);
+    if (redirect) return redirect;
 
     const response = await env.ASSETS.fetch(request);
 
